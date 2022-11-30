@@ -1,4 +1,4 @@
-# `AirBnB`
+# `AirBnB` (Meetup?)
 
 ## Database Schema Design
 
