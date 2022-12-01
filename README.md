@@ -2,14 +2,192 @@
 
 ## Database Schema Design
 
-`TODO`
+<details>
+<summary>DBML</summary>
+
+```sql
+table Users {
+  id integer [PK, increment, not null]
+  firstName varchar(20) [not null]
+  lastName varchar(20) [not null]
+  email varchar(30) [not null, unique]
+  username varchar(18) [not null, unique]
+  passwordHash char(64) [not null]
+  passwordSalt varchar(10) [not null]
+}
+
+
+table Spots {
+  id integer [PK, increment, not null]
+  ownerId integer [ref: > Users.id]
+  address varchar [not null]
+  city varchar [not null]
+  state varchar [not null]
+  country varchar [not null]
+  lat numeric
+  lng numeric
+  name varchar(50)
+  description varchar [not null]
+  price numeric(0,2) [not null]
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
+
+  // avgRating numeric(1,1)
+  // previewImage varchar [ref: - SpotImages.url]
+}
+
+table SpotImages {
+  id integer [PK, increment, not null]
+  spotId integer [ref: > Spots.id]
+  url varchar
+  preview boolean
+}
+
+table Reviews {
+  id integer [PK, increment, not null]
+  userId integer [ref: > Users.id, not null]
+  spotId integer [ref: > Spots.id, not null]
+  review varchar [not null]
+  stars integer [not null]
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
+
+  indexes {
+    (userId, spotId) [unique]
+  }
+}
+
+table ReviewImages {
+  id integer [PK, increment, not null]
+  reviewId integer [ref: > Reviews.id, not null]
+  url varchar
+}
+
+table Bookings {
+  id integer [PK, increment, not null]
+  spotId integer [ref: > Spots.id, not null]
+  userId integer [ref: > Users.id, not null]
+
+  // Do we need a CHECK here? How?
+  startDate date
+  endDate date
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
+
+  indexes {
+    (spotId, startDate) [unique]
+    (spotId, endDate) [unique]
+  }
+
+  note {
+    "endDate must be after startDate"
+  }
+}
+
+```
+
+</details>
+
+<details>
+<summary>Diagram</summary>
+
+![Diagram](schema.png)
+
+</details>
+
+<details>
+<summary>SQL</summary>
+
+```sql
+--
+-- Table Definitions
+--
+CREATE TABLE Users (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    firstName VARCHAR NOT NULL,
+    lastName VARCHAR NOT NULL,
+    email VARCHAR UNIQUE NOT NULL,
+    username VARCHAR UNIQUE NOT NULL,
+    passwordHash CHAR(64) NOT NULL,
+    passwordSalt VARCHAR NOT NULL
+);
+
+CREATE TABLE Spots (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    ownerId INTEGER NOT NULL,
+    address VARCHAR NOT NULL,
+    city VARCHAR NOT NULL,
+    state VARCHAR NOT NULL,
+    country VARCHAR NOT NULL,
+    lat NUMERIC,
+    lng NUMERIC,
+    name VARCHAR(50),
+    description VARCHAR NOT NULL,
+    price NUMERIC(0, 2) NOT NULL,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ownerId) REFERENCES (Owners.id) ON DELETE CASCADE
+);
+
+CREATE TABLE SpotImages (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    spotId INTEGER,
+    url VARCHAR,
+    preview BOOLEAN,
+    FOREIGN KEY (spotId) REFERENCES (Spots.id) ON DELETE CASCADE
+);
+
+CREATE TABLE Reviews (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    userId INTEGER NOT NULL,
+    spotId INTEGER NOT NULL,
+    review VARCHAR NOT NULL,
+    stars INTEGER NOT NULL,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES (Users.id) ON DELETE CASCADE,
+    FOREIGN KEY (spotId) REFERENCES (Spots.id) ON DELETE CASCADE
+);
+
+CREATE TABLE ReviewImages (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    reviewId INTEGER NOT NULL,
+    url VARCHAR,
+    FOREIGN KEY (reviewId) REFERENCES (Reviews.id) ON DELETE CASCADE
+);
+
+CREATE TABLE Bookings (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    spotId INTEGER NOT NULL,
+    userId INTEGER NOT NULL,
+    startDate DATE,
+    endDate DATE,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES (Users.id) ON DELETE CASCADE,
+    FOREIGN KEY (spotId) REFERENCES (Spots.id) ON DELETE CASCADE,
+    CHECK (endDate > startDate),
+);
+
+--
+-- Index Definitions
+--
+CREATE UNIQUE INDEX idx_reviews_userId_spotId ON Reviews (userId, spotId);
+
+CREATE UNIQUE INDEX idx_bookings_spotId_startDate ON Bookings (spotId, startDate);
+
+CREATE UNIQUE INDEX idx_bookings_spotId_endDate ON Bookings (spotId, endDate);
+
+```
+
+</details>
+<br>
 
 ## API Documentation
 
-## USER AUTHENTICATION/AUTHORIZATION
+## User Authentication/Authorization
 
-### All endpoints that require authentication
-
+### Authentication
 All endpoints that require a current user to be logged in.
 
 -   Request: endpoints that require authentication
