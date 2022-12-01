@@ -1,0 +1,78 @@
+--
+-- Table Definitions
+--
+CREATE TABLE Users (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    firstName VARCHAR NOT NULL,
+    lastName VARCHAR NOT NULL,
+    email VARCHAR UNIQUE NOT NULL,
+    username VARCHAR UNIQUE NOT NULL,
+    passwordHash CHAR(64) NOT NULL,
+    passwordSalt VARCHAR NOT NULL
+);
+
+CREATE TABLE Spots (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    ownerId INTEGER NOT NULL,
+    address VARCHAR NOT NULL,
+    city VARCHAR NOT NULL,
+    state VARCHAR NOT NULL,
+    country VARCHAR NOT NULL,
+    lat NUMERIC,
+    lng NUMERIC,
+    name VARCHAR(50),
+    description VARCHAR NOT NULL,
+    price NUMERIC(0, 2) NOT NULL,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ownerId) REFERENCES (Owners.id) ON DELETE CASCADE
+);
+
+CREATE TABLE SpotImages (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    spotId INTEGER,
+    url VARCHAR,
+    preview BOOLEAN,
+    FOREIGN KEY (spotId) REFERENCES (Spots.id) ON DELETE CASCADE
+);
+
+CREATE TABLE Reviews (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    userId INTEGER NOT NULL,
+    spotId INTEGER NOT NULL,
+    review VARCHAR NOT NULL,
+    stars INTEGER NOT NULL,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES (Users.id) ON DELETE CASCADE,
+    FOREIGN KEY (spotId) REFERENCES (Spots.id) ON DELETE CASCADE
+);
+
+CREATE TABLE ReviewImages (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    reviewId INTEGER NOT NULL,
+    url VARCHAR,
+    FOREIGN KEY (reviewId) REFERENCES (Reviews.id) ON DELETE CASCADE
+);
+
+CREATE TABLE Bookings (
+    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    spotId INTEGER NOT NULL,
+    userId INTEGER NOT NULL,
+    startDate DATE,
+    endDate DATE,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES (Users.id) ON DELETE CASCADE,
+    FOREIGN KEY (spotId) REFERENCES (Spots.id) ON DELETE CASCADE,
+    CHECK (endDate > startDate),
+);
+
+--
+-- Index Definitions
+--
+CREATE UNIQUE INDEX idx_reviews_userId_spotId ON Reviews (userId, spotId);
+
+CREATE UNIQUE INDEX idx_bookings_spotId_startDate ON Bookings (spotId, startDate);
+
+CREATE UNIQUE INDEX idx_bookings_spotId_endDate ON Bookings (spotId, endDate);
