@@ -31,9 +31,6 @@ table Spots {
   price numeric(0,2) [not null]
   createdAt datetime [default: `now()`]
   updatedAt datetime [default: `now()`]
-
-  // avgRating numeric(1,1)
-  // previewImage varchar [ref: - SpotImages.url]
 }
 
 table SpotImages {
@@ -68,7 +65,7 @@ table Bookings {
   spotId integer [ref: > Spots.id, not null]
   userId integer [ref: > Users.id, not null]
 
-  // Do we need a CHECK here? How?
+  // Do we need a CHECK here?
   startDate date
   endDate date
   createdAt datetime [default: `now()`]
@@ -77,10 +74,6 @@ table Bookings {
   indexes {
     (spotId, startDate) [unique]
     (spotId, endDate) [unique]
-  }
-
-  note {
-    "endDate must be after startDate"
   }
 }
 
