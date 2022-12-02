@@ -5,9 +5,9 @@ table Users {
   email varchar(30) [not null, unique]
   username varchar(18) [not null, unique]
   passwordHash char(64) [not null]
-  passwordSalt varchar(10) [not null]
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
 }
-
 
 table Spots {
   id integer [PK, increment, not null]
@@ -30,6 +30,8 @@ table SpotImages {
   spotId integer [ref: > Spots.id]
   url varchar
   preview boolean
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
 }
 
 table Reviews {
@@ -50,6 +52,8 @@ table ReviewImages {
   id integer [PK, increment, not null]
   reviewId integer [ref: > Reviews.id, not null]
   url varchar
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
 }
 
 table Bookings {

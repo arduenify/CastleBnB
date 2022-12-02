@@ -13,9 +13,9 @@ table Users {
   email varchar(30) [not null, unique]
   username varchar(18) [not null, unique]
   passwordHash char(64) [not null]
-  passwordSalt varchar(10) [not null]
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
 }
-
 
 table Spots {
   id integer [PK, increment, not null]
@@ -38,6 +38,8 @@ table SpotImages {
   spotId integer [ref: > Spots.id]
   url varchar
   preview boolean
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
 }
 
 table Reviews {
@@ -48,7 +50,7 @@ table Reviews {
   stars integer [not null]
   createdAt datetime [default: `now()`]
   updatedAt datetime [default: `now()`]
-
+  
   indexes {
     (userId, spotId) [unique]
   }
@@ -58,25 +60,26 @@ table ReviewImages {
   id integer [PK, increment, not null]
   reviewId integer [ref: > Reviews.id, not null]
   url varchar
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
 }
 
 table Bookings {
   id integer [PK, increment, not null]
   spotId integer [ref: > Spots.id, not null]
   userId integer [ref: > Users.id, not null]
-
+  
   // Do we need a CHECK here?
   startDate date
   endDate date
   createdAt datetime [default: `now()`]
   updatedAt datetime [default: `now()`]
-
+  
   indexes {
     (spotId, startDate) [unique]
     (spotId, endDate) [unique]
   }
 }
-
 ```
 
 </details>
@@ -102,7 +105,8 @@ CREATE TABLE Users (
     email VARCHAR UNIQUE NOT NULL,
     username VARCHAR UNIQUE NOT NULL,
     passwordHash CHAR(64) NOT NULL,
-    passwordSalt VARCHAR NOT NULL
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Spots (
@@ -127,6 +131,8 @@ CREATE TABLE SpotImages (
     spotId INTEGER,
     url VARCHAR,
     preview BOOLEAN,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (spotId) REFERENCES (Spots.id) ON DELETE CASCADE
 );
 
@@ -146,6 +152,8 @@ CREATE TABLE ReviewImages (
     id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
     reviewId INTEGER NOT NULL,
     url VARCHAR,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
     FOREIGN KEY (reviewId) REFERENCES (Reviews.id) ON DELETE CASCADE
 );
 
@@ -170,7 +178,6 @@ CREATE UNIQUE INDEX idx_reviews_userId_spotId ON Reviews (userId, spotId);
 CREATE UNIQUE INDEX idx_bookings_spotId_startDate ON Bookings (spotId, startDate);
 
 CREATE UNIQUE INDEX idx_bookings_spotId_endDate ON Bookings (spotId, endDate);
-
 ```
 
 </details>
