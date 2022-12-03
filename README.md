@@ -188,6 +188,7 @@ CREATE UNIQUE INDEX idx_bookings_spotId_endDate ON Bookings (spotId, endDate);
 ## User Authentication/Authorization
 
 ### Authentication
+
 All endpoints that require a current user to be logged in.
 
 -   Request: endpoints that require authentication
@@ -723,7 +724,7 @@ Updates and returns an existing spot.
 -   Request
 
     -   Method: PUT
-    -   URL: /spots/:spotId/edit
+    -   URL: /spots/:spotId
     -   Headers:
         -   Content-Type: application/json
     -   Body:
