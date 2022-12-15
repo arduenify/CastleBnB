@@ -11,9 +11,19 @@ module.exports = {
             },
             spotId: {
                 type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Spots',
+                    key: 'id',
+                },
             },
             userId: {
                 type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Users',
+                    key: 'id',
+                },
             },
             startDate: {
                 type: Sequelize.DATE,
@@ -24,10 +34,23 @@ module.exports = {
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
             updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+            },
+        });
+
+        await queryInterface.addConstraint('Bookings', {
+            ['endDate']: {
+                type: 'check',
+                where: {
+                    endDate: {
+                        [Sequelize.Op.gt]: Sequelize.col('startDate'),
+                    },
+                },
             },
         });
     },
