@@ -11,26 +11,35 @@ module.exports = {
             },
             firstName: {
                 type: Sequelize.STRING,
+                allowNull: false,
             },
             lastName: {
                 type: Sequelize.STRING,
+                allowNull: false,
             },
             email: {
                 type: Sequelize.STRING,
+                allowNull: false,
+                unique: true,
             },
             username: {
                 type: Sequelize.STRING,
+                allowNull: false,
+                unique: true,
             },
             passwordHash: {
-                type: Sequelize.STRING,
+                type: Sequelize.STRING(64),
+                allowNull: false,
             },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
             updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
     },
