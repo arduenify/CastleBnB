@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Spot.belongsTo(models.User, { foreignKey: 'ownerId' });
+
+            Spot.hasMany(models.Booking, { foreignKey: 'spotId' });
+            Spot.hasMany(models.SpotImage, { foreignKey: 'spotId' });
+            Spot.hasMany(models.Review, { foreignKey: 'spotId' });
         }
     }
 
@@ -43,6 +47,9 @@ module.exports = (sequelize, DataTypes) => {
             },
             name: {
                 type: DataTypes.STRING(50),
+                validation: {
+                    len: [1, 50],
+                },
             },
             description: {
                 type: DataTypes.STRING,
@@ -51,6 +58,9 @@ module.exports = (sequelize, DataTypes) => {
             price: {
                 type: DataTypes.NUMERIC(0, 2),
                 allowNull: false,
+                validation: {
+                    min: 0,
+                },
             },
         },
         {
