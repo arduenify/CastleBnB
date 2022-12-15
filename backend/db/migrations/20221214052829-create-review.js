@@ -11,23 +11,38 @@ module.exports = {
             },
             userId: {
                 type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Users',
+                    key: 'id',
+                },
+                onDelete: 'CASCADE',
             },
             spotId: {
                 type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Spots',
+                    key: 'id',
+                },
             },
             review: {
                 type: Sequelize.STRING,
+                allowNull: false,
             },
             stars: {
                 type: Sequelize.INTEGER,
+                allowNull: false,
             },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
             updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
     },
