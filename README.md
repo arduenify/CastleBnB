@@ -50,7 +50,7 @@ table Reviews {
   stars integer [not null]
   createdAt datetime [default: `now()`]
   updatedAt datetime [default: `now()`]
-  
+
   indexes {
     (userId, spotId) [unique]
   }
@@ -68,13 +68,13 @@ table Bookings {
   id integer [PK, increment, not null]
   spotId integer [ref: > Spots.id, not null]
   userId integer [ref: > Users.id, not null]
-  
+
   // Do we need a CHECK here?
   startDate date
   endDate date
   createdAt datetime [default: `now()`]
   updatedAt datetime [default: `now()`]
-  
+
   indexes {
     (spotId, startDate) [unique]
     (spotId, endDate) [unique]
@@ -123,7 +123,7 @@ CREATE TABLE Spots (
     price NUMERIC(0, 2) NOT NULL,
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ownerId) REFERENCES (Owners.id) ON DELETE CASCADE
+    FOREIGN KEY (ownerId) REFERENCES (Users.id) ON DELETE CASCADE
 );
 
 CREATE TABLE SpotImages (
