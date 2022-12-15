@@ -46,12 +46,11 @@ module.exports = {
         });
 
         await queryInterface.addConstraint('Bookings', {
-            ['endDate']: {
-                type: 'check',
-                where: {
-                    endDate: {
-                        [Sequelize.Op.gt]: Sequelize.col('startDate'),
-                    },
+            fields: ['endDate'],
+            type: 'check',
+            where: {
+                endDate: {
+                    [Sequelize.Op.gt]: Sequelize.col('startDate'),
                 },
             },
         });
