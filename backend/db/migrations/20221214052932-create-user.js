@@ -2,50 +2,33 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('Spots', {
+        await queryInterface.createTable('Users', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-            ownerId: {
-                allowNull: false,
-                type: Sequelize.INTEGER,
-                references: { model: 'Users', key: 'id' },
-                onDelete: 'CASCADE',
-            },
-            address: {
+            firstName: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            city: {
+            lastName: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            state: {
+            email: {
                 type: Sequelize.STRING,
                 allowNull: false,
+                unique: true,
             },
-            country: {
+            username: {
                 type: Sequelize.STRING,
                 allowNull: false,
+                unique: true,
             },
-            lat: {
-                type: Sequelize.NUMERIC,
-            },
-            lng: {
-                type: Sequelize.NUMERIC,
-            },
-            name: {
-                type: Sequelize.STRING(50),
-            },
-            description: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            price: {
-                type: Sequelize.NUMERIC(0, 2),
+            passwordHash: {
+                type: Sequelize.STRING(64),
                 allowNull: false,
             },
             createdAt: {
@@ -61,6 +44,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Spots');
+        await queryInterface.dropTable('Users');
     },
 };
