@@ -19,8 +19,14 @@ module.exports = (sequelize, DataTypes) => {
         {
             spotId: { type: DataTypes.INTEGER, allowNull: false },
             userId: { type: DataTypes.INTEGER, allowNull: false },
-            startDate: DataTypes.DATE,
-            endDate: DataTypes.DATE,
+            startDate: {
+                type: DataTypes.DATE,
+                allowNull: false,
+            },
+            endDate: {
+                type: DataTypes.DATE,
+                allowNull: false,
+            },
         },
         {
             sequelize,
