@@ -33,12 +33,15 @@ module.exports = {
             },
             lat: {
                 type: Sequelize.NUMERIC,
+                allowNull: false,
             },
             lng: {
                 type: Sequelize.NUMERIC,
+                allowNull: false,
             },
             name: {
                 type: Sequelize.STRING(50),
+                allowNull: false,
             },
             description: {
                 type: Sequelize.STRING,

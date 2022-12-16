@@ -29,18 +29,20 @@ module.exports = {
             },
             startDate: {
                 type: Sequelize.DATE,
+                allowNull: false,
             },
             endDate: {
                 type: Sequelize.DATE,
+                allowNull: false,
             },
             createdAt: {
-                allowNull: false,
                 type: Sequelize.DATE,
+                allowNull: false,
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
             updatedAt: {
-                allowNull: false,
                 type: Sequelize.DATE,
+                allowNull: false,
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
