@@ -35,11 +35,5 @@
     },
     "devDependencies": {
         "nodemon": "^2.0.20"
-    },
-    "_moduleAliases": {
-        "@models": "db/models",
-        "@errors": "errors",
-        "@routes": "routes",
-        "@utils": "utils"
     }
 }
