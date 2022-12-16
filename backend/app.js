@@ -10,7 +10,13 @@ const cookieParser = require('cookie-parser');
 const { environment } = require('./config');
 const { ValidationError } = require('sequelize');
 const isProduction = environment === 'production';
+
 const routes = require('./routes');
+
+// Errors
+const { ResourceNotFoundError } = require('./errors/not-found');
+const { AuthorizationError } = require('./errors/authorization');
+const { AuthenticationError } = require('./errors/authentication');
 
 const app = express();
 app.use(morgan('dev'));
@@ -39,16 +45,11 @@ app.use(
 // Routes
 app.use(routes);
 
-// Errors
-// backend/app.js
-// ...
-// Catch unhandled requests and forward to error handler.
+// Resource not found error
 app.use((_req, _res, next) => {
-    const err = new Error("The requested resource couldn't be found.");
-    err.title = 'Resource Not Found';
-    err.errors = ["The requested resource couldn't be found."];
-    err.status = 404;
-    next(err);
+    const resourceNotFoundError = new ResourceNotFoundError();
+
+    next(resourceNotFoundError);
 });
 
 // Process sequelize errors
@@ -58,19 +59,22 @@ app.use((err, _req, _res, next) => {
         err.errors = err.errors.map((e) => e.message);
         err.title = 'Validation error';
     }
+
     next(err);
 });
 
-// Error formatter
-app.use((err, _req, res, _next) => {
-    res.status(err.status || 500);
-    console.error(err);
-    res.json({
-        title: err.title || 'Server Error',
-        message: err.message,
-        errors: err.errors,
-        stack: isProduction ? null : err.stack,
-    });
+/**
+ * Catch unhandled requests.
+ */
+app.use((err, req, res, next) => {
+    if (!(err instanceof ErrorResponse)) {
+        return res.json({
+            title: 'Well, this is awkward... Something went wrong.',
+            message: err,
+        });
+    }
+
+    err.send(res);
 });
 
 // Export
