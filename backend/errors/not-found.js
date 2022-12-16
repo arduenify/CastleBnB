@@ -1,3 +1,5 @@
+const ErrorResponse = require('./response');
+
 class ResourceNotFoundError extends ErrorResponse {
     constructor(message) {
         super(404, message);
