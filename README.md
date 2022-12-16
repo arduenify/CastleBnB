@@ -2,87 +2,6 @@
 
 ## Database Schema Design
 
-<details>
-<summary>DBML</summary>
-
-```sql
-table Users {
-  id integer [PK, increment, not null]
-  firstName varchar(20) [not null]
-  lastName varchar(20) [not null]
-  email varchar(30) [not null, unique]
-  username varchar(18) [not null, unique]
-  passwordHash char(64) [not null]
-  createdAt datetime [default: `now()`]
-  updatedAt datetime [default: `now()`]
-}
-
-table Spots {
-  id integer [PK, increment, not null]
-  ownerId integer [ref: > Users.id]
-  address varchar [not null]
-  city varchar [not null]
-  state varchar [not null]
-  country varchar [not null]
-  lat numeric
-  lng numeric
-  name varchar(50)
-  description varchar [not null]
-  price numeric(0,2) [not null]
-  createdAt datetime [default: `now()`]
-  updatedAt datetime [default: `now()`]
-}
-
-table SpotImages {
-  id integer [PK, increment, not null]
-  spotId integer [ref: > Spots.id]
-  url varchar
-  preview boolean
-  createdAt datetime [default: `now()`]
-  updatedAt datetime [default: `now()`]
-}
-
-table Reviews {
-  id integer [PK, increment, not null]
-  userId integer [ref: > Users.id, not null]
-  spotId integer [ref: > Spots.id, not null]
-  review varchar [not null]
-  stars integer [not null]
-  createdAt datetime [default: `now()`]
-  updatedAt datetime [default: `now()`]
-
-  indexes {
-    (userId, spotId) [unique]
-  }
-}
-
-table ReviewImages {
-  id integer [PK, increment, not null]
-  reviewId integer [ref: > Reviews.id, not null]
-  url varchar
-  createdAt datetime [default: `now()`]
-  updatedAt datetime [default: `now()`]
-}
-
-table Bookings {
-  id integer [PK, increment, not null]
-  spotId integer [ref: > Spots.id, not null]
-  userId integer [ref: > Users.id, not null]
-
-  // Do we need a CHECK here?
-  startDate date
-  endDate date
-  createdAt datetime [default: `now()`]
-  updatedAt datetime [default: `now()`]
-
-  indexes {
-    (spotId, startDate) [unique]
-    (spotId, endDate) [unique]
-  }
-}
-```
-
-</details>
 
 <details>
 <summary>Diagram</summary>
@@ -98,86 +17,111 @@ table Bookings {
 --
 -- Table Definitions
 --
-CREATE TABLE Users (
-    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-    firstName VARCHAR NOT NULL,
-    lastName VARCHAR NOT NULL,
-    email VARCHAR UNIQUE NOT NULL,
-    username VARCHAR UNIQUE NOT NULL,
-    passwordHash CHAR(64) NOT NULL,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE "Users" (
+    "id" SERIAL PRIMARY KEY NOT NULL,
+    "firstName" varchar(20) NOT NULL,
+    "lastName" varchar(20) NOT NULL,
+    "email" varchar(30) UNIQUE NOT NULL,
+    "username" varchar(18) UNIQUE NOT NULL,
+    "passwordHash" char(64) NOT NULL,
+    "createdAt" datetime DEFAULT (NOW()),
+    "updatedAt" datetime DEFAULT (NOW())
 );
 
-CREATE TABLE Spots (
-    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-    ownerId INTEGER NOT NULL,
-    address VARCHAR NOT NULL,
-    city VARCHAR NOT NULL,
-    state VARCHAR NOT NULL,
-    country VARCHAR NOT NULL,
-    lat NUMERIC,
-    lng NUMERIC,
-    name VARCHAR(50),
-    description VARCHAR NOT NULL,
-    price NUMERIC(0, 2) NOT NULL,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ownerId) REFERENCES (Users.id) ON DELETE CASCADE
+CREATE TABLE "Spots" (
+    "id" SERIAL PRIMARY KEY NOT NULL,
+    "ownerId" integer NOT NULL,
+    "address" varchar NOT NULL,
+    "city" varchar NOT NULL,
+    "state" varchar NOT NULL,
+    "country" varchar NOT NULL,
+    "lat" numeric NOT NULL,
+    "lng" numeric NOT NULL,
+    "name" varchar(50) NOT NULL,
+    "description" varchar NOT NULL,
+    "price" numeric(0, 2) NOT NULL,
+    "createdAt" datetime DEFAULT (NOW()),
+    "updatedAt" datetime DEFAULT (NOW())
 );
 
-CREATE TABLE SpotImages (
-    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-    spotId INTEGER,
-    url VARCHAR,
-    preview BOOLEAN,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (spotId) REFERENCES (Spots.id) ON DELETE CASCADE
+CREATE TABLE "SpotImages" (
+    "id" SERIAL PRIMARY KEY NOT NULL,
+    "spotId" integer NOT NULL,
+    "url" varchar NOT NULL,
+    "preview" boolean NOT NULL DEFAULT 0,
+    "createdAt" datetime DEFAULT (NOW()),
+    "updatedAt" datetime DEFAULT (NOW())
 );
 
-CREATE TABLE Reviews (
-    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-    userId INTEGER NOT NULL,
-    spotId INTEGER NOT NULL,
-    review VARCHAR NOT NULL,
-    stars INTEGER NOT NULL,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES (Users.id) ON DELETE CASCADE,
-    FOREIGN KEY (spotId) REFERENCES (Spots.id) ON DELETE CASCADE
+CREATE TABLE "Reviews" (
+    "id" SERIAL PRIMARY KEY NOT NULL,
+    "userId" integer NOT NULL,
+    "spotId" integer NOT NULL,
+    "review" varchar NOT NULL,
+    "stars" integer NOT NULL,
+    "createdAt" datetime DEFAULT (NOW()),
+    "updatedAt" datetime DEFAULT (NOW())
 );
 
-CREATE TABLE ReviewImages (
-    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-    reviewId INTEGER NOT NULL,
-    url VARCHAR,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
-    FOREIGN KEY (reviewId) REFERENCES (Reviews.id) ON DELETE CASCADE
+CREATE TABLE "ReviewImages" (
+    "id" SERIAL PRIMARY KEY NOT NULL,
+    "reviewId" integer NOT NULL,
+    "url" varchar NOT NULL,
+    "createdAt" datetime DEFAULT (NOW()),
+    "updatedAt" datetime DEFAULT (NOW())
 );
 
-CREATE TABLE Bookings (
-    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-    spotId INTEGER NOT NULL,
-    userId INTEGER NOT NULL,
-    startDate DATE,
-    endDate DATE,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES (Users.id) ON DELETE CASCADE,
-    FOREIGN KEY (spotId) REFERENCES (Spots.id) ON DELETE CASCADE,
-    CHECK (endDate > startDate),
+CREATE TABLE "Bookings" (
+    "id" SERIAL PRIMARY KEY NOT NULL,
+    "spotId" integer NOT NULL,
+    "userId" integer NOT NULL,
+    "startDate" date NOT NULL,
+    "endDate" date NOT NULL,
+    "createdAt" datetime DEFAULT (NOW()),
+    "updatedAt" datetime DEFAULT (NOW()),
+    CHECK ("endDate" > "startDate")
 );
 
---
--- Index Definitions
---
-CREATE UNIQUE INDEX idx_reviews_userId_spotId ON Reviews (userId, spotId);
+CREATE UNIQUE INDEX ON "Reviews" ("userId", "spotId");
 
-CREATE UNIQUE INDEX idx_bookings_spotId_startDate ON Bookings (spotId, startDate);
+CREATE UNIQUE INDEX ON "Bookings" ("spotId", "startDate");
 
-CREATE UNIQUE INDEX idx_bookings_spotId_endDate ON Bookings (spotId, endDate);
+CREATE UNIQUE INDEX ON "Bookings" ("spotId", "endDate");
+
+ALTER TABLE
+    "Spots"
+ADD
+    FOREIGN KEY ("ownerId") REFERENCES "Users" ("id") ON DELETE CASCADE;
+
+ALTER TABLE
+    "SpotImages"
+ADD
+    FOREIGN KEY ("spotId") REFERENCES "Spots" ("id") ON DELETE CASCADE;
+
+ALTER TABLE
+    "Reviews"
+ADD
+    FOREIGN KEY ("userId") REFERENCES "Users" ("id") ON DELETE CASCADE;
+
+ALTER TABLE
+    "Reviews"
+ADD
+    FOREIGN KEY ("spotId") REFERENCES "Spots" ("id") ON DELETE CASCADE;
+
+ALTER TABLE
+    "ReviewImages"
+ADD
+    FOREIGN KEY ("reviewId") REFERENCES "Reviews" ("id") ON DELETE CASCADE;
+
+ALTER TABLE
+    "Bookings"
+ADD
+    FOREIGN KEY ("spotId") REFERENCES "Spots" ("id") ON DELETE CASCADE;
+
+ALTER TABLE
+    "Bookings"
+ADD
+    FOREIGN KEY ("userId") REFERENCES "Users" ("id") ON DELETE CASCADE;
 ```
 
 </details>
