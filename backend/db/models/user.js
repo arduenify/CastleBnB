@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
             username,
             password,
         }) {
-            const hashedPassword = bcrypt.hashSync(password);
+            const passwordHash = bcrypt.hashSync(password);
 
             try {
                 const user = await User.create({
@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
                     lastName,
                     email,
                     username,
-                    passwordHash: hashedPassword,
+                    passwordHash,
                 });
 
                 return await User.scope('currentUser').findByPk(user.id);
@@ -114,11 +114,6 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: 'User',
-            defaultScope: {
-                attributes: {
-                    exclude: ['passwordHash', 'createdAt', 'updatedAt'],
-                },
-            },
             defaultScope: {
                 attributes: {
                     exclude: [
