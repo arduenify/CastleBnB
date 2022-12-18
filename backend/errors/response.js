@@ -2,17 +2,22 @@ class ErrorResponse {
     constructor(statusCode, message, title) {
         this.statusCode = statusCode;
         this.message = message;
-        this.title = title;
+
+        if (title) this.title = title;
     }
 
     toJSON() {
         const response = {
-            statusCode: this.statusCode,
             message: this.message,
+            statusCode: this.statusCode,
         };
 
         if (this.title) {
             response.title = this.title;
+        }
+
+        if (this.errors) {
+            response.errors = this.errors;
         }
 
         return response;
