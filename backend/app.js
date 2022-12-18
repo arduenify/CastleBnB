@@ -14,9 +14,11 @@ const isProduction = environment === 'production';
 const routes = require('./routes');
 
 // Errors
-const { ResourceNotFoundError } = require('./errors/not-found');
-const { AuthorizationError } = require('./errors/authorization');
-const { AuthenticationError } = require('./errors/authentication');
+const ErrorResponse = require('./errors/response');
+const ResourceNotFoundError = require('./errors/not-found');
+const AuthorizationError = require('./errors/authorization');
+const AuthenticationError = require('./errors/authentication');
+const InternalServerError = require('./errors/internal');
 
 const app = express();
 app.use(morgan('dev'));
@@ -52,29 +54,25 @@ app.use((_req, _res, next) => {
     next(resourceNotFoundError);
 });
 
-// Process sequelize errors
-app.use((err, _req, _res, next) => {
-    // check if error is a Sequelize error:
-    if (err instanceof ValidationError) {
-        err.errors = err.errors.map((e) => e.message);
-        err.title = 'Validation error';
-    }
-
-    next(err);
-});
-
-/**
- * Catch unhandled requests.
- */
+// Catch the errors
 app.use((err, req, res, next) => {
-    if (!(err instanceof ErrorResponse)) {
-        return res.json({
-            title: 'Well, this is awkward... Something went wrong.',
-            message: err,
-        });
+    if (process.env.NODE_ENV !== 'production') {
+        console.error(err);
     }
 
-    err.send(res);
+    if (err instanceof ErrorResponse) {
+        return err.send(res);
+    }
+
+    // CSURF error
+    if (err.code === 'EBADCSRFTOKEN') {
+        return new AuthorizationError().send(res);
+    }
+
+    new InternalServerError(
+        'Well, this is awkward... Something went wrong.',
+        err
+    ).send(res);
 });
 
 // Export
