@@ -2,6 +2,7 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
 const { User } = require('../db/models');
+const AuthenticationError = require('../errors/authentication');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -39,9 +40,11 @@ const restoreUser = (req, res, next) => {
 
         try {
             const { id } = jwtPayload.data;
+
             req.user = await User.scope('currentUser').findByPk(id);
         } catch (e) {
             res.clearCookie('token');
+
             return next();
         }
 
@@ -55,11 +58,7 @@ const restoreUser = (req, res, next) => {
 const requireAuth = function (req, _res, next) {
     if (req.user) return next();
 
-    const err = new Error('Authentication required');
-    err.title = 'Authentication required';
-    err.errors = ['Authentication required'];
-    err.status = 401;
-    return next(err);
+    return next(new AuthenticationError());
 };
 
 module.exports = { setTokenCookie, restoreUser, requireAuth };
