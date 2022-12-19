@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
 const { User } = require('../db/models');
-const AuthenticationError = require('../errors/authentication');
+const { AuthenticationError } = require('../errors/api');
 
 const { secret, expiresIn } = jwtConfig;
 

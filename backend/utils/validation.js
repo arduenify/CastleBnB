@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const SequelizeValidationError = require('../errors/sequelize-validation');
+const { SequelizeValidationError } = require('../errors/api');
 
 // formats errors via express-validator mw
 const handleValidationErrors = (req, res, next) => {

@@ -8,17 +8,17 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
 const { environment } = require('./config');
-const { ValidationError } = require('sequelize');
 const isProduction = environment === 'production';
 
 const routes = require('./routes');
 
 // Errors
-const ErrorResponse = require('./errors/response');
-const ResourceNotFoundError = require('./errors/not-found');
-const AuthorizationError = require('./errors/authorization');
-const AuthenticationError = require('./errors/authentication');
-const InternalServerError = require('./errors/internal');
+const {
+    ResourceNotFoundError,
+    AuthorizationError,
+    InternalServerError,
+    ApiError,
+} = require('./errors/api');
 
 const app = express();
 app.use(morgan('dev'));
@@ -60,7 +60,7 @@ app.use((err, req, res, next) => {
         console.error(err);
     }
 
-    if (err instanceof ErrorResponse) {
+    if (err instanceof ApiError) {
         return err.send(res);
     }
 
