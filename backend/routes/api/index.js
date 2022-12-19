@@ -1,7 +1,7 @@
 // backend/routes/api/index.js
 const router = require('express').Router();
 
-const { BadRequestError } = require('../../errors/api');
+const { BadRequestError } = require('../../errors');
 const { restoreUser } = require('../../utils/auth');
 
 router.use(restoreUser);

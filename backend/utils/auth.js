@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
 const { User } = require('../db/models');
-const { AuthenticationError } = require('../errors/api');
+const { AuthenticationError } = require('../errors');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -58,7 +58,8 @@ const restoreUser = (req, res, next) => {
 const requireAuth = function (req, _res, next) {
     if (req.user) return next();
 
-    return next(new AuthenticationError());
+    const error = new AuthenticationError('Authentication required');
+    return next(error);
 };
 
 module.exports = { setTokenCookie, restoreUser, requireAuth };

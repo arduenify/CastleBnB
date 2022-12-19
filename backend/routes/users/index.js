@@ -5,7 +5,11 @@
 const express = require('express');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { AuthenticationError } = require('../../errors/api');
+const {
+    AuthenticationError,
+    SequelizeValidationError,
+    ForbiddenError,
+} = require('../../errors');
 const { User } = require('../../db/models');
 const {
     setTokenCookie,
@@ -116,11 +120,10 @@ router.post(
             });
 
             const statusCode = 403;
-            const responseMessage = {
+            const responseMessage = new ForbiddenError({
                 message: 'User already exists',
-                statusCode,
-                errors: errorMessages || [],
-            };
+                errors: errorMessages,
+            });
 
             return res.status(statusCode).json(responseMessage);
         }

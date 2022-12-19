@@ -15,10 +15,10 @@ const routes = require('./routes');
 // Errors
 const {
     ResourceNotFoundError,
-    AuthorizationError,
+    ForbiddenError,
     InternalServerError,
     ApiError,
-} = require('./errors/api');
+} = require('./errors');
 
 const app = express();
 app.use(morgan('dev'));
@@ -66,7 +66,11 @@ app.use((err, req, res, next) => {
 
     // CSURF error
     if (err.code === 'EBADCSRFTOKEN') {
-        return new AuthorizationError().send(res);
+        const authorizationError = new ForbiddenError(
+            'Invalid CSRF token. Please try again.'
+        );
+
+        return authorizationError.send(res);
     }
 
     new InternalServerError(
