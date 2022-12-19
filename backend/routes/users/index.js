@@ -5,7 +5,7 @@
 const express = require('express');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const AuthenticationError = require('../../errors/authentication');
+const { AuthenticationError } = require('../../errors/api');
 const { User } = require('../../db/models');
 const {
     setTokenCookie,
