@@ -1,9 +1,8 @@
 class ApiError {
-    constructor({ statusCode, message, title, errors }) {
+    constructor({ statusCode, message, errors }) {
         this.statusCode = statusCode;
         this.message = message;
 
-        if (title) this.title = title;
         if (errors) this.errors = errors;
     }
 
@@ -17,11 +16,7 @@ class ApiError {
             statusCode: this.statusCode,
         };
 
-        if (this.title) {
-            response.title = this.title;
-        }
-
-        if (this.errors) {
+        if (this.errors && this.errors.length) {
             response.errors = this.errors;
         }
 
@@ -41,37 +36,37 @@ class ApiError {
  */
 
 class BadRequestError extends ApiError {
-    constructor({ message = 'Bad request' }) {
+    constructor({ message = 'Bad request' } = {}) {
         super({ statusCode: 400, message });
     }
 }
 
 class SequelizeValidationError extends ApiError {
-    constructor({ errors }) {
+    constructor({ errors } = {}) {
         super({ statusCode: 400, message: 'Validation error', errors });
     }
 }
 
-class UnauthorizedError extends ApiError {
-    constructor({ message = 'Authentication required' }) {
+class AuthenticationError extends ApiError {
+    constructor({ message = 'Authentication required' } = {}) {
         super({ statusCode: 401, message });
     }
 }
 
 class ForbiddenError extends ApiError {
-    constructor({ message = 'Forbidden' }) {
-        super({ statusCode: 403, message });
+    constructor({ message = 'Forbidden', errors } = {}) {
+        super({ statusCode: 403, message, errors });
     }
 }
 
 class InternalServerError extends ApiError {
-    constructor({ message = 'Internal server error' }) {
+    constructor({ message = 'Internal server error' } = {}) {
         super({ statusCode: 500, message });
     }
 }
 
 class ResourceNotFoundError extends ApiError {
-    constructor({ message = 'Resource not found' }) {
+    constructor({ message = 'Resource not found' } = {}) {
         super({ statusCode: 404, message });
     }
 }
@@ -80,7 +75,7 @@ module.exports = {
     ApiError,
     BadRequestError,
     SequelizeValidationError,
-    UnauthorizedError,
+    AuthenticationError,
     ForbiddenError,
     InternalServerError,
     ResourceNotFoundError,
