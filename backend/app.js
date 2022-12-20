@@ -18,7 +18,10 @@ const {
     ForbiddenError,
     InternalServerError,
     ApiError,
+    SequelizeValidationError,
+    BadRequestError,
 } = require('./errors');
+const { ValidationError } = require('sequelize');
 
 const app = express();
 app.use(morgan('dev'));
@@ -51,32 +54,39 @@ app.use(routes);
 app.use((_req, _res, next) => {
     const resourceNotFoundError = new ResourceNotFoundError();
 
-    next(resourceNotFoundError);
+    return next(resourceNotFoundError);
 });
 
 // Catch the errors
 app.use((err, req, res, next) => {
     if (process.env.NODE_ENV !== 'production') {
-        console.error(err);
     }
 
     if (err instanceof ApiError) {
+        // Custom errors
         return err.send(res);
+    }
+
+    if (err instanceof ValidationError) {
+        // Sequelize validation errors
+        const badRequestError = new BadRequestError({ message: err.message });
+
+        return badRequestError.send(res);
     }
 
     // CSURF error
     if (err.code === 'EBADCSRFTOKEN') {
-        const authorizationError = new ForbiddenError(
+        const forbiddenError = new ForbiddenError(
             'Invalid CSRF token. Please try again.'
         );
 
-        return authorizationError.send(res);
+        return forbiddenError.send(res);
     }
 
-    new InternalServerError(
-        'Well, this is awkward... Something went wrong.',
-        err
-    ).send(res);
+    return new InternalServerError({
+        message: 'Well, this is awkward... Something went wrong.',
+        errors: err,
+    }).send(res);
 });
 
 // Export
