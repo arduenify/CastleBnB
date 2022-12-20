@@ -56,25 +56,27 @@ router.post(
     ],
     async (req, res, next) => {
         const { credential, password } = req.body;
-        console.log('credential', credential);
-        console.log('password', password);
 
-        const user = await User.login({ credential, password });
+        try {
+            const user = await User.login({ credential, password });
 
-        if (!user) {
-            const error = new AuthenticationError({
-                message: 'Invalid credentials',
+            if (!user) {
+                const error = new AuthenticationError({
+                    message: 'Invalid credentials',
+                });
+
+                return next(error);
+            }
+
+            return res.json({
+                user: {
+                    ...user.toSafeObject(),
+                    token: await setTokenCookie(res, user),
+                },
             });
-
-            return next(error);
+        } catch (error) {
+            next(error);
         }
-
-        return res.json({
-            user: {
-                ...user.toSafeObject(),
-                token: await setTokenCookie(res, user),
-            },
-        });
     }
 );
 
