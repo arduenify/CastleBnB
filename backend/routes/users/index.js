@@ -48,10 +48,10 @@ router.post(
     [
         check('credential')
             .exists({ checkFalsy: true })
-            .withMessage('Please provide a valid email or username.'),
+            .withMessage('Email or username is required'),
         check('password')
             .exists({ checkFalsy: true })
-            .withMessage('Please provide a valid password.'),
+            .withMessage('Password is required'),
         handleValidationErrors,
     ],
     async (req, res, next) => {
@@ -62,7 +62,9 @@ router.post(
         const user = await User.login({ credential, password });
 
         if (!user) {
-            const error = new AuthenticationError('Invalid credentials');
+            const error = new AuthenticationError({
+                message: 'Invalid credentials',
+            });
 
             return next(error);
         }
@@ -84,23 +86,22 @@ router.post(
 router.post(
     '/signup',
     [
-        check('firstName')
-            .exists({ checkFalsy: true })
-            .withMessage('Please provide a first name.'),
-        check('lastName')
-            .exists({ checkFalsy: true })
-            .withMessage('Please provide a last name.'),
         check('email')
             .exists({ checkFalsy: true })
-            .withMessage('Please provide an email.')
-            .isEmail()
-            .withMessage('Please provide a valid email.'),
+            .withMessage('Email is required'),
+        check('email').isEmail().withMessage('Invalid email'),
         check('username')
             .exists({ checkFalsy: true })
-            .withMessage('Please provide a username.'),
+            .withMessage('Username is required'),
+        check('firstName')
+            .exists({ checkFalsy: true })
+            .withMessage('First name is required'),
+        check('lastName')
+            .exists({ checkFalsy: true })
+            .withMessage('Last name is required'),
         check('password')
             .exists({ checkFalsy: true })
-            .withMessage('Please provide a password.'),
+            .withMessage('Password is required'),
         handleValidationErrors,
     ],
     async (req, res) => {
