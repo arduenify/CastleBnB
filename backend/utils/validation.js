@@ -8,7 +8,7 @@ const handleValidationErrors = (req, res, next) => {
     if (!validationErrors.isEmpty()) {
         const errors = validationErrors.array().map((error) => `${error.msg}`);
 
-        const err = new SequelizeValidationError(errors);
+        const err = new SequelizeValidationError({ errors });
 
         next(err);
     }

@@ -17,10 +17,13 @@ fi
 if [ ! -f .env ]; then
   echo "Creating .env file"
   echo "DB_FILE=db/dev.db" > .env
+  echo "JWT_SECRET=secret" > .env
+  echo "JWT_EXPIRES_IN=60000" > .env
 elif ! grep -q "DB_FILE" .env; then
   echo "DB_FILE=db/dev.db" >> .env
 else
     echo ".env file already exists and has the correct DB_FILE"
 fi
+
 
 echo "Done"
