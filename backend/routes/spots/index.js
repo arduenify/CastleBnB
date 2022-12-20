@@ -1,4 +1,6 @@
-const { Spot } = require('../../db/models');
+const express = require('express');
+
+const { Spot, SpotImage } = require('../../db/models');
 
 const router = express.Router();
 
@@ -9,10 +11,17 @@ const router = express.Router();
  */
 router.get('/', async (req, res, next) => {
     try {
-        const spots = await Spot.findAll();
+        const spots = await Spot.findAll({
+            include: {
+                model: SpotImage,
+                attributes: ['url'],
+            },
+        });
 
         res.json(spots);
     } catch (error) {
         next(error);
     }
 });
+
+module.exports = router;
