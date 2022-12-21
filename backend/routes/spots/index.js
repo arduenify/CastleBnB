@@ -60,7 +60,9 @@ router.get('/', handleValidationErrors, async (req, res, next) => {
  */
 router.get('/:spotId', async (req, res, next) => {
     try {
-        const spot = await Spot.findByPk(req.params.spotId, {
+        const spotId = req.params.spotId;
+
+        const spot = await Spot.findByPk(spotId, {
             include: [
                 {
                     association: 'SpotImages',
@@ -89,7 +91,7 @@ router.get('/:spotId', async (req, res, next) => {
             },
         });
 
-        if (!spot) {
+        if (!spot || !spot.dataValues.id) {
             const spotNotFoundError = new ResourceNotFoundError({
                 message: "Spot couldn't be found",
             });
