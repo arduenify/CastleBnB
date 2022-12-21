@@ -1,17 +1,14 @@
 const express = require('express');
 const Sequelize = require('sequelize');
-const { check } = require('express-validator');
-
-const router = express.Router();
-
 const { Spot, Review } = require('../../db/models');
-const { ResourceNotFoundError } = require('../../errors');
+const { ResourceNotFoundError, ForbiddenError } = require('../../errors');
 const { requireAuth, restoreUser } = require('../../utils/auth');
 const {
     spotValidationMiddleware,
     handleValidationErrors,
 } = require('../../utils/validation');
 
+const router = express.Router();
 router.use(restoreUser);
 
 /**
@@ -43,14 +40,9 @@ router.get('/', handleValidationErrors, async (req, res, next) => {
             },
         });
 
-        for (const spot of spots) {
-            spot.dataValues.previewImage =
-                spot.dataValues?.previewImage?.url ?? null;
+        const formattedSpots = Spot.formatSpotsResponse(spots);
 
-            delete spot.dataValues.SpotImages; // safety first!
-        }
-
-        res.json(spots);
+        res.json(formattedSpots);
     } catch (err) {
         next(err);
     }
@@ -60,7 +52,7 @@ router.get('/', handleValidationErrors, async (req, res, next) => {
  * Get a single spot by id
  * Method: GET
  * Route: /spots/:id
- * Params: id
+ * Params: spotId
  */
 router.get('/:spotId', async (req, res, next) => {
     try {
@@ -156,8 +148,8 @@ router.post(
 /**
  * Edit a spot
  * Method: PUT
- * Route: /spots/:id
- * Params: id
+ * Route: /spots/:spotId
+ * Params: spotId
  * Body: { address, city, state, country, lat, lng, name, description, price }
  */
 router.put(
@@ -188,6 +180,10 @@ router.put(
                 });
             }
 
+            if (spot.dataValues.ownerId !== req.user.id) {
+                throw new ForbiddenError();
+            }
+
             await spot.update({
                 address,
                 city,
@@ -206,5 +202,38 @@ router.put(
         }
     }
 );
+
+/**
+ * Delete a spot
+ * Method: DELETE
+ * Route: /spots/:spotId
+ * Params: spotId
+ */
+router.delete('/:spotId', requireAuth, async (req, res, next) => {
+    try {
+        const spotId = req.params.spotId;
+
+        const spot = await Spot.findByPk(spotId);
+
+        if (!spot || !spot.dataValues.id) {
+            throw new ResourceNotFoundError({
+                message: "Spot couldn't be found",
+            });
+        }
+
+        if (spot.dataValues.ownerId !== req.user.id) {
+            throw new ForbiddenError();
+        }
+
+        await spot.destroy();
+
+        res.json({
+            message: 'Successfully deleted',
+            statusCode: 200,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
 
 module.exports = router;

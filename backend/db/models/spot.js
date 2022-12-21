@@ -25,6 +25,82 @@ module.exports = (sequelize, DataTypes) => {
                 },
             });
         }
+
+        static formatResponse(spot) {
+            const {
+                id,
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+                ownerId,
+            } = spot;
+            const { url } = spot.previewImage;
+            const { firstName, lastName } = spot.Owner;
+            const { numReviews, avgStarRating } = spot;
+
+            return {
+                id,
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+                ownerId,
+                previewImage: url,
+                owner: {
+                    firstName,
+                    lastName,
+                },
+                numReviews,
+                avgStarRating,
+            };
+        }
+
+        static formatSpotsResponse(spots) {
+            return spots.map((spot) => {
+                const {
+                    id,
+                    address,
+                    city,
+                    state,
+                    country,
+                    lat,
+                    lng,
+                    name,
+                    description,
+                    price,
+                    ownerId,
+                } = spot;
+                const { url } = spot.previewImage;
+                const { averageRating } = spot;
+
+                return {
+                    id,
+                    address,
+                    city,
+                    state,
+                    country,
+                    lat,
+                    lng,
+                    name,
+                    description,
+                    price,
+                    ownerId,
+                    previewImage: url,
+                    averageRating,
+                };
+            });
+        }
     }
 
     Spot.init(
