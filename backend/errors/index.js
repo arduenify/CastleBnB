@@ -20,6 +20,11 @@ class ApiError {
             response.errors = this.errors;
         }
 
+        // Pretty print the response to the console
+        console.log('\n::::::::::::::::::::::::::::::::::::::::');
+        console.log('Error Response Created: ', response);
+        console.log('::::::::::::::::::::::::::::::::::::::::\n');
+
         return response;
     }
 
@@ -27,6 +32,9 @@ class ApiError {
     // but it's convenient.
     // todo: maybe remove this method
     send(res) {
+        console.log('::::::::::::::::::::::::::::::::::::::::');
+        console.log('Sending error response: ', this.toErrorResponse());
+        console.log('::::::::::::::::::::::::::::::::::::::::\n');
         res.status(this.statusCode).json(this.toErrorResponse());
     }
 }
@@ -43,6 +51,7 @@ class BadRequestError extends ApiError {
 
 class SequelizeValidationError extends ApiError {
     constructor({ errors } = {}) {
+        console.log('Creating new SequelizeValidationError', errors);
         super({ statusCode: 400, message: 'Validation error', errors });
     }
 }
