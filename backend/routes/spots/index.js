@@ -5,12 +5,12 @@ const { check } = require('express-validator');
 const router = express.Router();
 
 const { Spot, Review } = require('../../db/models');
-const {
-    ResourceNotFoundError,
-    SequelizeValidationError,
-} = require('../../errors');
+const { ResourceNotFoundError } = require('../../errors');
 const { requireAuth, restoreUser } = require('../../utils/auth');
-const { handleValidationErrors } = require('../../utils/validation');
+const {
+    spotValidationMiddleware,
+    handleValidationErrors,
+} = require('../../utils/validation');
 
 router.use(restoreUser);
 
@@ -62,7 +62,7 @@ router.get('/', handleValidationErrors, async (req, res, next) => {
  * Route: /spots/:id
  * Params: id
  */
-router.get('/:spotId', handleValidationErrors, async (req, res, next) => {
+router.get('/:spotId', async (req, res, next) => {
     try {
         const spotId = req.params.spotId;
 
@@ -96,12 +96,9 @@ router.get('/:spotId', handleValidationErrors, async (req, res, next) => {
         });
 
         if (!spot || !spot.dataValues.id) {
-            // spot doesn't exist
-            const spotNotFoundError = new ResourceNotFoundError({
+            throw new ResourceNotFoundError({
                 message: "Spot couldn't be found",
             });
-
-            return next(spotNotFoundError);
         }
 
         res.json(spot);
@@ -119,47 +116,7 @@ router.get('/:spotId', handleValidationErrors, async (req, res, next) => {
 router.post(
     '/',
     requireAuth,
-    [
-        check('address')
-            .exists({ checkFalsy: true })
-            .withMessage('Street address is required'),
-        check('city')
-            .exists({ checkFalsy: true })
-            .withMessage('City is required'),
-        check('state')
-            .exists({ checkFalsy: true })
-            .withMessage('State is required'),
-        check('country')
-            .exists({ checkFalsy: true })
-            .withMessage('Country is required'),
-        check(
-            'lat',
-            'Latitude is not valid. Must be between -90 and 90'
-        ).custom((value) => {
-            // Is a valid latitude
-            return value >= -90 && value <= 90;
-        }),
-        check(
-            'lng',
-            'Longitude is not valid. Must be between -180 and 180'
-        ).custom((value) => {
-            // Is a valid longitude
-            return value >= -180 && value <= 180;
-        }),
-        check('name')
-            .exists({ checkFalsy: true })
-            .withMessage('Name is required'),
-        check('name')
-            .isLength({ max: 50 })
-            .withMessage('Name must be less than 50 characters'),
-        check('description')
-            .exists({ checkFalsy: true })
-            .withMessage('Description is required'),
-        check('price')
-            .exists({ checkFalsy: true })
-            .withMessage('Price per day is required'),
-        handleValidationErrors,
-    ],
+    spotValidationMiddleware,
     async (req, res, next) => {
         try {
             const {
@@ -190,6 +147,60 @@ router.post(
             });
 
             res.status(201).json(spot);
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+/**
+ * Edit a spot
+ * Method: PUT
+ * Route: /spots/:id
+ * Params: id
+ * Body: { address, city, state, country, lat, lng, name, description, price }
+ */
+router.put(
+    '/:spotId',
+    requireAuth,
+    spotValidationMiddleware,
+    async (req, res, next) => {
+        try {
+            const spotId = req.params.spotId;
+
+            const {
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+            } = req.body;
+
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot || !spot.dataValues.id) {
+                throw new ResourceNotFoundError({
+                    message: "Spot couldn't be found",
+                });
+            }
+
+            await spot.update({
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+            });
+
+            res.json(spot);
         } catch (err) {
             next(err);
         }
