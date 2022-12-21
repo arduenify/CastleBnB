@@ -1,14 +1,15 @@
 const express = require('express');
 const Sequelize = require('sequelize');
+const { Spot, Review } = require('../../db/models');
+const { ResourceNotFoundError, ForbiddenError } = require('../../errors');
+const { requireAuth, restoreUser } = require('../../utils/auth');
+const {
+    spotValidationMiddleware,
+    handleValidationErrors,
+} = require('../../utils/validation');
 
 const router = express.Router();
-
-const { Spot, Review } = require('../../db/models');
-const {
-    ResourceNotFoundError,
-    SequelizeValidationError,
-} = require('../../errors');
-const { handleValidationErrors } = require('../../utils/validation');
+router.use(restoreUser);
 
 /**
  * Get all spots
@@ -39,14 +40,9 @@ router.get('/', handleValidationErrors, async (req, res, next) => {
             },
         });
 
-        for (const spot of spots) {
-            spot.dataValues.previewImage =
-                spot.dataValues?.previewImage?.url ?? null;
+        const formattedSpots = Spot.formatSpotsResponse(spots);
 
-            delete spot.dataValues.SpotImages; // safety first!
-        }
-
-        res.json(spots);
+        res.json(formattedSpots);
     } catch (err) {
         next(err);
     }
@@ -56,11 +52,13 @@ router.get('/', handleValidationErrors, async (req, res, next) => {
  * Get a single spot by id
  * Method: GET
  * Route: /spots/:id
- * Params: id
+ * Params: spotId
  */
 router.get('/:spotId', async (req, res, next) => {
     try {
-        const spot = await Spot.findByPk(req.params.spotId, {
+        const spotId = req.params.spotId;
+
+        const spot = await Spot.findByPk(spotId, {
             include: [
                 {
                     association: 'SpotImages',
@@ -89,15 +87,150 @@ router.get('/:spotId', async (req, res, next) => {
             },
         });
 
-        if (!spot) {
-            const spotNotFoundError = new ResourceNotFoundError({
+        if (!spot || !spot.dataValues.id) {
+            throw new ResourceNotFoundError({
                 message: "Spot couldn't be found",
             });
-
-            return next(spotNotFoundError);
         }
 
         res.json(spot);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * Create a new spot
+ * Method: POST
+ * Route: /spots
+ * Body: { address, city, state, country, lat, lng, name, description, price }
+ */
+router.post(
+    '/',
+    requireAuth,
+    spotValidationMiddleware,
+    async (req, res, next) => {
+        try {
+            const {
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+            } = req.body;
+
+            const { id } = req.user;
+
+            const spot = await Spot.create({
+                ownerId: id,
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+            });
+
+            res.status(201).json(spot);
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+/**
+ * Edit a spot
+ * Method: PUT
+ * Route: /spots/:spotId
+ * Params: spotId
+ * Body: { address, city, state, country, lat, lng, name, description, price }
+ */
+router.put(
+    '/:spotId',
+    requireAuth,
+    spotValidationMiddleware,
+    async (req, res, next) => {
+        try {
+            const spotId = req.params.spotId;
+
+            const {
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+            } = req.body;
+
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot || !spot.dataValues.id) {
+                throw new ResourceNotFoundError({
+                    message: "Spot couldn't be found",
+                });
+            }
+
+            if (spot.dataValues.ownerId !== req.user.id) {
+                throw new ForbiddenError();
+            }
+
+            await spot.update({
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+            });
+
+            res.json(spot);
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+/**
+ * Delete a spot
+ * Method: DELETE
+ * Route: /spots/:spotId
+ * Params: spotId
+ */
+router.delete('/:spotId', requireAuth, async (req, res, next) => {
+    try {
+        const spotId = req.params.spotId;
+
+        const spot = await Spot.findByPk(spotId);
+
+        if (!spot || !spot.dataValues.id) {
+            throw new ResourceNotFoundError({
+                message: "Spot couldn't be found",
+            });
+        }
+
+        if (spot.dataValues.ownerId !== req.user.id) {
+            throw new ForbiddenError();
+        }
+
+        await spot.destroy();
+
+        res.json({
+            message: 'Successfully deleted',
+            statusCode: 200,
+        });
     } catch (err) {
         next(err);
     }

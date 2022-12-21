@@ -140,4 +140,19 @@ router.post(
     }
 );
 
+/**
+ * Get all spots owned by the current user
+ * Method: GET
+ * Route: /users/current/spots
+ */
+router.get('/current/spots', requireAuth, async (req, res, next) => {
+    try {
+        const spots = await req.user.getSpots();
+
+        return res.json({ spots });
+    } catch (error) {
+        next(error);
+    }
+});
+
 module.exports = router;
