@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator');
+const { SequelizeValidationError } = require('../errors');
 
 // formats errors via express-validator mw
 const handleValidationErrors = (req, res, next) => {
@@ -7,10 +8,7 @@ const handleValidationErrors = (req, res, next) => {
     if (!validationErrors.isEmpty()) {
         const errors = validationErrors.array().map((error) => `${error.msg}`);
 
-        const err = Error('Bad request.');
-        err.errors = errors;
-        err.status = 400;
-        err.title = 'Bad request.';
+        const err = new SequelizeValidationError({ errors });
 
         next(err);
     }

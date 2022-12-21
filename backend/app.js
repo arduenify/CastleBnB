@@ -8,9 +8,21 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
 const { environment } = require('./config');
-const { ValidationError } = require('sequelize');
 const isProduction = environment === 'production';
+
 const routes = require('./routes');
+
+// Errors
+const {
+    ResourceNotFoundError,
+    ForbiddenError,
+    InternalServerError,
+    ApiError,
+    SequelizeValidationError,
+    BadRequestError,
+} = require('./errors');
+
+const { ValidationError } = require('sequelize');
 
 const app = express();
 app.use(morgan('dev'));
@@ -39,38 +51,45 @@ app.use(
 // Routes
 app.use(routes);
 
-// Errors
-// backend/app.js
-// ...
-// Catch unhandled requests and forward to error handler.
+// Resource not found error
 app.use((_req, _res, next) => {
-    const err = new Error("The requested resource couldn't be found.");
-    err.title = 'Resource Not Found';
-    err.errors = ["The requested resource couldn't be found."];
-    err.status = 404;
-    next(err);
+    const resourceNotFoundError = new ResourceNotFoundError();
+
+    return next(resourceNotFoundError);
 });
 
-// Process sequelize errors
-app.use((err, _req, _res, next) => {
-    // check if error is a Sequelize error:
-    if (err instanceof ValidationError) {
-        err.errors = err.errors.map((e) => e.message);
-        err.title = 'Validation error';
+// Catch the errors
+app.use((err, req, res, next) => {
+    if (process.env.NODE_ENV !== 'production') {
+        console.error(err);
     }
-    next(err);
-});
 
-// Error formatter
-app.use((err, _req, res, _next) => {
-    res.status(err.status || 500);
-    console.error(err);
-    res.json({
-        title: err.title || 'Server Error',
-        message: err.message,
-        errors: err.errors,
-        stack: isProduction ? null : err.stack,
+    if (err instanceof ApiError) {
+        // Custom errors
+        return err.send(res);
+    }
+
+    if (err instanceof ValidationError) {
+        // Sequelize validation errors
+        const badRequestError = new BadRequestError({ message: err.message });
+
+        return badRequestError.send(res);
+    }
+
+    if (err.code === 'EBADCSRFTOKEN') {
+        const forbiddenError = new ForbiddenError(
+            'Invalid CSRF token. Please try again.'
+        );
+
+        return forbiddenError.send(res);
+    }
+
+    const defaultError = new InternalServerError({
+        message: 'Well, this is awkward... Something went wrong.',
+        errors: err,
     });
+
+    return defaultError.send(res);
 });
 
 // Export

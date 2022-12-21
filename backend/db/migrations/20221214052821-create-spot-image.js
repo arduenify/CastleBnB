@@ -37,8 +37,24 @@ module.exports = {
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
+
+        await queryInterface.addIndex('SpotImages', {
+            unique: true,
+            fields: ['spotId', 'preview'],
+            where: {
+                preview: true,
+            },
+        });
     },
     async down(queryInterface, Sequelize) {
         await queryInterface.dropTable('SpotImages');
+
+        await queryInterface.removeIndex('SpotImages', {
+            unique: true,
+            fields: ['spotId', 'preview'],
+            where: {
+                preview: true,
+            },
+        });
     },
 };
