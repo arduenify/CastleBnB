@@ -1,8 +1,9 @@
 const express = require('express');
+const Sequelize = require('sequelize');
 
 const router = express.Router();
 
-const { Spot } = require('../../db/models');
+const { Spot, Review } = require('../../db/models');
 const {
     ResourceNotFoundError,
     SequelizeValidationError,
@@ -17,9 +18,24 @@ const { handleValidationErrors } = require('../../utils/validation');
 router.get('/', handleValidationErrors, async (req, res, next) => {
     try {
         const spots = await Spot.findAll({
-            include: {
-                association: 'previewImage',
-                attributes: ['url'],
+            include: [
+                {
+                    association: 'previewImage',
+                    attributes: ['url'],
+                },
+                {
+                    model: Review,
+                    attributes: [],
+                },
+            ],
+            group: ['Spot.id'],
+            attributes: {
+                include: [
+                    [
+                        Sequelize.fn('AVG', Sequelize.col('reviews.stars')),
+                        'averageRating',
+                    ],
+                ],
             },
         });
 
@@ -54,7 +70,23 @@ router.get('/:spotId', async (req, res, next) => {
                     association: 'Owner',
                     attributes: ['id', 'firstName', 'lastName'],
                 },
+                {
+                    model: Review,
+                    attributes: [], // don't include 'Reviews: []'
+                },
             ],
+            attributes: {
+                include: [
+                    [
+                        Sequelize.fn('COUNT', Sequelize.col('reviews.stars')),
+                        'numReviews',
+                    ],
+                    [
+                        Sequelize.fn('AVG', Sequelize.col('reviews.stars')),
+                        'avgStarRating',
+                    ],
+                ],
+            },
         });
 
         if (!spot) {

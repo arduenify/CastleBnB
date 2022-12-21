@@ -21,6 +21,7 @@ const {
     SequelizeValidationError,
     BadRequestError,
 } = require('./errors');
+
 const { ValidationError } = require('sequelize');
 
 const app = express();
@@ -60,6 +61,7 @@ app.use((_req, _res, next) => {
 // Catch the errors
 app.use((err, req, res, next) => {
     if (process.env.NODE_ENV !== 'production') {
+        console.error(err);
     }
 
     if (err instanceof ApiError) {
@@ -74,7 +76,6 @@ app.use((err, req, res, next) => {
         return badRequestError.send(res);
     }
 
-    // CSURF error
     if (err.code === 'EBADCSRFTOKEN') {
         const forbiddenError = new ForbiddenError(
             'Invalid CSRF token. Please try again.'
@@ -83,10 +84,12 @@ app.use((err, req, res, next) => {
         return forbiddenError.send(res);
     }
 
-    return new InternalServerError({
+    const defaultError = new InternalServerError({
         message: 'Well, this is awkward... Something went wrong.',
         errors: err,
-    }).send(res);
+    });
+
+    return defaultError.send(res);
 });
 
 // Export
