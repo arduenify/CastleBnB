@@ -92,6 +92,7 @@ router.get('/:spotId', async (req, res, next) => {
         });
 
         if (!spot || !spot.dataValues.id) {
+            // spot doesn't exist
             const spotNotFoundError = new ResourceNotFoundError({
                 message: "Spot couldn't be found",
             });
