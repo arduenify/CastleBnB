@@ -10,12 +10,14 @@ const {
     SequelizeValidationError,
     ForbiddenError,
 } = require('../../errors');
-const { User } = require('../../db/models');
+const { User, Spot, Review } = require('../../db/models');
 const {
     setTokenCookie,
     restoreUser,
     requireAuth,
 } = require('../../utils/auth');
+
+const Sequelize = require('sequelize');
 
 const router = express.Router();
 
@@ -149,7 +151,25 @@ router.get('/current/spots', requireAuth, async (req, res, next) => {
     try {
         const spots = await req.user.getSpots();
 
-        return res.json({ spots });
+        for (const spot of spots) {
+            const reviewAverageRating = await Review.findOne({
+                attributes: [
+                    [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating'],
+                ],
+                where: { spotId: spot.id },
+            });
+
+            if (!reviewAverageRating.dataValues.avgRating) {
+                spot.dataValues.avgRating = null;
+            } else {
+                spot.dataValues.avgRating =
+                    reviewAverageRating.dataValues.avgRating;
+            }
+        }
+
+        const formattedSpots = Spot.formatSpotsResponse(spots);
+
+        return res.json(formattedSpots);
     } catch (error) {
         next(error);
     }

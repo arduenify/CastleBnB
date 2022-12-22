@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Model, SequelizeScopeError } = require('sequelize');
 const Review = require('./review');
 
 module.exports = (sequelize, DataTypes) => {
@@ -26,9 +26,10 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
 
-        static formatResponse(spot) {
+        static formatResponse(spot, numReviews = 0) {
             const {
                 id,
+                ownerId,
                 address,
                 city,
                 state,
@@ -38,14 +39,18 @@ module.exports = (sequelize, DataTypes) => {
                 name,
                 description,
                 price,
-                ownerId,
-            } = spot;
-            const { url } = spot.previewImage;
-            const { firstName, lastName } = spot.Owner;
-            const { numReviews, avgStarRating } = spot;
+                createdAt,
+                updatedAt,
+                SpotImages,
+                avgStarRating = null,
+            } = spot.dataValues;
+
+            // console.dir(spot);
+            const { firstName, lastName } = spot.dataValues.Owner;
 
             return {
                 id,
+                ownerId,
                 address,
                 city,
                 state,
@@ -55,21 +60,24 @@ module.exports = (sequelize, DataTypes) => {
                 name,
                 description,
                 price,
-                ownerId,
-                previewImage: url,
-                owner: {
+                createdAt,
+                updatedAt,
+                numReviews,
+                avgStarRating,
+                SpotImages,
+                Owner: {
+                    id: ownerId,
                     firstName,
                     lastName,
                 },
-                numReviews,
-                avgStarRating,
             };
         }
 
         static formatSpotsResponse(spots) {
-            return spots.map((spot) => {
+            const formattedSpots = spots.map((spot) => {
                 const {
                     id,
+                    ownerId,
                     address,
                     city,
                     state,
@@ -79,13 +87,19 @@ module.exports = (sequelize, DataTypes) => {
                     name,
                     description,
                     price,
-                    ownerId,
-                } = spot;
-                const { url } = spot.previewImage;
-                const { averageRating } = spot;
+                    createdAt,
+                    updatedAt,
+                    avgRating,
+                } = spot.dataValues;
+
+                let url = null;
+                if (spot.previewImage) {
+                    url = spot.previewImage.url;
+                }
 
                 return {
                     id,
+                    ownerId,
                     address,
                     city,
                     state,
@@ -95,11 +109,62 @@ module.exports = (sequelize, DataTypes) => {
                     name,
                     description,
                     price,
-                    ownerId,
-                    previewImage: url,
-                    averageRating,
+                    createdAt,
+                    updatedAt,
+                    avgRating,
+                    previewImage: url ?? null,
                 };
             });
+
+            return { Spots: formattedSpots };
+        }
+
+        static formatSpotsQueryResponse(spots, page, size) {
+            const formattedSpots = spots.map((spot) => {
+                const {
+                    id,
+                    ownerId,
+                    address,
+                    city,
+                    state,
+                    country,
+                    lat,
+                    lng,
+                    name,
+                    description,
+                    price,
+                    createdAt,
+                    updatedAt,
+                } = spot.dataValues;
+
+                let url = null;
+                if (spot.previewImage) {
+                    url = spot.previewImage.url;
+                }
+
+                return {
+                    id,
+                    ownerId,
+                    address,
+                    city,
+                    state,
+                    country,
+                    lat,
+                    lng,
+                    name,
+                    description,
+                    price,
+                    createdAt,
+                    updatedAt,
+                    previewImage: url ?? null,
+                };
+            });
+
+            return {
+                Spots: formattedSpots,
+                page: parseInt(page),
+                size: parseInt(size),
+            };
         }
     }
 
