@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 const { SequelizeValidationError } = require('../errors');
-const { check } = require('express-validator');
+const { check, query } = require('express-validator');
 
 // formats errors via express-validator mw
 const handleValidationErrors = (req, res, next) => {
@@ -11,10 +11,10 @@ const handleValidationErrors = (req, res, next) => {
 
         const err = new SequelizeValidationError({ errors });
 
-        next(err);
+        return next(err);
     }
 
-    next();
+    return next();
 };
 
 const spotValidationMiddleware = [
@@ -30,13 +30,11 @@ const spotValidationMiddleware = [
         .withMessage('Country is required'),
     check('lat', 'Latitude is not valid. Must be between -90 and 90').custom(
         (value) => {
-            // Is a valid latitude
             return value >= -90 && value <= 90;
         }
     ),
     check('lng', 'Longitude is not valid. Must be between -180 and 180').custom(
         (value) => {
-            // Is a valid longitude
             return value >= -180 && value <= 180;
         }
     ),
@@ -53,7 +51,55 @@ const spotValidationMiddleware = [
     handleValidationErrors,
 ];
 
+const spotQueryFilterValidationMiddleware = [
+    query('page').exists({ checkFalsy: true }).withMessage('Page is required'),
+    query('page')
+        .isInt({ min: 0, max: 10 })
+        .withMessage(
+            'Page must be greater than or equal to 0, and less than or equal to 10'
+        ),
+    query('size').exists({ checkFalsy: true }).withMessage('Size is required'),
+    query('size')
+        .isInt({ min: 0, max: 20 })
+        .withMessage(
+            'Size must be greater than or equal to 0, and less than or equal to 20'
+        ),
+    query('minLat')
+        .optional()
+        .isFloat({ min: -90 })
+        .withMessage('Min latitude is invalid'),
+    query('maxLat')
+        .optional()
+        .isFloat({ max: 90 })
+        .withMessage('Max latitude is invalid'),
+    query('minLng')
+        .optional()
+        .isFloat({ min: -180 })
+        .withMessage('Min longitude is invalid'),
+    query('maxLng')
+        .optional()
+        .isFloat({ max: 180 })
+        .withMessage('Max longitude is invalid'),
+    query('minPrice')
+        .optional()
+        .isFloat({ min: 0 })
+        .withMessage('Min price must be greater than or equal to 0'),
+    query('maxPrice')
+        .optional()
+        .isFloat({ min: 0 })
+        .withMessage('Max price must be greater than or equal to 0'),
+    async (req, res, next) => {
+        // Skip validation if no query params are present
+        if (Object.keys(req.query).length) {
+            return handleValidationErrors(req, res, next);
+        }
+
+        return next();
+    },
+];
+
 module.exports = {
     spotValidationMiddleware,
+    spotQueryFilterValidationMiddleware,
     handleValidationErrors,
 };

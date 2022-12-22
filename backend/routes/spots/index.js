@@ -6,6 +6,7 @@ const { requireAuth, restoreUser } = require('../../utils/auth');
 const {
     spotValidationMiddleware,
     handleValidationErrors,
+    spotQueryFilterValidationMiddleware,
 } = require('../../utils/validation');
 
 const router = express.Router();
@@ -16,9 +17,28 @@ router.use(restoreUser);
  * Method: GET
  * Route: /spots
  */
-router.get('/', handleValidationErrors, async (req, res, next) => {
+router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
     try {
-        const spots = await Spot.findAll({
+        const {
+            page = 0,
+            size = 20,
+            minLat,
+            maxLat,
+            minLng,
+            maxLng,
+            minPrice,
+            maxPrice,
+        } = req.query;
+
+        if (isNaN(page)) {
+            page = parseInt(page);
+        }
+
+        if (isNaN(size)) {
+            size = parseInt(size);
+        }
+
+        const query = {
             include: [
                 {
                     association: 'previewImage',
@@ -30,17 +50,66 @@ router.get('/', handleValidationErrors, async (req, res, next) => {
                 },
             ],
             group: ['Spot.id'],
-            attributes: {
-                include: [
-                    [
-                        Sequelize.fn('AVG', Sequelize.col('reviews.stars')),
-                        'averageRating',
-                    ],
-                ],
-            },
-        });
+            // This throws an error
+            // attributes: {
+            //     include: [
+            //         [
+            //             Sequelize.fn('AVG', Sequelize.col('reviews.stars')),
+            //             'averageRating',
+            //         ],
+            //     ],
+            // },
+            // limit: size,
+            // offset: page * (size - 1),
+        };
 
-        const formattedSpots = Spot.formatSpotsResponse(spots);
+        const where = {};
+        if (minLat && maxLat) {
+            where.lat = { [Sequelize.Op.between]: [minLat, maxLat] };
+        }
+        if (minLng && maxLng) {
+            where.lng = { [Sequelize.Op.between]: [minLng, maxLng] };
+        }
+        if (minPrice && maxPrice) {
+            where.price = { [Sequelize.Op.between]: [minPrice, maxPrice] };
+        }
+
+        if (Object.keys(where).length) {
+            query.where = where;
+        }
+
+        if (size && page) {
+            query.limit = size;
+            query.offset = (page - 1) * size;
+        }
+
+        const spots = await Spot.findAll(query);
+
+        for (const spot of spots) {
+            const reviewAverageRating = await Review.findOne({
+                attributes: [
+                    [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating'],
+                ],
+                where: { spotId: spot.id },
+            });
+
+            if (!reviewAverageRating.dataValues.avgRating) {
+                spot.avgRating = null;
+            } else {
+                spot.avgRating = reviewAverageRating.dataValues.avgRating;
+            }
+        }
+
+        let formattedSpots;
+        if (page && size) {
+            formattedSpots = await Spot.formatSpotsQueryResponse(
+                spots,
+                page,
+                size
+            );
+        } else {
+            formattedSpots = await Spot.formatSpotsResponse(spots);
+        }
 
         res.json(formattedSpots);
     } catch (err) {
@@ -231,6 +300,41 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
             message: 'Successfully deleted',
             statusCode: 200,
         });
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * Add a spot image
+ * Method: POST
+ * Route: /spots/:spotId/images
+ * Params: spotId
+ * Body: { url, preview }
+ */
+router.post('/:spotId/images', requireAuth, async (req, res, next) => {
+    try {
+        const spotId = req.params.spotId;
+        const spot = await Spot.findByPk(spotId);
+
+        if (!spot || !spot.dataValues.id) {
+            throw new ResourceNotFoundError({
+                message: "Spot couldn't be found",
+            });
+        }
+
+        if (spot.dataValues.ownerId !== req.user.id) {
+            throw new ForbiddenError();
+        }
+
+        const { url, preview } = req.body;
+
+        const spotImage = await spot.createSpotImage({
+            url,
+            preview,
+        });
+
+        res.json(spotImage);
     } catch (err) {
         next(err);
     }

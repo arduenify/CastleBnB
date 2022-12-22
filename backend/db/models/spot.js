@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Model, SequelizeScopeError } = require('sequelize');
 const Review = require('./review');
 
 module.exports = (sequelize, DataTypes) => {
@@ -40,7 +40,12 @@ module.exports = (sequelize, DataTypes) => {
                 price,
                 ownerId,
             } = spot;
-            const { url } = spot.previewImage;
+
+            let url = null;
+
+            if (spot.previewImage) {
+                url = spot.previewImage.url;
+            }
             const { firstName, lastName } = spot.Owner;
             const { numReviews, avgStarRating } = spot;
 
@@ -67,9 +72,10 @@ module.exports = (sequelize, DataTypes) => {
         }
 
         static formatSpotsResponse(spots) {
-            return spots.map((spot) => {
+            const formattedSpots = spots.map((spot) => {
                 const {
                     id,
+                    ownerId,
                     address,
                     city,
                     state,
@@ -79,13 +85,19 @@ module.exports = (sequelize, DataTypes) => {
                     name,
                     description,
                     price,
-                    ownerId,
+                    createdAt,
+                    updatedAt,
+                    avgRating,
                 } = spot;
-                const { url } = spot.previewImage;
-                const { averageRating } = spot;
+
+                let url = null;
+                if (spot.previewImage) {
+                    url = spot.previewImage.url;
+                }
 
                 return {
                     id,
+                    ownerId,
                     address,
                     city,
                     state,
@@ -95,11 +107,64 @@ module.exports = (sequelize, DataTypes) => {
                     name,
                     description,
                     price,
-                    ownerId,
-                    previewImage: url,
-                    averageRating,
+                    createdAt,
+                    updatedAt,
+                    avgRating,
+                    previewImage: url ?? null,
                 };
             });
+
+            return { Spots: formattedSpots };
+        }
+
+        static formatSpotsQueryResponse(spots, page, size) {
+            const formattedSpots = spots.map((spot) => {
+                const {
+                    id,
+                    ownerId,
+                    address,
+                    city,
+                    state,
+                    country,
+                    lat,
+                    lng,
+                    name,
+                    description,
+                    price,
+                    createdAt,
+                    updatedAt,
+                    // avgRating,
+                } = spot;
+
+                let url = null;
+                if (spot.previewImage) {
+                    url = spot.previewImage.url;
+                }
+
+                return {
+                    id,
+                    ownerId,
+                    address,
+                    city,
+                    state,
+                    country,
+                    lat,
+                    lng,
+                    name,
+                    description,
+                    price,
+                    createdAt,
+                    updatedAt,
+                    // avgRating,
+                    previewImage: url ?? null,
+                };
+            });
+
+            return {
+                Spots: formattedSpots,
+                page: parseInt(page),
+                size: parseInt(size),
+            };
         }
     }
 
