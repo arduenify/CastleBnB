@@ -26,9 +26,10 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
 
-        static formatResponse(spot) {
+        static formatResponse(spot, numReviews = 0) {
             const {
                 id,
+                ownerId,
                 address,
                 city,
                 state,
@@ -38,19 +39,18 @@ module.exports = (sequelize, DataTypes) => {
                 name,
                 description,
                 price,
-                ownerId,
-            } = spot;
+                createdAt,
+                updatedAt,
+                SpotImages,
+                avgStarRating = null,
+            } = spot.dataValues;
 
-            let url = null;
-
-            if (spot.previewImage) {
-                url = spot.previewImage.url;
-            }
-            const { firstName, lastName } = spot.Owner;
-            const { numReviews, avgStarRating } = spot;
+            // console.dir(spot);
+            const { firstName, lastName } = spot.dataValues.Owner;
 
             return {
                 id,
+                ownerId,
                 address,
                 city,
                 state,
@@ -60,14 +60,16 @@ module.exports = (sequelize, DataTypes) => {
                 name,
                 description,
                 price,
-                ownerId,
-                previewImage: url,
-                owner: {
+                createdAt,
+                updatedAt,
+                numReviews,
+                avgStarRating,
+                SpotImages,
+                Owner: {
+                    id: ownerId,
                     firstName,
                     lastName,
                 },
-                numReviews,
-                avgStarRating,
             };
         }
 
@@ -88,7 +90,7 @@ module.exports = (sequelize, DataTypes) => {
                     createdAt,
                     updatedAt,
                     avgRating,
-                } = spot;
+                } = spot.dataValues;
 
                 let url = null;
                 if (spot.previewImage) {
@@ -133,8 +135,7 @@ module.exports = (sequelize, DataTypes) => {
                     price,
                     createdAt,
                     updatedAt,
-                    // avgRating,
-                } = spot;
+                } = spot.dataValues;
 
                 let url = null;
                 if (spot.previewImage) {
@@ -155,7 +156,6 @@ module.exports = (sequelize, DataTypes) => {
                     price,
                     createdAt,
                     updatedAt,
-                    // avgRating,
                     previewImage: url ?? null,
                 };
             });

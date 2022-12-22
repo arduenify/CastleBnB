@@ -14,6 +14,9 @@ router.use(restoreUser);
 
 /**
  * Get all spots
+ * Supports query filters for minLat, maxLat, minLng, maxLng, minPrice, maxPrice
+ * Also supports pagination with page and size query params
+ *
  * Method: GET
  * Route: /spots
  */
@@ -94,9 +97,10 @@ router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
             });
 
             if (!reviewAverageRating.dataValues.avgRating) {
-                spot.avgRating = null;
+                spot.dataValues.avgRating = null;
             } else {
-                spot.avgRating = reviewAverageRating.dataValues.avgRating;
+                spot.dataValues.avgRating =
+                    reviewAverageRating.dataValues.avgRating;
             }
         }
 
@@ -145,10 +149,6 @@ router.get('/:spotId', async (req, res, next) => {
             attributes: {
                 include: [
                     [
-                        Sequelize.fn('COUNT', Sequelize.col('reviews.stars')),
-                        'numReviews',
-                    ],
-                    [
                         Sequelize.fn('AVG', Sequelize.col('reviews.stars')),
                         'avgStarRating',
                     ],
@@ -162,7 +162,13 @@ router.get('/:spotId', async (req, res, next) => {
             });
         }
 
-        res.json(spot);
+        const numReviews = await Review.count({
+            where: { spotId: spot.id },
+        });
+
+        const formattedSpot = await Spot.formatResponse(spot, numReviews);
+
+        res.json(formattedSpot);
     } catch (err) {
         next(err);
     }
