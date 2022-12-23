@@ -41,13 +41,39 @@ const spots = [
     },
 ];
 
+// Spot Images
+const spotImages = [
+    {
+        spotId: 1,
+        url: 'great_image.jpg',
+        preview: true,
+    },
+    {
+        spotId: 1,
+        url: 'great_image2.jpg',
+        preview: false,
+    },
+    {
+        spotId: 2,
+        url: 'awesome_image.png',
+        preview: false,
+    },
+    {
+        spotId: 3,
+        url: 'awesome_image2.png',
+        preview: true,
+    },
+];
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.bulkInsert('Spots', spots, {});
+        await queryInterface.bulkInsert('SpotImages', spotImages, {});
     },
 
     async down(queryInterface, Sequelize) {
         await queryInterface.bulkDelete('Spots', spots, {});
+        await queryInterface.bulkDelete('SpotImages', spotImages, {});
     },
 };
