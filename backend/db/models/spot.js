@@ -165,14 +165,6 @@ module.exports = (sequelize, DataTypes) => {
                 size: parseInt(size),
             };
         }
-
-        // get SpotImages() {
-        //     return this.SpotImages;
-        // }
-
-        getPreviewImage() {
-            return this.SpotImages.find((image) => image.preview);
-        }
     }
 
     Spot.init(
