@@ -10,11 +10,11 @@ const {
     SequelizeValidationError,
     ForbiddenError,
 } = require('../../errors');
-const { User, Spot, Review } = require('../../db/models');
+const { User, Spot, Review, ReviewImage } = require('../../db/models');
 const {
     setTokenCookie,
     restoreUser,
-    requireAuth,
+    requireAuthentication,
 } = require('../../utils/auth');
 
 const Sequelize = require('sequelize');
@@ -28,7 +28,7 @@ router.use(restoreUser);
  * Method: GET
  * Route: /users/current
  */
-router.get('/current', requireAuth, (req, res) => {
+router.get('/current', requireAuthentication, (req, res) => {
     if (req.user) {
         return res.json({
             user: req.user.toSafeObject(),
@@ -147,7 +147,7 @@ router.post(
  * Method: GET
  * Route: /users/current/spots
  */
-router.get('/current/spots', requireAuth, async (req, res, next) => {
+router.get('/current/spots', requireAuthentication, async (req, res, next) => {
     try {
         const spots = await req.user.getSpots();
 
@@ -174,5 +174,58 @@ router.get('/current/spots', requireAuth, async (req, res, next) => {
         next(error);
     }
 });
+
+/**
+ * Returns all the reviews written by the current user
+ * Method: GET
+ * Route: /users/current/reviews
+ */
+router.get(
+    '/current/reviews',
+    requireAuthentication,
+    async (req, res, next) => {
+        try {
+            const reviews = await Review.findAll({
+                where: { userId: req.user.id },
+                include: [
+                    {
+                        model: User,
+                        attributes: ['id', 'firstName', 'lastName'],
+                    },
+                    {
+                        model: Spot,
+                        attributes: [
+                            'id',
+                            'ownerId',
+                            'address',
+                            'city',
+                            'state',
+                            'country',
+                            'lat',
+                            'lng',
+                            'name',
+                            'price',
+                        ],
+                    },
+                    {
+                        model: ReviewImage,
+                        attributes: ['id', 'url'],
+                    },
+                ],
+            });
+
+            for (const review of reviews) {
+                const spot = review.Spot;
+                const previewImage = await spot.getPreviewImage();
+
+                spot.dataValues.previewImage = previewImage?.url || null;
+            }
+
+            return res.json({ Reviews: reviews });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 
 module.exports = router;
