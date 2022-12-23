@@ -1,6 +1,5 @@
 'use strict';
-const { Model, SequelizeScopeError } = require('sequelize');
-const Review = require('./review');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Spot extends Model {

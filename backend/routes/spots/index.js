@@ -1,8 +1,9 @@
 const express = require('express');
+const { check } = require('express-validator');
 const Sequelize = require('sequelize');
-const { Spot, Review } = require('../../db/models');
+const { Spot, Review, User, ReviewImage } = require('../../db/models');
 const { ResourceNotFoundError, ForbiddenError } = require('../../errors');
-const { requireAuth, restoreUser } = require('../../utils/auth');
+const { requireAuthentication, restoreUser } = require('../../utils/auth');
 const {
     spotValidationMiddleware,
     handleValidationErrors,
@@ -182,7 +183,7 @@ router.get('/:spotId', async (req, res, next) => {
  */
 router.post(
     '/',
-    requireAuth,
+    requireAuthentication,
     spotValidationMiddleware,
     async (req, res, next) => {
         try {
@@ -229,7 +230,7 @@ router.post(
  */
 router.put(
     '/:spotId',
-    requireAuth,
+    requireAuthentication,
     spotValidationMiddleware,
     async (req, res, next) => {
         try {
@@ -284,7 +285,7 @@ router.put(
  * Route: /spots/:spotId
  * Params: spotId
  */
-router.delete('/:spotId', requireAuth, async (req, res, next) => {
+router.delete('/:spotId', requireAuthentication, async (req, res, next) => {
     try {
         const spotId = req.params.spotId;
 
@@ -318,9 +319,48 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
  * Params: spotId
  * Body: { url, preview }
  */
-router.post('/:spotId/images', requireAuth, async (req, res, next) => {
+router.post(
+    '/:spotId/images',
+    requireAuthentication,
+    async (req, res, next) => {
+        try {
+            const spotId = req.params.spotId;
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot || !spot.dataValues.id) {
+                throw new ResourceNotFoundError({
+                    message: "Spot couldn't be found",
+                });
+            }
+
+            if (spot.dataValues.ownerId !== req.user.id) {
+                throw new ForbiddenError();
+            }
+
+            const { url, preview } = req.body;
+
+            const spotImage = await spot.createSpotImage({
+                url,
+                preview,
+            });
+
+            res.json(spotImage);
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+/**
+ * Get all reviews for a spot by :spotId
+ * Method: GET
+ * Route: /spots/:spotId/reviews
+ * Params: spotId
+ */
+router.get('/:spotId/reviews', async (req, res, next) => {
     try {
         const spotId = req.params.spotId;
+
         const spot = await Spot.findByPk(spotId);
 
         if (!spot || !spot.dataValues.id) {
@@ -329,21 +369,91 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
             });
         }
 
-        if (spot.dataValues.ownerId !== req.user.id) {
-            throw new ForbiddenError();
-        }
-
-        const { url, preview } = req.body;
-
-        const spotImage = await spot.createSpotImage({
-            url,
-            preview,
+        const reviews = await Review.findAll({
+            where: { spotId },
+            include: [
+                {
+                    model: User,
+                    attributes: ['id', 'firstName', 'lastName'],
+                },
+                {
+                    model: ReviewImage,
+                    attributes: ['id', 'url'],
+                },
+            ],
         });
 
-        res.json(spotImage);
+        res.json({ Reviews: reviews });
     } catch (err) {
         next(err);
     }
 });
+
+/**
+ * Create and return a new review for a spot specified by id
+ * Require authentication
+ * Method: POST
+ * Route: /spots/:spotId/reviews
+ * Params: spotId
+ * Body: { review, stars }
+ */
+router.post(
+    '/:spotId/reviews',
+    requireAuthentication,
+    [
+        check('review')
+            .exists({ checkFalsy: true })
+            .withMessage('Review text is required'),
+        check('stars')
+            .custom((value) => {
+                if (!value || isNaN(value) || value < 1 || value > 5) {
+                    return false;
+                }
+
+                return true;
+            })
+            .withMessage('Stars must be an integer from 1 to 5'),
+        handleValidationErrors,
+    ],
+    async (req, res, next) => {
+        try {
+            const spotId = parseInt(req.params.spotId);
+
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot || !spot.dataValues.id) {
+                throw new ResourceNotFoundError({
+                    message: "Spot couldn't be found",
+                });
+            }
+
+            const { review } = req.body;
+            let { stars } = req.body;
+
+            if (typeof stars !== 'number') {
+                stars = parseInt(stars);
+            }
+
+            const reviewInstance = await Review.create({
+                userId: req.user.id,
+                spotId,
+                review,
+                stars,
+            });
+
+            res.status(201).json(reviewInstance);
+        } catch (err) {
+            if (err instanceof Sequelize.UniqueConstraintError) {
+                const error = new ForbiddenError({
+                    message: 'User already has a review for this spot',
+                });
+
+                return next(error);
+            }
+
+            next(err);
+        }
+    }
+);
 
 module.exports = router;

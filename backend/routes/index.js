@@ -15,5 +15,6 @@ router.get('/csrf/restore', (req, res) => {
 router.use('/api', require('./api'));
 router.use('/users', require('./users'));
 router.use('/spots', require('./spots'));
+router.use('/reviews', require('./reviews'));
 
 module.exports = router;

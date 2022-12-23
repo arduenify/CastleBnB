@@ -55,7 +55,7 @@ const restoreUser = (req, res, next) => {
 };
 
 // If there is no current user, return an error
-const requireAuth = function (req, _res, next) {
+const requireAuthentication = function (req, _res, next) {
     if (process.env.NODE_ENV !== 'production') {
         console.log('-----------------------');
         console.log('Require Auth');
@@ -69,4 +69,8 @@ const requireAuth = function (req, _res, next) {
     return next(error);
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+module.exports = {
+    setTokenCookie,
+    restoreUser,
+    requireAuthentication,
+};
