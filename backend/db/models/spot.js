@@ -166,11 +166,11 @@ module.exports = (sequelize, DataTypes) => {
             };
         }
 
-        get SpotImages() {
-            return this.SpotImages;
-        }
+        // get SpotImages() {
+        //     return this.SpotImages;
+        // }
 
-        get previewImage() {
+        getPreviewImage() {
             return this.SpotImages.find((image) => image.preview);
         }
     }
