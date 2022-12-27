@@ -1,7 +1,5 @@
 'use strict';
 
-const { User, Spot, SpotImage } = require('../models');
-
 const bookingSeed = [
     {
         spotId: 1,

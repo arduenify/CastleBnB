@@ -9,6 +9,7 @@ const {
     handleValidationErrors,
     spotQueryFilterValidationMiddleware,
 } = require('../../utils/validation');
+const toReadableDateUTC = require('../../utils/format_date');
 
 const router = express.Router();
 router.use(restoreUser);
@@ -451,6 +452,65 @@ router.post(
                 return next(error);
             }
 
+            next(err);
+        }
+    }
+);
+
+/**
+ * Get all Bookings for a Spot based on :spotId
+ * Method: GET
+ * Route: /spots/:spotId/bookings
+ * Params: spotId
+ * Require authentication
+ */
+router.get(
+    '/:spotId/bookings',
+    requireAuthentication,
+    async (req, res, next) => {
+        try {
+            const spotId = req.params.spotId;
+
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot || !spot.dataValues.id) {
+                throw new ResourceNotFoundError({
+                    message: "Spot couldn't be found",
+                });
+            }
+
+            const userIsSpotOwner = spot.dataValues.ownerId === req.user.id;
+
+            let queryOptions = {};
+            if (!userIsSpotOwner) {
+                queryOptions = {
+                    where: { spotId },
+                    attributes: ['spotId', 'startDate', 'endDate'],
+                };
+            } else {
+                queryOptions = {
+                    where: { spotId },
+                    include: [
+                        {
+                            model: User,
+                            attributes: ['id', 'firstName', 'lastName'],
+                        },
+                    ],
+                };
+            }
+            const bookings = await spot.getBookings(queryOptions);
+
+            const formattedBookings = bookings.map((booking) => {
+                const { User, ...allOther } = booking.dataValues;
+
+                allOther.startDate = toReadableDateUTC(allOther.startDate);
+                allOther.endDate = toReadableDateUTC(allOther.endDate);
+
+                return { User, ...allOther };
+            });
+
+            res.json({ Bookings: formattedBookings });
+        } catch (err) {
             next(err);
         }
     }

@@ -1,21 +1,14 @@
-/**
- * This is the router for all user related routes.
- */
-
 const express = require('express');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const {
-    AuthenticationError,
-    SequelizeValidationError,
-    ForbiddenError,
-} = require('../../errors');
+const { AuthenticationError, ForbiddenError } = require('../../errors');
 const { User, Spot, Review, ReviewImage, Booking } = require('../../db/models');
 const {
     setTokenCookie,
     restoreUser,
     requireAuthentication,
 } = require('../../utils/auth');
+const toReadableDateUTC = require('../../utils/format_date');
 
 const Sequelize = require('sequelize');
 
@@ -277,13 +270,16 @@ router.get(
             }
 
             const formattedBookings = bookings.map((booking) => {
+                const startDate = toReadableDateUTC(booking.startDate);
+                const endDate = toReadableDateUTC(booking.endDate);
+
                 return {
                     id: booking.id,
                     spotId: booking.spotId,
                     Spot: booking.Spot,
                     userId: booking.userId,
-                    startDate: booking.startDate,
-                    endDate: booking.endDate,
+                    startDate,
+                    endDate,
                     createdAt: booking.createdAt,
                     updatedAt: booking.updatedAt,
                 };
