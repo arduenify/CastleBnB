@@ -10,7 +10,7 @@ const {
     SequelizeValidationError,
     ForbiddenError,
 } = require('../../errors');
-const { User, Spot, Review, ReviewImage } = require('../../db/models');
+const { User, Spot, Review, ReviewImage, Booking } = require('../../db/models');
 const {
     setTokenCookie,
     restoreUser,
@@ -222,6 +222,74 @@ router.get(
             }
 
             return res.json({ Reviews: reviews });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
+ * Get all of the current user's bookings
+ * Require authentication: true
+ * Method: GET
+ * Route: /users/current/bookings
+ */
+router.get(
+    '/current/bookings',
+    requireAuthentication,
+    async (req, res, next) => {
+        try {
+            const bookings = await req.user.getBookings({
+                attributes: [
+                    'id',
+                    'startDate',
+                    'endDate',
+                    'spotId',
+                    'userId',
+                    'createdAt',
+                    'updatedAt',
+                ],
+                include: [
+                    {
+                        model: Spot,
+                        attributes: [
+                            'id',
+                            'ownerId',
+                            'address',
+                            'city',
+                            'state',
+                            'country',
+                            'lat',
+                            'lng',
+                            'name',
+                            'price',
+                        ],
+                    },
+                ],
+            });
+
+            for (const booking of bookings) {
+                const spot = booking.Spot;
+                const previewImage = await spot.getPreviewImage();
+
+                spot.dataValues.previewImage = previewImage?.url || null;
+                booking.dataValues.Spot = spot;
+            }
+
+            const formattedBookings = bookings.map((booking) => {
+                return {
+                    id: booking.id,
+                    spotId: booking.spotId,
+                    Spot: booking.Spot,
+                    userId: booking.userId,
+                    startDate: booking.startDate,
+                    endDate: booking.endDate,
+                    createdAt: booking.createdAt,
+                    updatedAt: booking.updatedAt,
+                };
+            });
+
+            return res.json({ Bookings: formattedBookings });
         } catch (error) {
             next(error);
         }

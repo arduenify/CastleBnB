@@ -59,7 +59,7 @@ const requireAuthentication = function (req, _res, next) {
     if (process.env.NODE_ENV !== 'production') {
         console.log('-----------------------');
         console.log('Require Auth');
-        console.log('User:', req.user);
+        console.log('User:', req?.user?.id, `(${req?.user?.username})`);
         console.log('-----------------------');
     }
 

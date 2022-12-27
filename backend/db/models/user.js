@@ -23,9 +23,6 @@ module.exports = (sequelize, DataTypes) => {
         static async login({ credential, password }) {
             const { Op } = require('sequelize');
 
-            console.log('credential', credential);
-            console.log('password', password);
-
             const user = await User.scope('login').findOne({
                 where: {
                     [Op.or]: {
@@ -36,10 +33,8 @@ module.exports = (sequelize, DataTypes) => {
             });
 
             if (user && user.validatePassword(password)) {
-                console.log('user', user);
                 return await User.scope('currentUser').findByPk(user.id);
             }
-            console.log('BAD USER', user);
         }
 
         static async signup({
