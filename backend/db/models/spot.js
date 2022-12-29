@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Spot extends Model {
@@ -164,6 +165,57 @@ module.exports = (sequelize, DataTypes) => {
                 page: parseInt(page),
                 size: parseInt(size),
             };
+        }
+
+        async checkBookingConflicts(startDate, endDate) {
+            const bookings = await this.getBookings({
+                where: {
+                    [Sequelize.Op.or]: [
+                        {
+                            startDate: {
+                                [Sequelize.Op.between]: [startDate, endDate],
+                            },
+                        },
+                        {
+                            endDate: {
+                                [Sequelize.Op.between]: [startDate, endDate],
+                            },
+                        },
+                    ],
+                },
+            });
+
+            if (!bookings.length) return null;
+
+            const conflicts = {
+                startDate: false,
+                endDate: false,
+            };
+
+            for (const booking of bookings) {
+                const conflictingDate = (date) => {
+                    const dateDate = new Date(date);
+
+                    return (
+                        dateDate >= booking.startDate &&
+                        dateDate <= booking.endDate
+                    );
+                };
+
+                if (conflictingDate(startDate)) {
+                    conflicts.startDate = true;
+                }
+
+                if (conflictingDate(endDate)) {
+                    conflicts.endDate = true;
+                }
+
+                // Save some time
+                if (conflicts.startDate && conflicts.endDate) break;
+            }
+
+            if (!conflicts.startDate && !conflicts.endDate) return null;
+            else return conflicts;
         }
     }
 
