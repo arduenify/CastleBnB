@@ -516,4 +516,99 @@ router.get(
     }
 );
 
+/**
+ * Create and return a new booking from a spot specified by id
+ * Require authentication
+ * Authorization: Spot must NOT belong to the current user
+ * Method: POST
+ * Route: /spots/:spotId/bookings
+ * Params: spotId
+ * Body: { startDate, endDate }
+ */
+router.post(
+    '/:spotId/bookings',
+    requireAuthentication,
+    [
+        check('startDate')
+            .exists({ checkFalsy: true })
+            .withMessage('Start date is required'),
+        check('endDate')
+            .exists({ checkFalsy: true })
+            .withMessage('End date is required'),
+        check('endDate')
+            .custom((value, { req }) => {
+                const { startDate } = req.body;
+
+                return value > startDate;
+            })
+            .withMessage('endDate cannot be on or before startDate'),
+        handleValidationErrors,
+    ],
+    async (req, res, next) => {
+        try {
+            const spotId = parseInt(req.params.spotId);
+
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot || !spot.dataValues.id) {
+                throw new ResourceNotFoundError({
+                    message: "Spot couldn't be found",
+                });
+            }
+
+            if (spot.dataValues.ownerId === req.user.id) {
+                throw new ForbiddenError({
+                    message: 'User cannot book a spot that they own',
+                });
+            }
+
+            const { startDate, endDate } = req.body;
+
+            const bookingConflicts = await spot.checkBookingConflicts(
+                startDate,
+                endDate
+            );
+
+            if (bookingConflicts) {
+                const errors = [];
+
+                if (bookingConflicts.startDate) {
+                    errors.push(
+                        'Start date conflicts with an existing booking'
+                    );
+                }
+
+                if (bookingConflicts.endDate) {
+                    errors.push('End date conflicts with an existing booking');
+                }
+
+                throw new ForbiddenError({
+                    message:
+                        'Sorry, this spot is already booked for the specified dates',
+                    errors,
+                });
+            }
+
+            const booking = await spot.createBooking({
+                userId: req.user.id,
+                startDate,
+                endDate,
+            });
+
+            // Maybe change this to 201? Docs say 200, though.
+            res.status(200).json({
+                id: booking.dataValues.id,
+                spotId: booking.dataValues.spotId,
+                userId: booking.dataValues.userId,
+                startDate: toReadableDateUTC(booking.dataValues.startDate),
+                endDate: toReadableDateUTC(booking.dataValues.endDate),
+                createdAt: booking.dataValues.createdAt,
+                updatedAt: booking.dataValues.updatedAt,
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
 module.exports = router;
