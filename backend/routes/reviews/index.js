@@ -138,4 +138,53 @@ router.delete('/:reviewId', requireAuthentication, async (req, res, next) => {
     }
 });
 
+/**
+ * Delete an existing image for a Review
+ * Require authentication: true
+ * Authorization: Review must belong to the current user
+ * Method: DELETE
+ * Route: /reviews/:reviewId/images/:imageId
+ * Params: reviewId, imageId
+ */
+router.delete(
+    '/:reviewId/images/:imageId',
+    requireAuthentication,
+    async (req, res, next) => {
+        const { reviewId, imageId } = req.params;
+
+        try {
+            const review = await Review.findByPk(reviewId);
+
+            if (!review) {
+                throw new ResourceNotFoundError({
+                    message: "Review Image couldn't be found",
+                });
+            }
+
+            if (review.userId !== req.user.id) {
+                throw new ForbiddenError({
+                    message: 'Review must belong to the current user',
+                });
+            }
+
+            const reviewImage = await ReviewImage.findByPk(imageId);
+
+            if (!reviewImage) {
+                throw new ResourceNotFoundError({
+                    message: "Review Image couldn't be found",
+                });
+            }
+
+            await reviewImage.destroy();
+
+            return res.json({
+                message: 'Successfully deleted',
+                statusCode: 200,
+            });
+        } catch (error) {
+            return next(error);
+        }
+    }
+);
+
 module.exports = router;
