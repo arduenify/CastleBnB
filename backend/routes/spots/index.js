@@ -9,6 +9,7 @@ const {
     handleValidationErrors,
     spotQueryFilterValidationMiddleware,
 } = require('../../utils/validation');
+const toReadableDateUTC = require('../../utils/format_date');
 
 const router = express.Router();
 router.use(restoreUser);
@@ -451,6 +452,206 @@ router.post(
                 return next(error);
             }
 
+            next(err);
+        }
+    }
+);
+
+/**
+ * Get all Bookings for a Spot based on :spotId
+ * Method: GET
+ * Route: /spots/:spotId/bookings
+ * Params: spotId
+ * Require authentication
+ */
+router.get(
+    '/:spotId/bookings',
+    requireAuthentication,
+    async (req, res, next) => {
+        try {
+            const spotId = req.params.spotId;
+
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot || !spot.dataValues.id) {
+                throw new ResourceNotFoundError({
+                    message: "Spot couldn't be found",
+                });
+            }
+
+            const userIsSpotOwner = spot.dataValues.ownerId === req.user.id;
+
+            let queryOptions = {};
+            if (!userIsSpotOwner) {
+                queryOptions = {
+                    where: { spotId },
+                    attributes: ['spotId', 'startDate', 'endDate'],
+                };
+            } else {
+                queryOptions = {
+                    where: { spotId },
+                    include: [
+                        {
+                            model: User,
+                            attributes: ['id', 'firstName', 'lastName'],
+                        },
+                    ],
+                };
+            }
+            const bookings = await spot.getBookings(queryOptions);
+
+            const formattedBookings = bookings.map((booking) => {
+                const { User, ...allOther } = booking.dataValues;
+
+                allOther.startDate = toReadableDateUTC(allOther.startDate);
+                allOther.endDate = toReadableDateUTC(allOther.endDate);
+
+                return { User, ...allOther };
+            });
+
+            res.json({ Bookings: formattedBookings });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+/**
+ * Create and return a new booking from a spot specified by id
+ * Require authentication
+ * Authorization: Spot must NOT belong to the current user
+ * Method: POST
+ * Route: /spots/:spotId/bookings
+ * Params: spotId
+ * Body: { startDate, endDate }
+ */
+router.post(
+    '/:spotId/bookings',
+    requireAuthentication,
+    [
+        check('startDate')
+            .exists({ checkFalsy: true })
+            .withMessage('Start date is required'),
+        check('endDate')
+            .exists({ checkFalsy: true })
+            .withMessage('End date is required'),
+        check('endDate')
+            .custom((value, { req }) => {
+                const { startDate } = req.body;
+
+                return value > startDate;
+            })
+            .withMessage('endDate cannot be on or before startDate'),
+        handleValidationErrors,
+    ],
+    async (req, res, next) => {
+        try {
+            const spotId = parseInt(req.params.spotId);
+
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot || !spot.dataValues.id) {
+                throw new ResourceNotFoundError({
+                    message: "Spot couldn't be found",
+                });
+            }
+
+            if (spot.dataValues.ownerId === req.user.id) {
+                throw new ForbiddenError({
+                    message: 'User cannot book a spot that they own',
+                });
+            }
+
+            const { startDate, endDate } = req.body;
+
+            const bookingConflicts = await spot.checkBookingConflicts(
+                startDate,
+                endDate
+            );
+
+            if (bookingConflicts) {
+                const errors = [];
+
+                if (bookingConflicts.startDate) {
+                    errors.push(
+                        'Start date conflicts with an existing booking'
+                    );
+                }
+
+                if (bookingConflicts.endDate) {
+                    errors.push('End date conflicts with an existing booking');
+                }
+
+                throw new ForbiddenError({
+                    message:
+                        'Sorry, this spot is already booked for the specified dates',
+                    errors,
+                });
+            }
+
+            const booking = await spot.createBooking({
+                userId: req.user.id,
+                startDate,
+                endDate,
+            });
+
+            res.status(201).json({
+                id: booking.dataValues.id,
+                spotId: booking.dataValues.spotId,
+                userId: booking.dataValues.userId,
+                startDate: toReadableDateUTC(booking.dataValues.startDate),
+                endDate: toReadableDateUTC(booking.dataValues.endDate),
+                createdAt: booking.dataValues.createdAt,
+                updatedAt: booking.dataValues.updatedAt,
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+/**
+ * Delete an existing image for a Spot
+ * Require authentication
+ * Authorization: Spot must belong to the current user
+ * Method: DELETE
+ * Route: /spots/:spotId/images/:imageId
+ * Params: spotId, imageId
+ */
+router.delete(
+    '/:spotId/images/:imageId',
+    requireAuthentication,
+    async (req, res, next) => {
+        try {
+            const spotId = req.params.spotId;
+            const imageId = req.params.imageId;
+
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot) {
+                throw new ResourceNotFoundError({
+                    message: "Spot Image couldn't be found",
+                });
+            }
+
+            if (spot.dataValues.ownerId !== req.user.id) {
+                throw new ForbiddenError({
+                    message: 'Spot must belong to the current user',
+                });
+            }
+
+            const image = await Image.findByPk(imageId);
+
+            if (!image) {
+                throw new ResourceNotFoundError({
+                    message: "Spot Image couldn't be found",
+                });
+            }
+
+            await image.destroy();
+
+            res.status(200).json({ message: 'Successfully deleted' });
+        } catch (err) {
             next(err);
         }
     }
