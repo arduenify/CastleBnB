@@ -595,8 +595,7 @@ router.post(
                 endDate,
             });
 
-            // Maybe change this to 201? Docs say 200, though.
-            res.status(200).json({
+            res.status(201).json({
                 id: booking.dataValues.id,
                 spotId: booking.dataValues.spotId,
                 userId: booking.dataValues.userId,
@@ -605,6 +604,53 @@ router.post(
                 createdAt: booking.dataValues.createdAt,
                 updatedAt: booking.dataValues.updatedAt,
             });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+/**
+ * Delete an existing image for a Spot
+ * Require authentication
+ * Authorization: Spot must belong to the current user
+ * Method: DELETE
+ * Route: /spots/:spotId/images/:imageId
+ * Params: spotId, imageId
+ */
+router.delete(
+    '/:spotId/images/:imageId',
+    requireAuthentication,
+    async (req, res, next) => {
+        try {
+            const spotId = req.params.spotId;
+            const imageId = req.params.imageId;
+
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot) {
+                throw new ResourceNotFoundError({
+                    message: "Spot Image couldn't be found",
+                });
+            }
+
+            if (spot.dataValues.ownerId !== req.user.id) {
+                throw new ForbiddenError({
+                    message: 'Spot must belong to the current user',
+                });
+            }
+
+            const image = await Image.findByPk(imageId);
+
+            if (!image) {
+                throw new ResourceNotFoundError({
+                    message: "Spot Image couldn't be found",
+                });
+            }
+
+            await image.destroy();
+
+            res.status(200).json({ message: 'Successfully deleted' });
         } catch (err) {
             next(err);
         }
