@@ -1,7 +1,5 @@
 'use strict';
 
-const { User, Spot } = require('../models');
-
 const spots = [
     {
         ownerId: 1,

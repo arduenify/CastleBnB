@@ -246,7 +246,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             price: {
-                type: DataTypes.NUMERIC(0, 2),
+                type: DataTypes.NUMERIC(6, 2),
                 allowNull: false,
                 validation: {
                     min: 0,

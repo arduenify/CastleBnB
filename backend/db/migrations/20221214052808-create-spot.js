@@ -48,8 +48,9 @@ module.exports = {
                 allowNull: false,
             },
             price: {
-                type: Sequelize.NUMERIC(0, 2),
+                type: Sequelize.NUMERIC(6, 2),
                 allowNull: false,
+                min: 0,
             },
             createdAt: {
                 allowNull: false,
