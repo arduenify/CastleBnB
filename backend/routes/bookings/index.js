@@ -8,7 +8,7 @@ const {
     handleValidationErrors,
     spotQueryFilterValidationMiddleware,
 } = require('../../utils/validation');
-const toReadableDateUTC = require('../../utils/format_date');
+const { toReadableDateUTC, formatDate } = require('../../utils/format_date');
 const { Booking } = require('../../db/models');
 
 const router = express.Router();
@@ -95,8 +95,8 @@ router.put(
                 userId: booking.userId,
                 startDate: toReadableDateUTC(booking.startDate),
                 endDate: toReadableDateUTC(booking.endDate),
-                createdAt: booking.createdAt,
-                updatedAt: booking.updatedAt,
+                createdAt: formatDate(booking.createdAt),
+                updatedAt: formatDate(booking.updatedAt),
             });
         } catch (err) {
             next(err);

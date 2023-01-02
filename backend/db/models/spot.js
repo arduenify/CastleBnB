@@ -2,6 +2,8 @@
 const { Model } = require('sequelize');
 const Sequelize = require('sequelize');
 
+const { formatDate } = require('../../utils/format_date');
+
 module.exports = (sequelize, DataTypes) => {
     class Spot extends Model {
         static associate(models) {
@@ -54,8 +56,8 @@ module.exports = (sequelize, DataTypes) => {
                 name,
                 description,
                 price,
-                createdAt,
-                updatedAt,
+                createdAt: formatDate(createdAt),
+                updatedAt: formatDate(updatedAt),
                 numReviews,
                 avgStarRating,
                 SpotImages,
@@ -104,8 +106,8 @@ module.exports = (sequelize, DataTypes) => {
                     name,
                     description,
                     price,
-                    createdAt,
-                    updatedAt,
+                    createdAt: formatDate(createdAt),
+                    updatedAt: formatDate(updatedAt),
                     avgRating,
                     previewImage: url,
                 };
@@ -149,8 +151,8 @@ module.exports = (sequelize, DataTypes) => {
                     name,
                     description,
                     price,
-                    createdAt,
-                    updatedAt,
+                    createdAt: formatDate(createdAt),
+                    updatedAt: formatDate(updatedAt),
                     previewImage: url ?? null,
                 };
             });

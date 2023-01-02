@@ -8,7 +8,7 @@ const {
     restoreUser,
     requireAuthentication,
 } = require('../../utils/auth');
-const toReadableDateUTC = require('../../utils/format_date');
+const { toReadableDateUTC, formatDate } = require('../../utils/format_date');
 
 const Sequelize = require('sequelize');
 
@@ -219,6 +219,9 @@ router.get(
                 const previewImage = await spot.getPreviewImage();
 
                 spot.dataValues.previewImage = previewImage?.url || null;
+
+                review.dataValues.createdAt = formatDate(review.createdAt);
+                review.dataValues.updatedAt = formatDate(review.updatedAt);
             }
 
             return res.json({ Reviews: reviews });
@@ -287,8 +290,8 @@ router.get(
                     userId: booking.userId,
                     startDate,
                     endDate,
-                    createdAt: booking.createdAt,
-                    updatedAt: booking.updatedAt,
+                    createdAt: formatDate(booking.createdAt),
+                    updatedAt: formatDate(booking.updatedAt),
                 };
             });
 
