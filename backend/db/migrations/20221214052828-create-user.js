@@ -2,58 +2,48 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('Reviews', {
+        await queryInterface.createTable('Users', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-            userId: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'Users',
-                    key: 'id',
-                },
-                onDelete: 'CASCADE',
-            },
-            spotId: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'Spots',
-                    key: 'id',
-                },
-                onDelete: 'CASCADE',
-            },
-            review: {
+            firstName: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            stars: {
-                type: Sequelize.INTEGER,
+            lastName: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            email: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                unique: true,
+            },
+            username: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                unique: true,
+            },
+            passwordHash: {
+                type: Sequelize.STRING(64),
                 allowNull: false,
             },
             createdAt: {
-                type: Sequelize.DATE,
                 allowNull: false,
+                type: Sequelize.DATE,
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
             updatedAt: {
-                type: Sequelize.DATE,
                 allowNull: false,
+                type: Sequelize.DATE,
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         });
-
-        await queryInterface.addConstraint('Reviews', {
-            fields: ['userId', 'spotId'],
-            type: 'unique',
-            name: 'unique_review',
-        });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Reviews');
+        await queryInterface.dropTable('Users');
     },
 };

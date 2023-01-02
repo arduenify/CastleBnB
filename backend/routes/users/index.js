@@ -1,21 +1,16 @@
-/**
- * This is the router for all user related routes.
- */
-
 const express = require('express');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const {
-    AuthenticationError,
-    SequelizeValidationError,
-    ForbiddenError,
-} = require('../../errors');
-const { User } = require('../../db/models');
+const { AuthenticationError, ForbiddenError } = require('../../errors');
+const { User, Spot, Review, ReviewImage, Booking } = require('../../db/models');
 const {
     setTokenCookie,
     restoreUser,
-    requireAuth,
+    requireAuthentication,
 } = require('../../utils/auth');
+const toReadableDateUTC = require('../../utils/format_date');
+
+const Sequelize = require('sequelize');
 
 const router = express.Router();
 
@@ -26,7 +21,7 @@ router.use(restoreUser);
  * Method: GET
  * Route: /users/current
  */
-router.get('/current', requireAuth, (req, res) => {
+router.get('/current', requireAuthentication, (req, res) => {
     if (req.user) {
         return res.json({
             user: req.user.toSafeObject(),
@@ -137,6 +132,170 @@ router.post(
                 token: await setTokenCookie(res, user),
             },
         });
+    }
+);
+
+/**
+ * Get all spots owned by the current user
+ * Method: GET
+ * Route: /users/current/spots
+ */
+router.get('/current/spots', requireAuthentication, async (req, res, next) => {
+    try {
+        const spots = await req.user.getSpots({
+            include: [
+                {
+                    association: 'previewImage',
+                    attributes: ['url'],
+                },
+            ],
+        });
+
+        for (const spot of spots) {
+            const reviewAverageRating = await Review.findOne({
+                attributes: [
+                    [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating'],
+                ],
+                where: { spotId: spot.id },
+            });
+
+            if (!reviewAverageRating.dataValues.avgRating) {
+                spot.dataValues.avgRating = null;
+            } else {
+                spot.dataValues.avgRating =
+                    reviewAverageRating.dataValues.avgRating;
+            }
+        }
+
+        const formattedSpots = Spot.formatSpotsResponse(spots);
+
+        return res.json(formattedSpots);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * Returns all the reviews written by the current user
+ * Method: GET
+ * Route: /users/current/reviews
+ */
+router.get(
+    '/current/reviews',
+    requireAuthentication,
+    async (req, res, next) => {
+        try {
+            const reviews = await Review.findAll({
+                where: { userId: req.user.id },
+                include: [
+                    {
+                        model: User,
+                        attributes: ['id', 'firstName', 'lastName'],
+                    },
+                    {
+                        model: Spot,
+                        attributes: [
+                            'id',
+                            'ownerId',
+                            'address',
+                            'city',
+                            'state',
+                            'country',
+                            'lat',
+                            'lng',
+                            'name',
+                            'price',
+                        ],
+                    },
+                    {
+                        model: ReviewImage,
+                        attributes: ['id', 'url'],
+                    },
+                ],
+            });
+
+            for (const review of reviews) {
+                const spot = review.Spot;
+                const previewImage = await spot.getPreviewImage();
+
+                spot.dataValues.previewImage = previewImage?.url || null;
+            }
+
+            return res.json({ Reviews: reviews });
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+/**
+ * Get all of the current user's bookings
+ * Require authentication: true
+ * Method: GET
+ * Route: /users/current/bookings
+ */
+router.get(
+    '/current/bookings',
+    requireAuthentication,
+    async (req, res, next) => {
+        try {
+            const bookings = await req.user.getBookings({
+                attributes: [
+                    'id',
+                    'startDate',
+                    'endDate',
+                    'spotId',
+                    'userId',
+                    'createdAt',
+                    'updatedAt',
+                ],
+                include: [
+                    {
+                        model: Spot,
+                        attributes: [
+                            'id',
+                            'ownerId',
+                            'address',
+                            'city',
+                            'state',
+                            'country',
+                            'lat',
+                            'lng',
+                            'name',
+                            'price',
+                        ],
+                    },
+                ],
+            });
+
+            for (const booking of bookings) {
+                const spot = booking.Spot;
+                const previewImage = await spot.getPreviewImage();
+
+                spot.dataValues.previewImage = previewImage?.url || null;
+                booking.dataValues.Spot = spot;
+            }
+
+            const formattedBookings = bookings.map((booking) => {
+                const startDate = toReadableDateUTC(booking.startDate);
+                const endDate = toReadableDateUTC(booking.endDate);
+
+                return {
+                    id: booking.id,
+                    spotId: booking.spotId,
+                    Spot: booking.Spot,
+                    userId: booking.userId,
+                    startDate,
+                    endDate,
+                    createdAt: booking.createdAt,
+                    updatedAt: booking.updatedAt,
+                };
+            });
+
+            return res.json({ Bookings: formattedBookings });
+        } catch (error) {
+            next(error);
+        }
     }
 );
 

@@ -1,14 +1,9 @@
 'use strict';
 const { Model } = require('sequelize');
-const Review = require('./review');
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Spot extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
         static associate(models) {
             Spot.belongsTo(models.User, { foreignKey: 'ownerId', as: 'Owner' });
 
@@ -24,6 +19,186 @@ module.exports = (sequelize, DataTypes) => {
                     preview: true,
                 },
             });
+        }
+
+        static formatResponse(spot, numReviews = 0) {
+            const {
+                id,
+                ownerId,
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+                createdAt,
+                updatedAt,
+                SpotImages,
+                avgStarRating = null,
+            } = spot.dataValues;
+
+            const { firstName, lastName } = spot.dataValues.Owner;
+
+            return {
+                id,
+                ownerId,
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+                createdAt,
+                updatedAt,
+                numReviews,
+                avgStarRating,
+                SpotImages,
+                Owner: {
+                    id: ownerId,
+                    firstName,
+                    lastName,
+                },
+            };
+        }
+
+        static formatSpotsResponse(spots) {
+            const formattedSpots = spots.map((spot) => {
+                const {
+                    id,
+                    ownerId,
+                    address,
+                    city,
+                    state,
+                    country,
+                    lat,
+                    lng,
+                    name,
+                    description,
+                    price,
+                    createdAt,
+                    updatedAt,
+                    avgRating,
+                    previewImage,
+                } = spot.dataValues;
+
+                let url = null;
+                if (previewImage) {
+                    url = previewImage.url;
+                }
+
+                return {
+                    id,
+                    ownerId,
+                    address,
+                    city,
+                    state,
+                    country,
+                    lat,
+                    lng,
+                    name,
+                    description,
+                    price,
+                    createdAt,
+                    updatedAt,
+                    avgRating,
+                    previewImage: url,
+                };
+            });
+
+            return { Spots: formattedSpots };
+        }
+
+        static formatSpotsQueryResponse(spots, page, size) {
+            const formattedSpots = spots.map((spot) => {
+                const {
+                    id,
+                    ownerId,
+                    address,
+                    city,
+                    state,
+                    country,
+                    lat,
+                    lng,
+                    name,
+                    description,
+                    price,
+                    createdAt,
+                    updatedAt,
+                } = spot.dataValues;
+
+                let url = null;
+                if (spot.previewImage) {
+                    url = spot.previewImage.url;
+                }
+
+                return {
+                    id,
+                    ownerId,
+                    address,
+                    city,
+                    state,
+                    country,
+                    lat,
+                    lng,
+                    name,
+                    description,
+                    price,
+                    createdAt,
+                    updatedAt,
+                    previewImage: url ?? null,
+                };
+            });
+
+            return {
+                Spots: formattedSpots,
+                page: parseInt(page),
+                size: parseInt(size),
+            };
+        }
+
+        async checkBookingConflicts(startDate, endDate, bookingId = null) {
+            const conflictingBookings = await this.getBookings({
+                where: {
+                    id: {
+                        [Sequelize.Op.not]: bookingId,
+                    },
+                    [Sequelize.Op.or]: [
+                        {
+                            startDate: {
+                                [Sequelize.Op.between]: [startDate, endDate],
+                            },
+                        },
+                        {
+                            endDate: {
+                                [Sequelize.Op.between]: [startDate, endDate],
+                            },
+                        },
+                        {
+                            startDate: {
+                                [Sequelize.Op.lte]: startDate,
+                            },
+                            endDate: {
+                                [Sequelize.Op.gte]: endDate,
+                            },
+                        },
+                    ],
+                },
+            });
+
+            if (conflictingBookings.length) {
+                return {
+                    errors: [
+                        'Start date conflicts with an existing booking',
+                        'End date conflicts with an existing booking',
+                    ],
+                };
+            }
         }
     }
 

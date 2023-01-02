@@ -55,11 +55,22 @@ const restoreUser = (req, res, next) => {
 };
 
 // If there is no current user, return an error
-const requireAuth = function (req, _res, next) {
+const requireAuthentication = function (req, _res, next) {
+    if (process.env.NODE_ENV !== 'production') {
+        console.log('-----------------------');
+        console.log('Require Auth');
+        console.log('User:', req?.user?.id, `(${req?.user?.username})`);
+        console.log('-----------------------');
+    }
+
     if (req.user) return next();
 
     const error = new AuthenticationError('Authentication required');
     return next(error);
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+module.exports = {
+    setTokenCookie,
+    restoreUser,
+    requireAuthentication,
+};
