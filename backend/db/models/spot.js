@@ -4,11 +4,6 @@ const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Spot extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
         static associate(models) {
             Spot.belongsTo(models.User, { foreignKey: 'ownerId', as: 'Owner' });
 
@@ -45,7 +40,6 @@ module.exports = (sequelize, DataTypes) => {
                 avgStarRating = null,
             } = spot.dataValues;
 
-            // console.dir(spot);
             const { firstName, lastName } = spot.dataValues.Owner;
 
             return {
@@ -90,11 +84,12 @@ module.exports = (sequelize, DataTypes) => {
                     createdAt,
                     updatedAt,
                     avgRating,
+                    previewImage,
                 } = spot.dataValues;
 
                 let url = null;
-                if (spot.previewImage) {
-                    url = spot.previewImage.url;
+                if (previewImage) {
+                    url = previewImage.url;
                 }
 
                 return {
@@ -112,7 +107,7 @@ module.exports = (sequelize, DataTypes) => {
                     createdAt,
                     updatedAt,
                     avgRating,
-                    previewImage: url ?? null,
+                    previewImage: url,
                 };
             });
 
@@ -167,9 +162,12 @@ module.exports = (sequelize, DataTypes) => {
             };
         }
 
-        async checkBookingConflicts(startDate, endDate) {
-            const bookings = await this.getBookings({
+        async checkBookingConflicts(startDate, endDate, bookingId = null) {
+            const conflictingBookings = await this.getBookings({
                 where: {
+                    id: {
+                        [Sequelize.Op.not]: bookingId,
+                    },
                     [Sequelize.Op.or]: [
                         {
                             startDate: {
@@ -181,41 +179,26 @@ module.exports = (sequelize, DataTypes) => {
                                 [Sequelize.Op.between]: [startDate, endDate],
                             },
                         },
+                        {
+                            startDate: {
+                                [Sequelize.Op.lte]: startDate,
+                            },
+                            endDate: {
+                                [Sequelize.Op.gte]: endDate,
+                            },
+                        },
                     ],
                 },
             });
 
-            if (!bookings.length) return null;
-
-            const conflicts = {
-                startDate: false,
-                endDate: false,
-            };
-
-            for (const booking of bookings) {
-                const conflictingDate = (date) => {
-                    const dateDate = new Date(date);
-
-                    return (
-                        dateDate >= booking.startDate &&
-                        dateDate <= booking.endDate
-                    );
+            if (conflictingBookings.length) {
+                return {
+                    errors: [
+                        'Start date conflicts with an existing booking',
+                        'End date conflicts with an existing booking',
+                    ],
                 };
-
-                if (conflictingDate(startDate)) {
-                    conflicts.startDate = true;
-                }
-
-                if (conflictingDate(endDate)) {
-                    conflicts.endDate = true;
-                }
-
-                // Save some time
-                if (conflicts.startDate && conflicts.endDate) break;
             }
-
-            if (!conflicts.startDate && !conflicts.endDate) return null;
-            else return conflicts;
         }
     }
 

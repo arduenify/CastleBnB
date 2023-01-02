@@ -46,7 +46,10 @@ router.post(
 
             const reviewImage = await review.createReviewImage({ url });
 
-            return res.json(reviewImage);
+            return res.json({
+                id: reviewImage.id,
+                url: reviewImage.url,
+            });
         } catch (error) {
             return next(error);
         }
@@ -127,7 +130,9 @@ router.delete('/:reviewId', requireAuthentication, async (req, res, next) => {
         }
 
         if (review.userId !== req.user.id) {
-            throw new ForbiddenError();
+            throw new ForbiddenError({
+                message: 'Review must belong to the current user',
+            });
         }
 
         await review.destroy();

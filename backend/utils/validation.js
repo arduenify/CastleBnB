@@ -11,6 +11,10 @@ const handleValidationErrors = (req, res, next) => {
 
         const err = new SequelizeValidationError({ errors });
 
+        for (let i = 20; i < 30; i++) {
+            console.log(i);
+        }
+
         return next(err);
     }
 
@@ -28,16 +32,12 @@ const spotValidationMiddleware = [
     check('country')
         .exists({ checkFalsy: true })
         .withMessage('Country is required'),
-    check('lat', 'Latitude is not valid. Must be between -90 and 90').custom(
-        (value) => {
-            return value >= -90 && value <= 90;
-        }
-    ),
-    check('lng', 'Longitude is not valid. Must be between -180 and 180').custom(
-        (value) => {
-            return value >= -180 && value <= 180;
-        }
-    ),
+    check('lat', 'Latitude is not valid').custom((value) => {
+        return value >= -90 && value <= 90;
+    }),
+    check('lng', 'Longitude is not valid').custom((value) => {
+        return value >= -180 && value <= 180;
+    }),
     check('name').exists({ checkFalsy: true }).withMessage('Name is required'),
     check('name')
         .isLength({ max: 50 })

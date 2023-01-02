@@ -6,10 +6,6 @@ class ApiError {
         if (errors) this.errors = errors;
     }
 
-    /**
-     * Converts the error to a response object
-     * @returns {Object} - The error response
-     */
     toErrorResponse() {
         const response = {
             message: this.message,
@@ -25,7 +21,6 @@ class ApiError {
 
     // Maybe not correct because it couples the error response with the response object
     // but it's convenient.
-    // todo: maybe remove this method
     send(res) {
         const errorResponse = this.toErrorResponse();
 
@@ -45,7 +40,6 @@ class BadRequestError extends ApiError {
 
 class SequelizeValidationError extends ApiError {
     constructor({ errors } = {}) {
-        console.log('Creating new SequelizeValidationError', errors);
         super({ statusCode: 400, message: 'Validation error', errors });
     }
 }

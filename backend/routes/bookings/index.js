@@ -43,7 +43,6 @@ router.put(
         handleValidationErrors,
     ],
     async (req, res, next) => {
-        console.log('booking id is:', req.params.bookingId);
         const { bookingId } = req.params;
         const { user } = req;
 
@@ -51,14 +50,15 @@ router.put(
             const booking = await Booking.findByPk(bookingId);
 
             if (!booking) {
-                console.log("Why isn't this working?");
                 throw new ResourceNotFoundError({
                     message: "Booking couldn't be found",
                 });
             }
 
             if (booking.userId !== user.id) {
-                throw new ForbiddenError();
+                throw new ForbiddenError({
+                    message: 'Booking must belong to the current user',
+                });
             }
 
             if (booking.startDate < new Date()) {
@@ -72,26 +72,15 @@ router.put(
             const spot = await booking.getSpot();
             const bookingConflicts = await spot.checkBookingConflicts(
                 startDate,
-                endDate
+                endDate,
+                bookingId
             );
 
             if (bookingConflicts) {
-                const errors = [];
-
-                if (bookingConflicts.startDate) {
-                    errors.push(
-                        'Start date conflicts with an existing booking'
-                    );
-                }
-
-                if (bookingConflicts.endDate) {
-                    errors.push('End date conflicts with an existing booking');
-                }
-
                 throw new ForbiddenError({
                     message:
                         'Sorry, this spot is already booked for the specified dates',
-                    errors,
+                    errors: bookingConflicts.errors,
                 });
             }
 

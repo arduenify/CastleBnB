@@ -5,7 +5,8 @@ const toReadableDateUTC = (date) => {
     const month = dateObject.getUTCMonth() + 1;
     const day = dateObject.getUTCDate();
 
-    return `${month}-${day}-${year}`;
+    return `${year}-${month}-${day}`;
+    // return `${month}-${day}-${year}`;
 };
 
 module.exports = toReadableDateUTC;
