@@ -142,7 +142,14 @@ router.post(
  */
 router.get('/current/spots', requireAuthentication, async (req, res, next) => {
     try {
-        const spots = await req.user.getSpots();
+        const spots = await req.user.getSpots({
+            include: [
+                {
+                    association: 'previewImage',
+                    attributes: ['url'],
+                },
+            ],
+        });
 
         for (const spot of spots) {
             const reviewAverageRating = await Review.findOne({
