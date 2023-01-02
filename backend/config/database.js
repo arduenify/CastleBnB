@@ -19,8 +19,7 @@ module.exports = {
             },
         },
         define: {
-            //schema: process.env.SCHEMA,
-            schema: 'airbnb_clone',
+            schema: process.env.SCHEMA,
         },
     },
 };
