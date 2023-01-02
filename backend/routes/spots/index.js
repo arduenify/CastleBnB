@@ -8,18 +8,14 @@ const {
     ReviewImage,
     SpotImage,
 } = require('../../db/models');
-const {
-    ResourceNotFoundError,
-    ForbiddenError,
-    SequelizeValidationError,
-} = require('../../errors');
+const { ResourceNotFoundError, ForbiddenError } = require('../../errors');
 const { requireAuthentication, restoreUser } = require('../../utils/auth');
 const {
     spotValidationMiddleware,
     handleValidationErrors,
     spotQueryFilterValidationMiddleware,
 } = require('../../utils/validation');
-const toReadableDateUTC = require('../../utils/format_date');
+const { toReadableDateUTC, formatDate } = require('../../utils/format_date');
 
 const router = express.Router();
 router.use(restoreUser);
@@ -65,17 +61,6 @@ router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
                 },
             ],
             group: ['Spot.id'],
-            // This throws an error
-            // attributes: {
-            //     include: [
-            //         [
-            //             Sequelize.fn('AVG', Sequelize.col('reviews.stars')),
-            //             'averageRating',
-            //         ],
-            //     ],
-            // },
-            // limit: size,
-            // offset: page * (size - 1),
         };
 
         const where = {};
@@ -134,7 +119,7 @@ router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
 });
 
 /**
- * Get a single spot by id
+ * Returns the details of a spot specified by its id
  * Method: GET
  * Route: /spots/:id
  * Params: spotId
@@ -230,6 +215,9 @@ router.post(
                 price,
             });
 
+            spot.dataValues.updatedAt = formatDate(spot.dataValues.updatedAt);
+            spot.dataValues.createdAt = formatDate(spot.dataValues.createdAt);
+
             res.status(201).json(spot);
         } catch (err) {
             next(err);
@@ -289,6 +277,9 @@ router.put(
                 description,
                 price,
             });
+
+            spot.dataValues.updatedAt = formatDate(spot.dataValues.updatedAt);
+            spot.dataValues.createdAt = formatDate(spot.dataValues.createdAt);
 
             res.json(spot);
         } catch (err) {
@@ -420,6 +411,15 @@ router.get('/:spotId/reviews', async (req, res, next) => {
             ],
         });
 
+        for (const review of reviews) {
+            review.dataValues.createdAt = formatDate(
+                review.dataValues.createdAt
+            );
+            review.dataValues.updatedAt = formatDate(
+                review.dataValues.updatedAt
+            );
+        }
+
         res.json({ Reviews: reviews });
     } catch (err) {
         next(err);
@@ -477,6 +477,13 @@ router.post(
                 review,
                 stars,
             });
+
+            reviewInstance.dataValues.createdAt = formatDate(
+                reviewInstance.dataValues.createdAt
+            );
+            reviewInstance.dataValues.updatedAt = formatDate(
+                reviewInstance.dataValues.updatedAt
+            );
 
             res.status(201).json(reviewInstance);
         } catch (err) {
@@ -536,13 +543,21 @@ router.get(
             }
             const bookings = await spot.getBookings(queryOptions);
 
+            // Todo move this formatter to the model
             const formattedBookings = bookings.map((booking) => {
                 const { User, ...allOther } = booking.dataValues;
 
                 allOther.startDate = toReadableDateUTC(allOther.startDate);
                 allOther.endDate = toReadableDateUTC(allOther.endDate);
 
-                return { User, ...allOther };
+                if (userIsSpotOwner) {
+                    allOther.createdAt = formatDate(allOther.createdAt);
+                    allOther.updatedAt = formatDate(allOther.updatedAt);
+
+                    return { User, ...allOther };
+                }
+
+                return allOther;
             });
 
             res.json({ Bookings: formattedBookings });
@@ -625,8 +640,8 @@ router.post(
                 userId: booking.dataValues.userId,
                 startDate: toReadableDateUTC(booking.dataValues.startDate),
                 endDate: toReadableDateUTC(booking.dataValues.endDate),
-                createdAt: booking.dataValues.createdAt,
-                updatedAt: booking.dataValues.updatedAt,
+                createdAt: formatDate(booking.dataValues.createdAt),
+                updatedAt: formatDate(booking.dataValues.updatedAt),
             });
         } catch (err) {
             next(err);
