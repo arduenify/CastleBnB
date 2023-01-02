@@ -1,8 +1,18 @@
 const express = require('express');
 const { check } = require('express-validator');
 const Sequelize = require('sequelize');
-const { Spot, Review, User, ReviewImage } = require('../../db/models');
-const { ResourceNotFoundError, ForbiddenError } = require('../../errors');
+const {
+    Spot,
+    Review,
+    User,
+    ReviewImage,
+    SpotImage,
+} = require('../../db/models');
+const {
+    ResourceNotFoundError,
+    ForbiddenError,
+    SequelizeValidationError,
+} = require('../../errors');
 const { requireAuthentication, restoreUser } = require('../../utils/auth');
 const {
     spotValidationMiddleware,
@@ -135,10 +145,10 @@ router.get('/:spotId', async (req, res, next) => {
 
         const spot = await Spot.findByPk(spotId, {
             include: [
-                {
-                    association: 'SpotImages',
-                    attributes: ['id', 'url', 'preview'],
-                },
+                // {
+                //     association: 'SpotImage',
+                //     attributes: ['id', 'url', 'preview'],
+                // },
                 {
                     association: 'Owner',
                     attributes: ['id', 'firstName', 'lastName'],
@@ -163,6 +173,11 @@ router.get('/:spotId', async (req, res, next) => {
                 message: "Spot couldn't be found",
             });
         }
+
+        const spotImages = await spot.getSpotImages({
+            attributes: ['id', 'url', 'preview'],
+        });
+        spot.dataValues.SpotImages = spotImages;
 
         const numReviews = await Review.count({
             where: { spotId: spot.id },
@@ -258,7 +273,9 @@ router.put(
             }
 
             if (spot.dataValues.ownerId !== req.user.id) {
-                throw new ForbiddenError();
+                throw new ForbiddenError({
+                    message: 'Spot must belong to the current user',
+                });
             }
 
             await spot.update({
@@ -299,7 +316,9 @@ router.delete('/:spotId', requireAuthentication, async (req, res, next) => {
         }
 
         if (spot.dataValues.ownerId !== req.user.id) {
-            throw new ForbiddenError();
+            throw new ForbiddenError({
+                message: 'Spot must belong to the current user',
+            });
         }
 
         await spot.destroy();
@@ -335,7 +354,20 @@ router.post(
             }
 
             if (spot.dataValues.ownerId !== req.user.id) {
-                throw new ForbiddenError();
+                throw new ForbiddenError({
+                    message: 'Spot must belong to the current user',
+                });
+            }
+
+            // This is because of the unique index on SpotImage(spotId, preview)
+            // Since there can only be one preview image, this will resolve the issue
+            //      by updating the current preview image to not be a preview image
+            const previewImage = await SpotImage.findOne({
+                where: { spotId, preview: true },
+            });
+
+            if (previewImage) {
+                await previewImage.update({ preview: false });
             }
 
             const { url, preview } = req.body;
@@ -345,7 +377,11 @@ router.post(
                 preview,
             });
 
-            res.json(spotImage);
+            res.json({
+                id: spotImage.dataValues.id,
+                url: spotImage.dataValues.url,
+                preview: spotImage.dataValues.preview,
+            });
         } catch (err) {
             next(err);
         }
@@ -558,7 +594,7 @@ router.post(
 
             if (spot.dataValues.ownerId === req.user.id) {
                 throw new ForbiddenError({
-                    message: 'User cannot book a spot that they own',
+                    message: 'Spot must NOT belong to the current user',
                 });
             }
 
@@ -570,22 +606,10 @@ router.post(
             );
 
             if (bookingConflicts) {
-                const errors = [];
-
-                if (bookingConflicts.startDate) {
-                    errors.push(
-                        'Start date conflicts with an existing booking'
-                    );
-                }
-
-                if (bookingConflicts.endDate) {
-                    errors.push('End date conflicts with an existing booking');
-                }
-
                 throw new ForbiddenError({
                     message:
                         'Sorry, this spot is already booked for the specified dates',
-                    errors,
+                    errors: bookingConflicts.errors,
                 });
             }
 
@@ -640,7 +664,7 @@ router.delete(
                 });
             }
 
-            const image = await Image.findByPk(imageId);
+            const image = await SpotImage.findByPk(imageId);
 
             if (!image) {
                 throw new ResourceNotFoundError({
