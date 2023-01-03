@@ -96,7 +96,7 @@ router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
         const spots = await Spot.findAll(query);
 
         for (const spot of spots) {
-            if (hasQueryFilters) {
+            if (!hasQueryFilters) {
                 const reviewAverageRating = await Review.findOne({
                     attributes: [
                         [
