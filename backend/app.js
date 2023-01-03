@@ -60,9 +60,9 @@ app.use((_req, _res, next) => {
 
 // Catch the errors
 app.use((err, req, res, next) => {
-    if (process.env.NODE_ENV !== 'production') {
-        console.error(err);
-    }
+    // if (process.env.NODE_ENV !== 'production') {
+    console.error(err);
+    // }
 
     if (err instanceof ApiError) {
         // Custom errors
