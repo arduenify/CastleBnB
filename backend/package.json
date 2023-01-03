@@ -9,7 +9,9 @@
         "start": "per-env",
         "start:development": "nodemon ./bin/www",
         "start:production": "node ./bin/www",
-        "build": "node ./bin/psql-setup-script.js"
+        "build": "node ./bin/psql-setup-script.js",
+        "undo-migrations": "sequelize db:migrate:undo:all",
+        "undo-seeds": "sequelize db:seed:undo:all"
     },
     "keywords": [],
     "author": "",
