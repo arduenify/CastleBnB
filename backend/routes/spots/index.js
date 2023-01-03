@@ -60,7 +60,7 @@ router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
                     attributes: [],
                 },
             ],
-            group: ['Spot.id'],
+            group: ['Spot.id', 'previewImage.id'],
         };
 
         const where = {};
