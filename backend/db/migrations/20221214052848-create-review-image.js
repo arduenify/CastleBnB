@@ -2,39 +2,47 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('ReviewImages', {
-            id: {
-                allowNull: false,
-                autoIncrement: true,
-                primaryKey: true,
-                type: Sequelize.INTEGER,
-            },
-            reviewId: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'Reviews',
-                    key: 'id',
+        await queryInterface.createTable(
+            'ReviewImages',
+            {
+                id: {
+                    allowNull: false,
+                    autoIncrement: true,
+                    primaryKey: true,
+                    type: Sequelize.INTEGER,
                 },
-                onDelete: 'CASCADE',
+                reviewId: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
+                    references: {
+                        model: 'Reviews',
+                        key: 'id',
+                    },
+                    onDelete: 'CASCADE',
+                },
+                url: {
+                    type: Sequelize.STRING,
+                    allowNull: false,
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: false,
+                    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: false,
+                    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                },
             },
-            url: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            createdAt: {
-                type: Sequelize.DATE,
-                allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-            },
-            updatedAt: {
-                type: Sequelize.DATE,
-                allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-            },
-        });
+            {
+                schema: 'airbnb_clone',
+            }
+        );
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('ReviewImages');
+        await queryInterface.dropTable('ReviewImages', {
+            schema: 'airbnb_clone',
+        });
     },
 };
