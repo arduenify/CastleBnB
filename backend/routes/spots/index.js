@@ -143,6 +143,7 @@ router.get('/:spotId', async (req, res, next) => {
                     attributes: [], // don't include 'Reviews: []'
                 },
             ],
+            group: ['Spot.id', 'Owner.id'],
             attributes: {
                 include: [
                     [
@@ -409,6 +410,7 @@ router.get('/:spotId/reviews', async (req, res, next) => {
                     attributes: ['id', 'url'],
                 },
             ],
+            group: ['Review.id', 'User.id', 'ReviewImages.id'],
         });
 
         for (const review of reviews) {
@@ -539,6 +541,7 @@ router.get(
                             attributes: ['id', 'firstName', 'lastName'],
                         },
                     ],
+                    group: ['User.id', 'Booking.id'],
                 };
             }
             const bookings = await spot.getBookings(queryOptions);

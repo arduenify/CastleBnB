@@ -17,6 +17,7 @@ module.exports = {
 
         dialectOptions: {
             prependSearchPath: true,
+            decimalNumbers: true,
             ssl: {
                 require: true,
                 rejectUnauthorized: false,

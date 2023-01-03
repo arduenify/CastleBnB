@@ -59,7 +59,9 @@ module.exports = (sequelize, DataTypes) => {
                 createdAt: formatDate(createdAt),
                 updatedAt: formatDate(updatedAt),
                 numReviews,
-                avgStarRating,
+                avgStarRating: avgStarRating
+                    ? Math.round(avgStarRating * 10) / 10
+                    : null,
                 SpotImages,
                 Owner: {
                     id: ownerId,
@@ -108,7 +110,9 @@ module.exports = (sequelize, DataTypes) => {
                     price,
                     createdAt: formatDate(createdAt),
                     updatedAt: formatDate(updatedAt),
-                    avgRating,
+                    avgRating: avgRating
+                        ? Math.round(avgRating * 10) / 10
+                        : null,
                     previewImage: url,
                 };
             });
@@ -229,10 +233,16 @@ module.exports = (sequelize, DataTypes) => {
             lat: {
                 type: DataTypes.NUMERIC,
                 allowNull: false,
+                get() {
+                    return parseFloat(this.getDataValue('lat'));
+                },
             },
             lng: {
                 type: DataTypes.NUMERIC,
                 allowNull: false,
+                get() {
+                    return parseFloat(this.getDataValue('lng'));
+                },
             },
             name: {
                 type: DataTypes.STRING(50),
@@ -250,6 +260,9 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 validation: {
                     min: 0,
+                },
+                get() {
+                    return parseFloat(this.getDataValue('price'));
                 },
             },
         },

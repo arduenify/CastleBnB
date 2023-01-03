@@ -176,6 +176,7 @@ router.get('/current/spots', requireAuthentication, async (req, res, next) => {
                     attributes: ['url'],
                 },
             ],
+            group: ['Spot.id', 'previewImage.id'],
         });
 
         for (const spot of spots) {
@@ -239,6 +240,7 @@ router.get(
                         attributes: ['id', 'url'],
                     },
                 ],
+                group: ['Review.id', 'User.id', 'Spot.id', 'ReviewImages.id'],
             });
 
             for (const review of reviews) {
@@ -296,6 +298,7 @@ router.get(
                         ],
                     },
                 ],
+                group: ['Booking.id', 'Spot.id'],
             });
 
             for (const booking of bookings) {
