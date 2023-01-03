@@ -77,9 +77,9 @@ app.use((err, req, res, next) => {
     }
 
     if (err.code === 'EBADCSRFTOKEN') {
-        const forbiddenError = new ForbiddenError(
-            'Invalid CSRF token. Please try again.'
-        );
+        const forbiddenError = new ForbiddenError({
+            message: 'Invalid CSRF token. Please try again.',
+        });
 
         return forbiddenError.send(res);
     }

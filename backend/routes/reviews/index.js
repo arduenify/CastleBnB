@@ -101,6 +101,12 @@ router.put(
                 });
             }
 
+            if (reviewInstance.userId !== req.user.id) {
+                throw new ForbiddenError({
+                    message: 'Review must belong to the current user',
+                });
+            }
+
             await reviewInstance.update({ review, stars });
 
             reviewInstance.dataValues.createdAt = formatDate(

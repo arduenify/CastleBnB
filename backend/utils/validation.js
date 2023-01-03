@@ -70,17 +70,19 @@ const spotQueryFilterValidationMiddleware = [
     /**
      *
      * Although I do not agree with the logic of the documentation (error messages do not match validation requirements), I want to follow it as closely as possible.
-     * Therefore, my suggested changes are commented out.
+     * Therefore, my suggested changes below are commented out.
      *
      */
 
     // query('page').exists({ checkFalsy: true }).withMessage('Page is required'),
-    query('page').isInt({ min: 0, max: 10 }).withMessage(
+    // query('page').isInt({ min: 0, max: 10 }).withMessage(
+    query('page').isInt({ min: 0 }).withMessage(
         //'Page must be greater than or equal to 0, and less than or equal to 10'
         'Page must be greater than or equal to 0'
     ),
     // query('size').exists({ checkFalsy: true }).withMessage('Size is required'),
-    query('size').isInt({ min: 0, max: 20 }).withMessage(
+    // query('size').isInt({ min: 0, max: 20 }).withMessage(
+    query('size').isInt({ min: 0 }).withMessage(
         //'Size must be greater than or equal to 0, and less than or equal to 20'
         'Size must be greater than or equal to 0'
     ),

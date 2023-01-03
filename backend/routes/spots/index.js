@@ -31,8 +31,8 @@ router.use(restoreUser);
 router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
     try {
         const {
-            page = 0,
-            size = 20,
+            page,
+            size,
             minLat,
             maxLat,
             minLng,
@@ -41,68 +41,102 @@ router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
             maxPrice,
         } = req.query;
 
-        if (isNaN(page)) {
-            page = parseInt(page);
-        }
+        const hasQueryFilters = Object.keys(req.query).length;
+        const query = {};
 
-        if (isNaN(size)) {
-            size = parseInt(size);
-        }
+        // Query filters exist
+        if (hasQueryFilters) {
+            const where = {};
 
-        const query = {
-            include: [
-                {
-                    association: 'previewImage',
-                    attributes: ['url'],
-                },
+            if (Number.isNaN(page)) {
+                page = parseInt(page);
+            }
+
+            if (Number.isNaN(size)) {
+                size = parseInt(size);
+            }
+
+            if (page > 10) {
+                page = 10;
+            }
+
+            if (size > 20) {
+                size = 20;
+            }
+
+            if ('minLat' in req.query) {
+                where.lat = { [Sequelize.Op.gte]: minLat };
+            }
+
+            if ('maxLat' in req.query) {
+                where.lat = { ...where.lat, [Sequelize.Op.lte]: maxLat };
+            }
+
+            if ('minLng' in req.query) {
+                where.lng = { [Sequelize.Op.gte]: minLng };
+            }
+
+            if ('maxLng' in req.query) {
+                where.lng = { ...where.lng, [Sequelize.Op.lte]: maxLng };
+            }
+
+            if ('minPrice' in req.query) {
+                where.price = { [Sequelize.Op.gte]: minPrice };
+            }
+
+            if ('maxPrice' in req.query) {
+                where.price = { ...where.price, [Sequelize.Op.lte]: maxPrice };
+            }
+
+            query.where = where;
+            query.limit = size;
+            query.offset = page * size;
+        } else {
+            // No query filters
+            query.include = [
                 {
                     model: Review,
                     attributes: [],
                 },
-            ],
-            group: ['Spot.id', 'previewImage.id'],
-        };
-
-        const where = {};
-        if (minLat && maxLat) {
-            where.lat = { [Sequelize.Op.between]: [minLat, maxLat] };
-        }
-        if (minLng && maxLng) {
-            where.lng = { [Sequelize.Op.between]: [minLng, maxLng] };
-        }
-        if (minPrice && maxPrice) {
-            where.price = { [Sequelize.Op.between]: [minPrice, maxPrice] };
-        }
-
-        if (Object.keys(where).length) {
-            query.where = where;
-        }
-
-        if (size && page) {
-            query.limit = size;
-            query.offset = (page - 1) * size;
+            ];
+            query.group = ['Spot.id', 'previewImage.id'];
         }
 
         const spots = await Spot.findAll(query);
 
         for (const spot of spots) {
-            const reviewAverageRating = await Review.findOne({
-                attributes: [
-                    [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating'],
-                ],
-                where: { spotId: spot.id },
+            if (hasQueryFilters) {
+                const reviewAverageRating = await Review.findOne({
+                    attributes: [
+                        [
+                            Sequelize.fn('AVG', Sequelize.col('stars')),
+                            'avgRating',
+                        ],
+                    ],
+                    where: { spotId: spot.id },
+                });
+
+                if (!reviewAverageRating.dataValues.avgRating) {
+                    spot.dataValues.avgRating = null;
+                } else {
+                    spot.dataValues.avgRating =
+                        reviewAverageRating.dataValues.avgRating;
+                }
+            }
+
+            const previewImage = await SpotImage.findOne({
+                where: { spotId: spot.id, preview: true },
             });
 
-            if (!reviewAverageRating.dataValues.avgRating) {
-                spot.dataValues.avgRating = null;
+            if (previewImage) {
+                spot.dataValues.previewImage = previewImage.dataValues;
             } else {
-                spot.dataValues.avgRating =
-                    reviewAverageRating.dataValues.avgRating;
+                spot.dataValues.previewImage = null;
             }
         }
 
         let formattedSpots;
-        if (page && size) {
+        if (hasQueryFilters) {
             formattedSpots = await Spot.formatSpotsQueryResponse(
                 spots,
                 page,

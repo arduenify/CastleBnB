@@ -136,11 +136,12 @@ module.exports = (sequelize, DataTypes) => {
                     price,
                     createdAt,
                     updatedAt,
+                    previewImage,
                 } = spot.dataValues;
 
                 let url = null;
-                if (spot.previewImage) {
-                    url = spot.previewImage.url;
+                if (previewImage) {
+                    url = previewImage.url;
                 }
 
                 return {
@@ -157,7 +158,7 @@ module.exports = (sequelize, DataTypes) => {
                     price: parseFloat(price),
                     createdAt: formatDate(createdAt),
                     updatedAt: formatDate(updatedAt),
-                    previewImage: url ?? null,
+                    previewImage: url,
                 };
             });
 
