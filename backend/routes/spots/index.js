@@ -689,7 +689,10 @@ router.delete(
 
             await image.destroy();
 
-            res.status(200).json({ message: 'Successfully deleted' });
+            res.status(200).json({
+                message: 'Successfully deleted',
+                statusCode: 200,
+            });
         } catch (err) {
             next(err);
         }

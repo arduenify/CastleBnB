@@ -52,42 +52,66 @@ const spotValidationMiddleware = [
 ];
 
 const spotQueryFilterValidationMiddleware = [
-    query('page').exists({ checkFalsy: true }).withMessage('Page is required'),
-    query('page')
-        .isInt({ min: 0, max: 10 })
-        .withMessage(
-            'Page must be greater than or equal to 0, and less than or equal to 10'
-        ),
-    query('size').exists({ checkFalsy: true }).withMessage('Size is required'),
-    query('size')
-        .isInt({ min: 0, max: 20 })
-        .withMessage(
-            'Size must be greater than or equal to 0, and less than or equal to 20'
-        ),
-    query('minLat')
-        .optional()
-        .isFloat({ min: -90 })
-        .withMessage('Min latitude is invalid'),
+    // {
+    //     "message": "Validation Error",
+    //     "statusCode": 400,
+    //     "errors": [
+    //         "Page must be greater than or equal to 0",
+    //         "Size must be greater than or equal to 0",
+    //         "Maximum latitude is invalid",
+    //         "Minimum latitude is invalid",
+    //         "Maximum longitude is invalid",
+    //         "Minimum longitude is invalid",
+    //         "Maximum price must be greater than or equal to 0",
+    //         "Minimum price must be greater than or equal to 0"
+    //     ]
+    // }
+
+    /**
+     *
+     * Although I do not agree with the logic of the documentation (error messages do not match validation requirements), I want to follow it as closely as possible.
+     * Therefore, my suggested changes are commented out.
+     *
+     */
+
+    // query('page').exists({ checkFalsy: true }).withMessage('Page is required'),
+    query('page').isInt({ min: 0, max: 10 }).withMessage(
+        //'Page must be greater than or equal to 0, and less than or equal to 10'
+        'Page must be greater than or equal to 0'
+    ),
+    // query('size').exists({ checkFalsy: true }).withMessage('Size is required'),
+    query('size').isInt({ min: 0, max: 20 }).withMessage(
+        //'Size must be greater than or equal to 0, and less than or equal to 20'
+        'Size must be greater than or equal to 0'
+    ),
     query('maxLat')
         .optional()
         .isFloat({ max: 90 })
-        .withMessage('Max latitude is invalid'),
-    query('minLng')
+        .withMessage('Maximum latitude is invalid'),
+    // .withMessage('Maximum latitude must be greater than or equal to -90, and less than or equal to 90'),
+    query('minLat')
         .optional()
-        .isFloat({ min: -180 })
-        .withMessage('Min longitude is invalid'),
+        .isFloat({ min: -90 })
+        .withMessage('Minimum latitude is invalid'),
+    // .withMessage('Minimum latitude must be greater than or equal to -90, and less than or equal to 90'),
     query('maxLng')
         .optional()
         .isFloat({ max: 180 })
-        .withMessage('Max longitude is invalid'),
-    query('minPrice')
+        .withMessage('Maximum longitude is invalid'),
+    // .withMessage('Maximum longitude must be greater than or equal to -180, and less than or equal to 180'),
+    query('minLng')
         .optional()
-        .isFloat({ min: 0 })
-        .withMessage('Min price must be greater than or equal to 0'),
+        .isFloat({ min: -180 })
+        .withMessage('Minimum longitude is invalid'),
+    // .withMessage('Minimum longitude must be greater than or equal to -180, and less than or equal to 180'),
     query('maxPrice')
         .optional()
         .isFloat({ min: 0 })
-        .withMessage('Max price must be greater than or equal to 0'),
+        .withMessage('Maximum price must be greater than or equal to 0'),
+    query('minPrice')
+        .optional()
+        .isFloat({ min: 0 })
+        .withMessage('Minimum price must be greater than or equal to 0'),
     async (req, res, next) => {
         // Skip validation if no query params are present
         if (Object.keys(req.query).length) {

@@ -101,37 +101,64 @@ router.post(
             .withMessage('Password is required'),
         handleValidationErrors,
     ],
-    async (req, res) => {
-        const { firstName, lastName, email, username, password } = req.body;
+    async (req, res, next) => {
+        try {
+            const { firstName, lastName, email, username, password } = req.body;
 
-        const user = await User.signup({
-            firstName,
-            lastName,
-            email,
-            username,
-            password,
-        });
-
-        if (!(user instanceof User)) {
-            const errorMessages = user?.errors?.map((error) => {
-                return error.message;
+            const user = await User.signup({
+                firstName,
+                lastName,
+                email,
+                username,
+                password,
             });
 
-            const statusCode = 403;
-            const responseMessage = new ForbiddenError({
-                message: 'User already exists',
-                errors: errorMessages,
-            });
+            if (!(user instanceof User)) {
+                // const errorMessages = user?.errors?.map((error) => {
+                //     return error.message;
+                // });
+                const errorMessages = [];
 
-            return res.status(statusCode).json(responseMessage);
+                if (user?.errors?.length) {
+                    // I am not the biggest fan, but am pressed for time...
+                    // It is not clear to me in the documentation if I need to return both errors. Since they are unique constraints, it is difficult to get both errors back from the database.
+
+                    const duplicateEmail = await User.findOne({
+                        where: { email },
+                    });
+
+                    if (duplicateEmail) {
+                        errorMessages.push(
+                            'User with that email already exists'
+                        );
+                    }
+
+                    const duplicateUsername = await User.findOne({
+                        where: { username },
+                    });
+
+                    if (duplicateUsername) {
+                        errorMessages.push(
+                            'User with that username already exists'
+                        );
+                    }
+                }
+
+                throw new ForbiddenError({
+                    message: 'User already exists',
+                    errors: errorMessages,
+                });
+            }
+
+            return res.json({
+                user: {
+                    ...user.toSafeObject(),
+                    token: await setTokenCookie(res, user),
+                },
+            });
+        } catch (error) {
+            next(error);
         }
-
-        return res.json({
-            user: {
-                ...user.toSafeObject(),
-                token: await setTokenCookie(res, user),
-            },
-        });
     }
 );
 

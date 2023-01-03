@@ -6,6 +6,7 @@ const { Review, ReviewImage, Spot } = require('../../db/models');
 const { ResourceNotFoundError, ForbiddenError } = require('../../errors');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const { formatDate } = require('../../utils/format_date');
 
 router.use(restoreUser);
 
@@ -101,6 +102,13 @@ router.put(
             }
 
             await reviewInstance.update({ review, stars });
+
+            reviewInstance.dataValues.createdAt = formatDate(
+                reviewInstance.createdAt
+            );
+            reviewInstance.dataValues.updatedAt = formatDate(
+                reviewInstance.updatedAt
+            );
 
             return res.json(reviewInstance);
         } catch (error) {
