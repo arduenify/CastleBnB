@@ -296,7 +296,21 @@ router.put(
             spot.dataValues.updatedAt = formatDate(spot.dataValues.updatedAt);
             spot.dataValues.createdAt = formatDate(spot.dataValues.createdAt);
 
-            res.json(spot);
+            res.json({
+                id: spot.id,
+                ownerId: spot.ownerId,
+                address: spot.address,
+                city: spot.city,
+                state: spot.state,
+                country: spot.country,
+                lat: spot.lat,
+                lng: spot.lng,
+                name: spot.name,
+                description: spot.description,
+                price: spot.price,
+                createdAt: spot.createdAt,
+                updatedAt: spot.updatedAt,
+            });
         } catch (err) {
             next(err);
         }

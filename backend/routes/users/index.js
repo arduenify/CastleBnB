@@ -251,6 +251,20 @@ router.get(
 
                 review.dataValues.createdAt = formatDate(review.createdAt);
                 review.dataValues.updatedAt = formatDate(review.updatedAt);
+
+                review.dataValues.Spot = {
+                    id: spot.id,
+                    ownerId: spot.ownerId,
+                    address: spot.address,
+                    city: spot.city,
+                    state: spot.state,
+                    country: spot.country,
+                    lat: spot.lat,
+                    lng: spot.lng,
+                    name: spot.name,
+                    price: spot.price,
+                    previewImage: spot.dataValues.previewImage,
+                };
             }
 
             return res.json({ Reviews: reviews });
