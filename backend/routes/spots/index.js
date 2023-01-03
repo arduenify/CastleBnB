@@ -91,15 +91,6 @@ router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
             query.where = where;
             query.limit = size;
             query.offset = page * size;
-        } else {
-            // No query filters
-            query.include = [
-                {
-                    model: Review,
-                    attributes: [],
-                },
-            ];
-            query.group = ['Spot.id', 'previewImage.id'];
         }
 
         const spots = await Spot.findAll(query);
