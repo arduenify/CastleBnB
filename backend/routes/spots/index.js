@@ -31,8 +31,8 @@ router.use(restoreUser);
 router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
     try {
         const {
-            page,
-            size,
+            // page,
+            // size,
             minLat,
             maxLat,
             minLng,
@@ -40,6 +40,8 @@ router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
             minPrice,
             maxPrice,
         } = req.query;
+
+        let { page, size } = req.query;
 
         const hasQueryFilters = Object.keys(req.query).length;
         const query = {};
