@@ -90,7 +90,7 @@ router.get('/', spotQueryFilterValidationMiddleware, async (req, res, next) => {
 
             query.where = where;
             query.limit = size;
-            query.offset = page * size;
+            query.offset = (page - 1) * size;
         }
 
         const spots = await Spot.findAll(query);
