@@ -21,7 +21,7 @@ router.use(restoreUser);
  * Method: GET
  * Route: /users/current
  */
-router.get('/current', requireAuthentication, (req, res) => {
+router.get('/current', (req, res) => {
     if (req.user) {
         return res.json({
             user: req.user.toSafeObject(),
@@ -320,25 +320,40 @@ router.get(
                 const previewImage = await spot.getPreviewImage();
 
                 spot.dataValues.previewImage = previewImage?.url || null;
+                spot.previewImage = previewImage?.url || null;
 
-                booking.dataValues.Spot = {
-                    id: spot.id,
-                    ownerId: spot.ownerId,
-                    address: spot.address,
-                    city: spot.city,
-                    state: spot.state,
-                    country: spot.country,
-                    lat: spot.lat,
-                    lng: spot.lng,
-                    name: spot.name,
-                    price: spot.price,
-                    previewImage: spot.dataValues.previewImage,
-                };
+                // booking.dataValues.Spot = {
+                //     id: spot.id,
+                //     ownerId: spot.ownerId,
+                //     address: spot.address,
+                //     city: spot.city,
+                //     state: spot.state,
+                //     country: spot.country,
+                //     lat: spot.lat,
+                //     lng: spot.lng,
+                //     name: spot.name,
+                //     price: spot.price,
+                //     previewImage: spot.dataValues.previewImage,
+                // };
             }
 
             const formattedBookings = bookings.map((booking) => {
                 const startDate = toReadableDateUTC(booking.startDate);
                 const endDate = toReadableDateUTC(booking.endDate);
+
+                booking.Spot = {
+                    id: booking.Spot.id,
+                    ownerId: booking.Spot.ownerId,
+                    address: booking.Spot.address,
+                    city: booking.Spot.city,
+                    state: booking.Spot.state,
+                    country: booking.Spot.country,
+                    lat: booking.Spot.lat,
+                    lng: booking.Spot.lng,
+                    name: booking.Spot.name,
+                    price: booking.Spot.price,
+                    previewImage: booking.Spot.previewImage,
+                };
 
                 return {
                     id: booking.id,
