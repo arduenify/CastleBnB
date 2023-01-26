@@ -2,13 +2,24 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { csrfFetch } from '../../app/csrf';
 
 const initialState = {
-    user: null,
+    currentUser: null,
     loading: false,
-    error: null,
+    errors: null,
 };
 
+/**
+ * Used by the LoginFormComponent to log in a user.
+ *
+ * @param {string} credential - The username or email of the user.
+ * @param {string} password - The password of the user.
+ * @returns {object} - The user object.
+ *
+ * @example
+ * const payload = {credential: 'username', password: 'password'}
+ * const user = await dispatch(login(payload));
+ */
 export const login = createAsyncThunk(
-    'login',
+    'users/login',
     async ({ credential, password }, thunkAPI) => {
         const response = await csrfFetch('/api/users/login', {
             method: 'POST',
@@ -18,43 +29,40 @@ export const login = createAsyncThunk(
             }),
         });
 
-        if (!response.ok) {
-            thunkAPI.rejectWithValue(response.statusText);
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return responseJson;
         }
 
-        const data = await response.json();
-        thunkAPI.dispatch(setUser(data.user));
-
-        return response;
+        return thunkAPI.rejectWithValue(responseJson);
     }
 );
 
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {
-        setUser: (state, action) => {
-            state.user = action.payload;
-        },
-        removeUser: (state) => {
-            state.user = null;
-        },
-    },
-    extraReducers: {
-        [login.pending]: (state) => {
-            state.loading = true;
-            state.error = null;
-        },
-        [login.fulfilled]: (state) => {
-            state.loading = false;
-        },
-        [login.rejected]: (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
-        },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(login.pending, (state) => {
+                state.loading = true;
+                state.errors = [];
+            })
+            .addCase(login.fulfilled, (state, action) => {
+                state.loading = false;
+                state.currentUser = action.payload;
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.loading = false;
+
+                if (action.payload.errors) {
+                    state.errors = action.payload.errors;
+                } else {
+                    state.errors = [action.payload.message];
+                }
+            });
     },
 });
-
-export const { setUser, removeUser } = userSlice.actions;
 
 export default userSlice.reducer;
