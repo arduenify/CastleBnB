@@ -12,10 +12,6 @@ export const csrfFetch = async (url, options = {}) => {
 
     const res = await window.fetch(url, options);
 
-    if (!res.ok) {
-        throw res;
-    }
-
     return res;
 };
 
