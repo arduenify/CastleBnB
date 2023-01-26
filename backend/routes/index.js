@@ -12,10 +12,10 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Routers
 router.use('/api', require('./api'));
-router.use('/users', require('./users'));
-router.use('/spots', require('./spots'));
-router.use('/reviews', require('./reviews'));
-router.use('/bookings', require('./bookings'));
+router.use('/api/users', require('./users'));
+router.use('/api/spots', require('./spots'));
+router.use('/api/reviews', require('./reviews'));
+router.use('/api/bookings', require('./bookings'));
 
 if (process.env.NODE_ENV === 'production') {
     const path = require('path');
