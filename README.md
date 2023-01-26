@@ -6,7 +6,7 @@
 <details>
 <summary>Diagram</summary>
 
-![Diagram](schema.png)
+![Diagram](backend/schema.png)
 
 </details>
 
