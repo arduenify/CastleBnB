@@ -1,17 +1,34 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import LoginFormComponent from '../user/LoginFormComponent';
-import SignupFormComponent from '../user/SignupFormComponent';
 import SearchComponent from './SearchComponent';
 import LogoComponent from '../../common/LogoComponent';
 
+import { logout } from '../user/userSlice';
+
 import './NavigationBarComponent.css';
 
-const NavigationBarComponent = () => {
-    const [signupVisible, setSignupVisible] = useState(false);
-    const [loginVisible, setLoginVisible] = useState(false);
+const NavigationBarComponent = ({ setSignupVisible, setLoginVisible }) => {
+    const dispatch = useDispatch();
+
     const currentUser = useSelector((state) => state.user.currentUser);
+
+    const signupBtnClicked = (e) => {
+        e.preventDefault();
+
+        setSignupVisible(true);
+    };
+
+    const loginBtnClicked = (e) => {
+        e.preventDefault();
+
+        setLoginVisible(true);
+    };
+
+    const logoutBtnClicked = (e) => {
+        e.preventDefault();
+
+        dispatch(logout());
+    };
 
     return (
         <nav className='navbar-container'>
@@ -27,17 +44,33 @@ const NavigationBarComponent = () => {
                 </div>
 
                 <div className='navbar-right'>
-                    {/* More elements here later */}
-                    <div className='navbar-login'>
-                        {signupVisible && !currentUser && (
-                            <SignupFormComponent
-                                setSignupVisible={setSignupVisible}
-                            />
+                    <div className='navbar-btn-container'>
+                        {/* Signup / login buttons */}
+                        {!currentUser && (
+                            <>
+                                <button
+                                    className='navbar-btn'
+                                    onClick={signupBtnClicked}
+                                >
+                                    Signup
+                                </button>
+                                <button
+                                    className='navbar-btn'
+                                    onClick={loginBtnClicked}
+                                >
+                                    Login
+                                </button>
+                            </>
                         )}
-                        {loginVisible && !currentUser && (
-                            <LoginFormComponent
-                                setLoginVisible={setLoginVisible}
-                            />
+
+                        {/* Logout button */}
+                        {currentUser && (
+                            <button
+                                className='navbar-btn'
+                                onClick={logoutBtnClicked}
+                            >
+                                Logout
+                            </button>
                         )}
                     </div>
                 </div>

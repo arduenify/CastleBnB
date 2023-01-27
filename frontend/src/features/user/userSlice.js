@@ -76,6 +76,20 @@ export const login = createAsyncThunk(
     }
 );
 
+export const logout = createAsyncThunk('users/logout', async (_, thunkAPI) => {
+    const response = await csrfFetch('/api/users/logout', {
+        method: 'DELETE',
+    });
+
+    const responseJson = await response.json();
+
+    if (response.ok) {
+        return responseJson;
+    }
+
+    return thunkAPI.rejectWithValue(responseJson);
+});
+
 /**
  * Used by the App component to restore the user session.
  * @returns {object} - The user object.
@@ -125,6 +139,19 @@ export const userSlice = createSlice({
                 }
             })
 
+            /** Logout user */
+            .addCase(logout.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(logout.fulfilled, (state) => {
+                state.loading = false;
+                state.currentUser = null;
+            })
+            .addCase(logout.rejected, (state) => {
+                state.loading = false;
+                state.currentUser = null;
+            })
+
             /** Restore user */
             .addCase(restoreUser.pending, (state) => {
                 state.loading = true;
@@ -133,7 +160,7 @@ export const userSlice = createSlice({
                 state.loading = false;
                 state.currentUser = action.payload.user;
             })
-            .addCase(restoreUser.rejected, (state, action) => {
+            .addCase(restoreUser.rejected, (state) => {
                 state.loading = false;
                 state.currentUser = null;
             })
