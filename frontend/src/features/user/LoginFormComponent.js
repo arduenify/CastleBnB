@@ -6,17 +6,15 @@ import { login } from './userSlice';
 
 import './LoginFormComponent.css';
 
-const LoginFormComponent = () => {
+const LoginFormComponent = ({ setLoginVisible }) => {
     const dispatch = useDispatch();
 
-    const currentUser = useSelector((state) => state.user.currentUser);
     const loginErrors = useSelector((state) => state.user.errors);
 
-    const [isVisible, setIsVisible] = useState(true);
     const [credential, setCredential] = useState('');
     const [password, setPassword] = useState('');
 
-    const hideModal = () => setIsVisible(false);
+    const hideModal = () => setLoginVisible(false);
 
     const loginBtnClicked = (e) => {
         e.preventDefault();
@@ -29,9 +27,9 @@ const LoginFormComponent = () => {
         hideModal();
     };
 
-    if (currentUser || !isVisible) {
-        return <Navigate to='/' />;
-    }
+    // if (currentUser) {
+    //     return <Navigate to='/' />;
+    // }
 
     return (
         <div className='popup-modal'>

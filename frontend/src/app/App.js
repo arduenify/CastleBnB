@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+
 import LoginFormComponent from '../features/user/LoginFormComponent';
+import LandingPageComponent from '../features/landing/LandingPageComponent';
+
 import { restoreUser } from '../features/user/userSlice';
 
 import './App.css';
+import NavigationBarComponent from '../features/navbar/NavigationBarComponent';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -16,18 +20,22 @@ const App = () => {
 
     return (
         isLoaded && (
-            <Routes>
-                <Route
-                    exact
-                    path='/'
-                    element={<h1>Home Page</h1>}
-                />
-                <Route
-                    exact
-                    path='/login'
-                    element={<LoginFormComponent />}
-                />
-            </Routes>
+            <>
+                <NavigationBarComponent></NavigationBarComponent>
+
+                <Routes>
+                    <Route
+                        exact
+                        path='/'
+                        element={<LandingPageComponent />}
+                    />
+                    <Route
+                        exact
+                        path='/login'
+                        element={<LoginFormComponent />}
+                    />
+                </Routes>
+            </>
         )
     );
 };

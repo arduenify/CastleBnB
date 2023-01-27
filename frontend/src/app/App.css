@@ -34,11 +34,45 @@
     flex-wrap: wrap;
 }
 
-.flex-row-item {
+.flex-item-1 {
     flex: 1;
 }
 
-#root {
+.flex-item-2 {
+    flex: 2;
+}
+
+.flex-item-3 {
+    flex: 3;
+}
+
+.flex-item-4 {
+    flex: 4;
+}
+
+.flex-item-5 {
+    flex: 5;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
     max-width: 1140px;
+    flex-direction: column;
     margin: 0 auto;
+    font-family: var(--font-family);
+    font-size: var(--font-size-medium);
+    line-height: var(--line-height-medium);
+    color: var(--colors-text-primary);
+}
+
+#root {
+    display: flex;
+    flex: 1;
+    margin: 0;
+    background-color: var(--colors-white);
+}
+
+* {
+    box-sizing: border-box;
 }
