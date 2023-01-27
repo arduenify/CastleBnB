@@ -76,6 +76,17 @@ router.post(
 );
 
 /**
+ * Logout a user
+ * Method: DELETE
+ * Route: /users/logout
+ */
+router.delete('/logout', (_req, res) => {
+    res.clearCookie('token');
+
+    return res.json({ message: 'Successfully logged out' });
+});
+
+/**
  * Sign up a user
  * Method: POST
  * Route: /users/signup
