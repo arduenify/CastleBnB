@@ -9,6 +9,7 @@ import { restoreCSRF, csrfFetch } from './app/csrf';
 import { login, restoreUser, signup } from './features/user/userSlice';
 
 import './index.css';
+import './style/normalize.css';
 
 if (process.env.NODE_ENV !== 'production') {
     restoreCSRF();
