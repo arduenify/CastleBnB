@@ -1,5 +1,44 @@
+/* This file contains all of the styling for any application-wide assets */
+
+:root {
+    --colors-black: #000;
+    --colors-dark-gray: #717171;
+    --colors-gray: #ddd;
+    --colors-light-gray: #f7f7f7;
+    --colors-white: #fff;
+    --colors-accent: #ff385c;
+    --colors-green: #008a05;
+    --colors-text-primary: #222;
+    --colors-text-secondary: var(--colors-dark-gray);
+
+    --font-family: Circular,
+        -apple-system,
+        BlinkMacSystemFont,
+        Roboto,
+        Helvetica Neue,
+        sans-serif;
+
+    --font-size-medium: 16px;
+    --font-size-small: 14px;
+    --font-size-x-small: 12px;
+
+    --line-height-medium: 20px;
+    --line-height-small: 18px;
+    --line-height-x-small: 16px;
+}
+
 .flex-container {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.flex-row-item {
+    flex: 1;
+}
+
+#root {
+    max-width: 1140px;
+    margin: 0 auto;
 }

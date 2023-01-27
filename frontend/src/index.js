@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import { restoreCSRF, csrfFetch } from './app/csrf';
-import { login } from './features/user/userSlice';
+import { login, restoreUser, signup } from './features/user/userSlice';
 
 import './index.css';
 
@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'production') {
     // Tests
     window.csrfFetch = csrfFetch;
     window.store = store;
-    window.userActions = { login };
+    window.userActions = { login, restoreUser, signup };
 }
 
 const Root = () => {
