@@ -37,6 +37,17 @@ const App = () => {
         }
     }, [currentUser]);
 
+    useEffect(() => {
+        // This will dynamically change the background color of the page
+        //  when a popup is visible
+        document.documentElement.style.setProperty(
+            '--bg-color',
+            signupVisible || loginVisible
+                ? 'var(--colors-backdrop)'
+                : 'var(--colors-white)'
+        );
+    }, [signupVisible, loginVisible]);
+
     return (
         isLoaded && (
             <>
@@ -46,7 +57,6 @@ const App = () => {
                     setSignupVisible={setSignupVisible}
                 />
 
-                {/* The login/signup popup modals */}
                 {signupVisible && !loginVisible && (
                     <SignupFormComponent setSignupVisible={setSignupVisible} />
                 )}
@@ -54,8 +64,10 @@ const App = () => {
                     <LoginFormComponent setLoginVisible={setLoginVisible} />
                 )}
 
-                {/* The main content of the page */}
-                <div className='page-container'>
+                <div
+                    className='page-container'
+                    /* If the signup or login form is visible, this element background should be #222 */
+                >
                     <Routes>
                         <Route
                             exact

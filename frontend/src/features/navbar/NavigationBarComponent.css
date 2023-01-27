@@ -6,9 +6,10 @@
 }
 
 .navbar-content {
-    border: 1px solid red;
+    border: 2px solid red;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
     width: 100%;
 }
@@ -22,6 +23,5 @@
 }
 
 .navbar-right {
-    width: 200px;
     border: 1px solid yellow;
 }
