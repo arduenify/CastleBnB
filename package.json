@@ -1,11 +1,8 @@
 {
     "name": "castlebnb",
     "version": "1.0.0",
-    "description": "## Database Schema Design",
+    "description": "CastleBnB",
     "main": "index.js",
-    "directories": {
-        "doc": "docs"
-    },
     "scripts": {
         "render-postbuild": "npm run build --prefix frontend",
         "install": "npm --prefix backend install backend && npm --prefix frontend install frontend",
@@ -23,8 +20,5 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/AdamScoggins/CastleBnB/issues"
-    },
     "homepage": "https://github.com/AdamScoggins/CastleBnB#readme"
 }
