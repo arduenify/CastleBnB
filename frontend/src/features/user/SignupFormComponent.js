@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { signup } from './userSlice';
+import PopupModalComponent from '../../common/popupModal/PopupModalComponent';
+import FormInputComponent from '../../common/input/FormInputComponent';
 
 const SignupFormComponent = ({ setSignupVisible }) => {
     const dispatch = useDispatch();
@@ -31,6 +33,71 @@ const SignupFormComponent = ({ setSignupVisible }) => {
 
         dispatch(signup({ email, username, password, firstName, lastName }));
     };
+
+    return (
+        <PopupModalComponent
+            header={'Sign up'}
+            setVisible={setSignupVisible}
+            content={
+                <form
+                    id='popup-modal-signup-form'
+                    onSubmit={signupBtnClicked}
+                >
+                    <FormInputComponent
+                        placeholder='Email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+
+                    <FormInputComponent
+                        placeholder='Username'
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+
+                    <FormInputComponent
+                        placeholder='First name'
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />
+
+                    <FormInputComponent
+                        placeholder='Last name'
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                    />
+
+                    <FormInputComponent
+                        placeholder='Password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    <FormInputComponent
+                        placeholder='Confirm password'
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+
+                    <button
+                        className='popup-modal-btn'
+                        type='submit'
+                    >
+                        Sign up
+                    </button>
+
+                    <div className='popup-modal-errors'>
+                        {passwordMatchError && <div>{passwordMatchError}</div>}
+
+                        {errors &&
+                            errors.map((error, idx) => (
+                                <div key={idx}>{error}</div>
+                            ))}
+                    </div>
+                </form>
+            }
+        />
+    );
 
     return (
         <div className='popup-modal'>

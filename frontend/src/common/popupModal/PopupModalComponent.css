@@ -1,24 +1,49 @@
 .popup-modal {
-    position: fixed;
     margin: 0 auto;
+    width: 600px;
+    height: auto;
+    position: fixed;
+    top: 25%;
     z-index: 100;
+
     display: flex;
     flex-direction: column;
     align-self: center;
-    width: 600px;
-    height: 600px;
+
     border-radius: var(--border-radius);
     background-color: var(--colors-white);
     box-shadow: var(--box-shadow);
-    transition: all 0.3s ease-in-out;
+
+    /* animation: {dur} {style} {?} {quantity} {keyframe id}*/
+    animation: 0.2s ease-in-out 0s 1 slideRight;
 }
 
 .popup-modal>div {
+    margin: 10px;
     position: relative;
-    display: inline-flex;
     z-index: 101;
+
+    display: inline-flex;
     justify-content: center;
     align-items: center;
+
     background-color: var(--colors-white);
-    margin: 10px;
+}
+
+.popup-modal form {
+    width: 90%;
+}
+
+.popup-modal-header-text {
+    font-size: var(--font-size-large)
+}
+
+@keyframes slideRight {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
 }

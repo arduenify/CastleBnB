@@ -6,6 +6,7 @@ import LoginFormComponent from '../features/user/LoginFormComponent';
 import SignupFormComponent from '../features/user/SignupFormComponent';
 import LandingPageComponent from '../features/landing/LandingPageComponent';
 import NavigationBarComponent from '../features/navbar/NavigationBarComponent';
+import LoaderComponent from '../common/loader/LoaderComponent';
 
 import { restoreUser } from '../features/user/userSlice';
 
@@ -40,13 +41,17 @@ const App = () => {
     return (
         isLoaded && (
             <>
-                <NavigationBarComponent
-                    logoutVisible={logoutVisible}
-                    loginVisible={loginVisible}
-                    setLoginVisible={setLoginVisible}
-                    signupVisible={signupVisible}
-                    setSignupVisible={setSignupVisible}
-                />
+                <header>
+                    <NavigationBarComponent
+                        logoutVisible={logoutVisible}
+                        loginVisible={loginVisible}
+                        setLoginVisible={setLoginVisible}
+                        signupVisible={signupVisible}
+                        setSignupVisible={setSignupVisible}
+                    />
+                </header>
+
+                <LoaderComponent />
 
                 {signupVisible && !loginVisible && (
                     <SignupFormComponent setSignupVisible={setSignupVisible} />
@@ -55,6 +60,9 @@ const App = () => {
                     <LoginFormComponent setLoginVisible={setLoginVisible} />
                 )}
 
+                {/*
+                 * Where all of the content resides
+                 */}
                 <div className='page-container'>
                     <Routes>
                         <Route

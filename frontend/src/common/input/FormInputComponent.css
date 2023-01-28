@@ -1,7 +1,7 @@
 .form-input {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     width: 100%;
     min-height: 55px;
     border: 1.5px solid var(--colors-gray);
@@ -25,5 +25,5 @@
     background-color: var(--colors-white);
     margin: 0.5rem;
     transition: all 0.3s ease-in-out;
-    border: none;
+    border: none !important;
 }

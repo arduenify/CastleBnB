@@ -21,49 +21,47 @@ const LoginFormComponent = ({ setLoginVisible }) => {
         dispatch(login({ credential, password }));
     };
 
-    const loginForm = (
-        <form
-            id='popup-modalLoginForm'
-            onSubmit={loginBtnClicked}
-        >
-            <FormInputComponent
-                placeholder='Email/username'
-                value={credential}
-                onChange={(e) => setCredential(e.target.value)}
-            />
-
-            <FormInputComponent
-                placeholder='Password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-
-            <button
-                className='popup-modal-button'
-                type='submit'
-            >
-                Login
-            </button>
-
-            <ul>
-                {loginErrors &&
-                    loginErrors.map((error, index) => (
-                        <li
-                            className='popup-modal-error'
-                            key={index}
-                        >
-                            {error}
-                        </li>
-                    ))}
-            </ul>
-        </form>
-    );
-
     return (
         <PopupModalComponent
             header={'Login'}
-            content={loginForm}
             setVisible={setLoginVisible}
+            content={
+                <form
+                    id='popup-modalLoginForm'
+                    onSubmit={loginBtnClicked}
+                >
+                    <FormInputComponent
+                        placeholder='Email/username'
+                        value={credential}
+                        onChange={(e) => setCredential(e.target.value)}
+                    />
+
+                    <FormInputComponent
+                        placeholder='Password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    <button
+                        className='popup-modal-button'
+                        type='submit'
+                    >
+                        Login
+                    </button>
+
+                    <ul>
+                        {loginErrors &&
+                            loginErrors.map((error, index) => (
+                                <li
+                                    className='popup-modal-error'
+                                    key={index}
+                                >
+                                    {error}
+                                </li>
+                            ))}
+                    </ul>
+                </form>
+            }
         />
     );
 };

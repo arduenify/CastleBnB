@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { logout } from '../user/userSlice';
+import { login, logout } from '../user/userSlice';
 
 import './ProfileMenuComponent.css';
 
@@ -27,6 +27,11 @@ const ProfileMenuComponent = ({ setSignupVisible, setLoginVisible }) => {
         dispatch(logout());
     };
 
+    const demoUserBtnClicked = (e) => {
+        e.preventDefault();
+        dispatch(login({ credential: 'adamscoggins', password: 'iloveaa' }));
+    };
+
     return (
         <ul id='profile-menu'>
             {!currentUser && (
@@ -46,6 +51,16 @@ const ProfileMenuComponent = ({ setSignupVisible, setLoginVisible }) => {
                     onClick={loginBtnClicked}
                 >
                     <p className='profile-menu-text'>Log in</p>
+                </li>
+            )}
+
+            {!currentUser && (
+                <li
+                    id='profile-menu-demo-user'
+                    className='profile-menu-btn'
+                    onClick={demoUserBtnClicked}
+                >
+                    <p className='profile-menu-text'>Demo user</p>
                 </li>
             )}
 

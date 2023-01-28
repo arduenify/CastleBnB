@@ -4,7 +4,7 @@ import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 
 import SearchComponent from './SearchComponent';
 import ProfileMenuComponent from './ProfileMenuComponent';
-import LogoComponent from '../../common/LogoComponent';
+import LogoComponent from '../../common/logo/LogoComponent';
 
 import './NavigationBarComponent.css';
 
