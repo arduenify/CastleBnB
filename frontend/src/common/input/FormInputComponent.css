@@ -1,0 +1,29 @@
+.form-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    width: 100%;
+    min-height: 55px;
+    border: 1.5px solid var(--colors-gray);
+    border-radius: var(--border-radius-small);
+}
+
+.form-input label {
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    color: var(--colors-text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+/* TODO 
+ * Unsure why border re-appears the input is focused..
+ */
+.form-input input {
+    font-size: var(--font-size-medium);
+    line-height: var(--line-height-medium);
+    color: var(--colors-text-primary);
+    background-color: var(--colors-white);
+    margin: 0.5rem;
+    transition: all 0.3s ease-in-out;
+    border: none;
+}

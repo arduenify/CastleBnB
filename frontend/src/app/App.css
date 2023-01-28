@@ -1,0 +1,82 @@
+/* This file contains all of the styling for any application-wide assets */
+
+:root {
+    --colors-black: #000;
+    --colors-dark-gray: #717171;
+    --colors-gray: #ddd;
+    --colors-light-gray: #f7f7f7;
+    --colors-white: #fff;
+    --colors-accent: #ff385c;
+    --colors-green: #008a05;
+    --colors-text-primary: #222;
+    --colors-text-secondary: var(--colors-dark-gray);
+    --colors-backdrop: rgba(0, 0, 0, 0.5);
+
+    --bg-color: var(--colors-white);
+
+    --font-family: Circular,
+        -apple-system,
+        BlinkMacSystemFont,
+        Roboto,
+        Helvetica Neue,
+        sans-serif;
+
+    --font-size-x-small: 12px;
+    --font-size-small: 14px;
+    --font-size-medium: 16px;
+
+    --line-height-x-small: 16px;
+    --line-height-small: 18px;
+    --line-height-medium: 20px;
+
+    --border-radius-small: 0.5rem;
+    --border-radius: 1rem;
+
+    --box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+body {
+    min-height: 90vh;
+    margin: 0 auto !important;
+    float: none !important;
+
+    font-family: var(--font-family);
+    font-size: var(--font-size-medium);
+    line-height: var(--line-height-medium);
+    color: var(--colors-text-primary);
+    background-color: var(--bg-color);
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-self: center;
+    margin: 0 auto;
+    max-width: 90%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.page-container {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+}
+
+@media screen and (max-width: 1200px) {
+    body {
+        max-width: 100%;
+    }
+}
