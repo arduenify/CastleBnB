@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
+import { Navigate } from 'react-router-dom';
 
 import SearchComponent from './SearchComponent';
 import ProfileMenuComponent from './ProfileMenuComponent';
@@ -60,9 +61,7 @@ const NavigationBarComponent = ({
         >
             <div className='navbar-content'>
                 <div className='navbar-left'>
-                    <a href='/'>
-                        <LogoComponent />
-                    </a>
+                    <LogoComponent />
                 </div>
 
                 <div className='navbar-middle'>
