@@ -11,6 +11,7 @@ const ProfileMenuComponent = ({ setSignupVisible, setLoginVisible }) => {
 
     const signupBtnClicked = (e) => {
         e.preventDefault();
+
         setLoginVisible(false);
         setSignupVisible(true);
     };
@@ -30,28 +31,31 @@ const ProfileMenuComponent = ({ setSignupVisible, setLoginVisible }) => {
         <ul id='profile-menu'>
             {!currentUser && (
                 <li
-                    className='navbar-btn'
+                    id='profile-menu-signup-btn'
+                    className='profile-menu-btn'
                     onClick={signupBtnClicked}
                 >
-                    Signup
+                    <p className='profile-menu-text'>Sign up</p>
                 </li>
             )}
 
             {!currentUser && (
                 <li
-                    className='navbar-btn'
+                    id='profile-menu-login-btn'
+                    className='profile-menu-btn'
                     onClick={loginBtnClicked}
                 >
-                    Login
+                    <p className='profile-menu-text'>Log in</p>
                 </li>
             )}
 
             {currentUser && (
                 <li
-                    className='navbar-btn'
+                    id='profile-menu-logout-btn'
+                    className='profile-menu-btn'
                     onClick={logoutBtnClicked}
                 >
-                    Logout
+                    <p className='profile-menu-text'>Logout</p>
                 </li>
             )}
         </ul>

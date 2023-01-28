@@ -21,16 +21,16 @@
         Helvetica Neue,
         sans-serif;
 
-    --font-size-medium: 16px;
-    --font-size-small: 14px;
     --font-size-x-small: 12px;
+    --font-size-small: 14px;
+    --font-size-medium: 16px;
 
-    --line-height-medium: 20px;
-    --line-height-small: 18px;
     --line-height-x-small: 16px;
+    --line-height-small: 18px;
+    --line-height-medium: 20px;
 
-    --border-radius: 1rem;
     --border-radius-small: 0.5rem;
+    --border-radius: 1rem;
 
     --box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
 }

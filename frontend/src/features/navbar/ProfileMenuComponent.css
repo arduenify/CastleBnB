@@ -1,10 +1,49 @@
 #profile-menu {
-    position: relative;
+    position: absolute;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 250px;
+    display: block;
+    top: 100%;
+    right: 0;
+    padding-left: 0;
     text-align: left;
     list-style: none;
-    background-clip: padding-box;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.175);
+}
+
+.profile-menu-text {
+    padding-left: 1rem;
+    margin: 0;
+    font-size: var(--font-size-medium);
+
+    /* Text should be vertically centered */
+    display: flex;
+    align-items: center;
+    height: 40px;
+
+}
+
+.profile-menu-btn {
+    min-width: 200px;
+    min-height: 40px;
+    z-index: 1;
+    background-color: var(--bg-color);
+}
+
+.profile-menu-btn:hover {
+    background-color: var(--colors-light-gray)
+}
+
+#profile-menu-signup-btn {
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+#profile-menu-login-btn {
+    margin-bottom: 0.5rem;
+}
+
+#profile-menu-logout-btn {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }

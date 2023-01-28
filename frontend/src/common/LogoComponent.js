@@ -1,5 +1,5 @@
 const LogoComponent = () => {
-    return <div className='logo'>Todo</div>;
+    return <div className='logo'>Logo</div>;
 };
 
 export default LogoComponent;
