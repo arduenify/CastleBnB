@@ -1,4 +1,4 @@
-# `AirBnB Clone`
+# `CastleBnB`
 
 ## Database Schema Design
 
@@ -7,7 +7,7 @@ URL: https://airbnb-clone-i8gb.onrender.com/
 <details>
 <summary>Diagram</summary>
 
-![Diagram](schema.png)
+![Diagram](backend/schema.png)
 
 </details>
 
@@ -293,7 +293,7 @@ user's information.
 -   Request
 
     -   Method: POST
-    -   URL: /users/sign-up
+    -   URL: /users/signup
     -   Headers:
         -   Content-Type: application/json
     -   Body:
