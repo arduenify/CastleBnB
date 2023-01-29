@@ -27,7 +27,7 @@ const LoginFormComponent = ({ setLoginVisible }) => {
             setVisible={setLoginVisible}
             content={
                 <form
-                    id='popup-modalLoginForm'
+                    id='popup-modal-login-form'
                     onSubmit={loginBtnClicked}
                 >
                     <FormInputComponent

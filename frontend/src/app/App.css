@@ -24,15 +24,22 @@
     --font-size-x-small: 12px;
     --font-size-small: 14px;
     --font-size-medium: 16px;
+    --font-size-large: 18px;
+    --font-size-x-large: 20px;
+    --font-size-xx-large: 24px;
 
     --line-height-x-small: 16px;
     --line-height-small: 18px;
     --line-height-medium: 20px;
 
     --border-radius-small: 0.5rem;
-    --border-radius: 1rem;
+    --border-radius-1: 1rem;
+    --border-radius: 1.5rem;
+    --border-light: 1px solid var(--colors-gray);
 
-    --box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
+    --box-shadow-popup: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
+    --box-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --transition-time: 0.25s;
 }
 
 .flex-container {
@@ -40,6 +47,10 @@
     align-items: center;
     justify-content: space-evenly;
     flex-wrap: wrap;
+}
+
+input {
+    outline: none;
 }
 
 body {

@@ -10,7 +10,7 @@
     flex-direction: column;
     align-self: center;
 
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-1);
     background-color: var(--colors-white);
     box-shadow: var(--box-shadow);
 
@@ -18,20 +18,47 @@
     animation: 0.2s ease-in-out 0s 1 slideRight;
 }
 
-.popup-modal>div {
-    margin: 10px;
-    position: relative;
-    z-index: 101;
+.popup-modal-border {
+    border-bottom: 1px solid var(--colors-gray);
+}
 
+.popup-modal-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+
+    height: 50px;
+}
+
+.popup-modal-header-text {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.close-modal-btn {
+    position: absolute;
+    left: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: var(--font-size-xx-large);
+}
+
+.popup-modal-body {
+    margin: 10px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-
-    background-color: var(--colors-white);
 }
 
 .popup-modal form {
-    width: 90%;
+    width: 95%;
+}
+
+.popup-modal .form-input-container {
+    border: 1px solid var(--colors-dark-gray);
+    border-radius: 1rem;
 }
 
 .popup-modal-header-text {

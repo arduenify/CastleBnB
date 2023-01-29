@@ -43,41 +43,43 @@ const SignupFormComponent = ({ setSignupVisible }) => {
                     id='popup-modal-signup-form'
                     onSubmit={signupBtnClicked}
                 >
-                    <FormInputComponent
-                        placeholder='Email'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
+                    <div className='form-input-container'>
+                        <FormInputComponent
+                            placeholder='Email'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
 
-                    <FormInputComponent
-                        placeholder='Username'
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
+                        <FormInputComponent
+                            placeholder='Username'
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
 
-                    <FormInputComponent
-                        placeholder='First name'
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                    />
+                        <FormInputComponent
+                            placeholder='First name'
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
 
-                    <FormInputComponent
-                        placeholder='Last name'
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                    />
+                        <FormInputComponent
+                            placeholder='Last name'
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
 
-                    <FormInputComponent
-                        placeholder='Password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
+                        <FormInputComponent
+                            placeholder='Password'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
 
-                    <FormInputComponent
-                        placeholder='Confirm password'
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
+                        <FormInputComponent
+                            placeholder='Confirm password'
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                    </div>
 
                     <button
                         className='popup-modal-btn'
