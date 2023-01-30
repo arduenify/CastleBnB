@@ -96,9 +96,28 @@
     background-color: var(--colors-accent-hover);
 }
 
-.popup-modal-errors {
+.popup-modal-error {
     color: var(--colors-error);
     font-size: var(--font-size-x-small);
+    margin: 0;
+    padding: 2px;
+}
+
+.popup-modal-error>.icon-text-container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 6px;
+}
+
+.popup-modal-error-text {
+    margin: 0;
+    padding: 0;
+}
+
+.popup-modal-errors {
+    padding-left: 0;
+    list-style: none;
 }
 
 @keyframes fadeIn {

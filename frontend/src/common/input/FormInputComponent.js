@@ -27,7 +27,6 @@ const FormInputComponent = ({
     });
 
     useEffect(() => {
-        console.log('VALIDATION ERROR', validationError);
         const input = inputRef?.current;
         const parent = input?.parentElement;
 

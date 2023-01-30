@@ -12,11 +12,15 @@ import {
 import './LoginFormComponent.css';
 import PopupModalComponent from '../../common/popupModal/PopupModalComponent';
 import FormInputComponent from '../../common/input/FormInputComponent';
+import FormErrorsComponent from './FormErrorsComponent';
 
 const LoginFormComponent = ({ setLoginVisible }) => {
     const dispatch = useDispatch();
 
     const loginErrors = useSelector((state) => state.user.errors);
+    const validationErrors = useSelector(
+        (state) => state.user.validationErrors
+    );
 
     const [credential, setCredential] = useState('');
     const [password, setPassword] = useState('');
@@ -94,17 +98,10 @@ const LoginFormComponent = ({ setLoginVisible }) => {
                         Login
                     </button>
 
-                    <ul>
-                        {loginErrors &&
-                            loginErrors.map((error, index) => (
-                                <li
-                                    className='popup-modal-error'
-                                    key={index}
-                                >
-                                    {error}
-                                </li>
-                            ))}
-                    </ul>
+                    <FormErrorsComponent
+                        errors={loginErrors}
+                        validationErrors={validationErrors}
+                    />
                 </form>
             }
         />
