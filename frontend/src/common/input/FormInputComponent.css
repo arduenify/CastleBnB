@@ -6,6 +6,8 @@
     font-size: var(--font-size-medium);
     line-height: var(--line-height-medium);
     color: var(--colors-text-primary);
+
+    pointer-events: all;
 }
 
 
@@ -19,6 +21,7 @@
 }
 
 .form-input label {
+    pointer-events: none;
     position: relative;
     margin: 0 1rem;
     top: 8px;
@@ -28,9 +31,9 @@
     color: var(--colors-text-secondary);
 
     transition:
-        transform 0.25s ease-in-out,
-        font-size 0.1s ease-in-out,
-        color 0.1s ease-in-out;
+        transform 0.25s ease,
+        font-size 0.1s ease-out,
+        color 0.1s ease-in;
 }
 
 .form-input input {

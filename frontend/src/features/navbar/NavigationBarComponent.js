@@ -41,14 +41,11 @@ const NavigationBarComponent = ({
     }, [profileMenuVisible]);
 
     useEffect(() => {
-        // This will dynamically change the background color of the page
-        //  when a popup is visible
-        document.documentElement.style.setProperty(
-            '--bg-color',
-            signupVisible || loginVisible
-                ? 'var(--colors-backdrop)'
-                : 'var(--colors-white)'
-        );
+        if (signupVisible || loginVisible) {
+            document.body.classList.add('popup-modal-visible');
+        } else {
+            document.body.classList.remove('popup-modal-visible');
+        }
 
         // Also, need to close the menu if it's open
         setProfileMenuVisible(false);

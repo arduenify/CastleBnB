@@ -12,10 +12,11 @@
 
     border-radius: var(--border-radius-1);
     background-color: var(--colors-white);
+    filter: none !important;
     box-shadow: var(--box-shadow);
 
     /* animation: {dur} {style} {?} {quantity} {keyframe id}*/
-    animation: 0.2s ease-in-out 0s 1 slideRight;
+    animation: 0.3s ease 0s 1 fadeIn;
 }
 
 .popup-modal-border {
@@ -65,12 +66,19 @@
     font-size: var(--font-size-large)
 }
 
-@keyframes slideRight {
+@keyframes fadeIn {
     0% {
-        transform: translateX(-100%);
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    50% {
+        opacity: 0.75;
+        transform: scale(0.5);
     }
 
     100% {
-        transform: translateX(0);
+        opacity: 1;
+        transform: scale(1);
     }
 }

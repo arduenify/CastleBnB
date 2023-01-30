@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 import './FormInputComponent.css';
 
@@ -10,15 +10,22 @@ const FormInputComponent = ({
     onChange,
 }) => {
     const inputRef = useRef(null);
+    const [inputActive, setInputActive] = useState(false);
 
     const inputClicked = (e) => {
-        inputRef?.current?.focus();
+        if (inputRef?.current) {
+            inputRef.current.focus();
+        }
+
+        setInputActive(true);
     };
 
     return (
         <div
             className='form-input'
             onClick={inputClicked}
+            /* Bug fix */
+            style={{ pointerEvents: inputActive ? 'none' : 'auto' }}
         >
             <label
                 htmlFor={id}
@@ -30,8 +37,10 @@ const FormInputComponent = ({
             <input
                 ref={inputRef}
                 id={id}
+                name={id}
                 type={type}
                 value={value}
+                onBlur={() => setInputActive(false)}
                 onChange={(e) => {
                     const input = e.target;
                     const label = inputRef?.current?.nextSibling;
