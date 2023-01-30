@@ -57,6 +57,6 @@
     top: 0px;
 }
 
-.form-input :hover {
+.form-input:hover {
     cursor: text;
 }

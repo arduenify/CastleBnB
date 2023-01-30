@@ -1,9 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import './FormInputComponent.css';
 
 const FormInputComponent = ({
     id,
+    name,
     type = 'text',
     placeholder = 'placeholder',
     value,
@@ -11,6 +13,30 @@ const FormInputComponent = ({
 }) => {
     const inputRef = useRef(null);
     const [inputActive, setInputActive] = useState(false);
+
+    const validationError = useSelector((state) => {
+        const validationErrors = state.user.validationErrors;
+
+        if (!validationErrors) return null;
+
+        const validationError = validationErrors.find((error) => {
+            return error.name === name;
+        });
+
+        return validationError;
+    });
+
+    useEffect(() => {
+        console.log('VALIDATION ERROR', validationError);
+        const input = inputRef?.current;
+        const parent = input?.parentElement;
+
+        parent?.classList?.remove('error');
+
+        if (input && validationError) {
+            parent.classList.add('error');
+        }
+    }, [validationError]);
 
     const inputClicked = (e) => {
         if (inputRef?.current) {
@@ -28,7 +54,7 @@ const FormInputComponent = ({
             style={{ pointerEvents: inputActive ? 'none' : 'auto' }}
         >
             <label
-                htmlFor={id}
+                htmlFor={name}
                 className={value ? 'has-value' : ''}
             >
                 {placeholder}
@@ -37,7 +63,7 @@ const FormInputComponent = ({
             <input
                 ref={inputRef}
                 id={id}
-                name={id}
+                name={name}
                 type={type}
                 value={value}
                 onBlur={() => setInputActive(false)}

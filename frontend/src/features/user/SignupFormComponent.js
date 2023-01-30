@@ -1,6 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
 import { signup } from './userSlice';
+import { clearErrors, clearValidationErrors } from './userSlice';
+
 import PopupModalComponent from '../../common/popupModal/PopupModalComponent';
 import FormInputComponent from '../../common/input/FormInputComponent';
 
@@ -33,6 +36,14 @@ const SignupFormComponent = ({ setSignupVisible }) => {
 
         dispatch(signup({ email, username, password, firstName, lastName }));
     };
+
+    // Cleanup
+    useEffect(() => {
+        return () => {
+            dispatch(clearErrors());
+            dispatch(clearValidationErrors());
+        };
+    }, []);
 
     return (
         <PopupModalComponent

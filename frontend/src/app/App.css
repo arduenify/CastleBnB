@@ -7,6 +7,8 @@
     --colors-light-gray: #f7f7f7;
     --colors-white: #fff;
     --colors-accent: #ff385c;
+    --colors-error: rgb(190, 54, 23);
+    --colors-accent-hover: #fc1c3e;
     --colors-green: #008a05;
     --colors-text-primary: #222;
     --colors-text-secondary: var(--colors-dark-gray);
@@ -14,13 +16,9 @@
 
     --bg-color: var(--colors-white);
 
-    --font-family: Circular,
-        -apple-system,
-        BlinkMacSystemFont,
-        Roboto,
-        Helvetica Neue,
-        sans-serif;
+    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
 
+    --font-size-xx-small: 10px;
     --font-size-x-small: 12px;
     --font-size-small: 14px;
     --font-size-medium: 16px;
@@ -28,6 +26,7 @@
     --font-size-x-large: 20px;
     --font-size-xx-large: 24px;
 
+    --line-height-xx-small: 12px;
     --line-height-x-small: 16px;
     --line-height-small: 18px;
     --line-height-medium: 20px;
@@ -40,6 +39,8 @@
     --box-shadow-popup: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
     --box-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.2);
     --transition-time: 0.25s;
+
+    --transition-default: all var(--transition-time) ease;
 }
 
 .flex-container {

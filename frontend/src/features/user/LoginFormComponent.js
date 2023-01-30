@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { login } from './userSlice';
+import {
+    clearValidationError,
+    clearValidationErrors,
+    clearErrors,
+    login,
+    setValidationErrors,
+} from './userSlice';
 
 import './LoginFormComponent.css';
 import PopupModalComponent from '../../common/popupModal/PopupModalComponent';
@@ -18,8 +24,43 @@ const LoginFormComponent = ({ setLoginVisible }) => {
     const loginBtnClicked = (e) => {
         e.preventDefault();
 
-        dispatch(login({ credential, password }));
+        const newErrors = [];
+
+        if (!credential)
+            newErrors.push({
+                name: 'credential',
+                msg: 'Please enter your email or username',
+            });
+
+        if (!password)
+            newErrors.push({
+                name: 'password',
+                msg: 'Please enter your password',
+            });
+
+        if (newErrors.length) {
+            dispatch(setValidationErrors(newErrors));
+        } else {
+            dispatch(login({ credential, password }));
+        }
     };
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearErrors());
+            dispatch(clearValidationErrors());
+        };
+    }, []);
+
+    useEffect(() => {
+        if (credential) {
+            dispatch(clearValidationError({ name: 'credential' }));
+        }
+
+        if (password) {
+            dispatch(clearValidationError({ name: 'password' }));
+        }
+    }, [credential, password]);
 
     return (
         <PopupModalComponent
@@ -30,17 +71,21 @@ const LoginFormComponent = ({ setLoginVisible }) => {
                     id='popup-modal-login-form'
                     onSubmit={loginBtnClicked}
                 >
-                    <FormInputComponent
-                        placeholder='Email/username'
-                        value={credential}
-                        onChange={(e) => setCredential(e.target.value)}
-                    />
+                    <div className='form-input-container'>
+                        <FormInputComponent
+                            name='credential'
+                            placeholder='Email/username'
+                            value={credential}
+                            onChange={(e) => setCredential(e.target.value)}
+                        />
 
-                    <FormInputComponent
-                        placeholder='Password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
+                        <FormInputComponent
+                            name='password'
+                            placeholder='Password'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
 
                     <button
                         className='popup-modal-button'

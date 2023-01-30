@@ -4,7 +4,8 @@ import { csrfFetch } from '../../app/csrf';
 const initialState = {
     currentUser: null,
     loading: false,
-    errors: null,
+    errors: [],
+    validationErrors: [],
 };
 
 /**
@@ -116,7 +117,36 @@ export const restoreUser = createAsyncThunk(
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        clearErrors: (state) => {
+            state.errors = null;
+        },
+
+        clearValidationErrors: (state) => {
+            state.validationErrors = null;
+        },
+
+        clearValidationError: (state, action) => {
+            const { name } = action.payload;
+
+            const index = state.validationErrors.findIndex(
+                (error) => error.name === name
+            );
+
+            if (index !== -1) state.validationErrors.splice(index, 1);
+        },
+
+        setValidationErrors: (state, action) => {
+            state.validationErrors = [...action.payload];
+        },
+
+        addValidationErrors: (state, action) => {
+            state.validationErrors = [
+                ...state.validationErrors,
+                ...action.payload,
+            ];
+        },
+    },
     extraReducers: (builder) => {
         builder
             /** Login */
@@ -188,3 +218,11 @@ export const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
+
+export const {
+    clearErrors,
+    clearValidationError,
+    clearValidationErrors,
+    setValidationErrors,
+    addValidationErrors,
+} = userSlice.actions;
