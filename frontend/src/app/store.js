@@ -1,7 +1,6 @@
-import { configureStore, createAsyncThunk } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
-import { csrfFetch } from './csrf';
 import userReducer from '../features/user/userSlice';
 
 const reducer = {
@@ -10,10 +9,9 @@ const reducer = {
 
 export const store = configureStore({
     reducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    middleware: (getDefaultMiddleware) =>
+        process.env.NODE_ENV !== 'production'
+            ? getDefaultMiddleware().concat(logger)
+            : getDefaultMiddleware(),
     devTools: process.env.NODE_ENV !== 'production',
 });
-
-
-
-
