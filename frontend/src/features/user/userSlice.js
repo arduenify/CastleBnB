@@ -104,8 +104,6 @@ export const restoreUser = createAsyncThunk(
         const response = await csrfFetch('/api/users/current');
         const responseJson = await response.json();
 
-        console.log('restoreUser ::', responseJson);
-
         if (response.ok) {
             return responseJson;
         }
