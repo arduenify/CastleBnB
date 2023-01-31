@@ -1,0 +1,32 @@
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 45px;
+
+    background-color: var(--bg-color);
+    border-top: 1px solid var(--colors-gray);
+    padding: 0 35px;
+    z-index: 10;
+
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-content a {
+    color: var(--colors-text-primary);
+    text-decoration: none;
+}
+
+.footer-content a:hover {
+    color: var(--colors-text-primary);
+    text-decoration: underline;
+}

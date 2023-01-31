@@ -11,6 +11,7 @@ import LoaderComponent from '../common/loader/LoaderComponent';
 import { restoreUser } from '../features/user/userSlice';
 
 import './App.css';
+import FooterComponent from '../features/footer/FooterComponent';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -72,10 +73,25 @@ const App = () => {
                         />
                         <Route
                             path='*'
-                            element={<h1>404: Page Not Found</h1>}
+                            element={
+                                <h1
+                                    style={{
+                                        textAlign: 'center',
+                                        marginTop: '150px',
+                                    }}
+                                >
+                                    404: Page Not Found
+                                </h1>
+                            }
                         />
                     </Routes>
                 </div>
+
+                {window.location.pathname === '/' && (
+                    <footer>
+                        <FooterComponent />
+                    </footer>
+                )}
             </>
         )
     );
