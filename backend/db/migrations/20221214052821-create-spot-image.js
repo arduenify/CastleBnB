@@ -39,8 +39,8 @@ module.exports = {
                     defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
                 },
             },
-            {
-                schema: 'airbnb_clone',
+            process.env.NODE_ENV === 'production' && {
+                schema: process.env.DB_SCHEMA || 'castlebnb',
             }
         );
 
@@ -53,8 +53,8 @@ module.exports = {
                     preview: true,
                 },
             },
-            {
-                schema: 'airbnb_clone',
+            process.env.NODE_ENV === 'production' && {
+                schema: process.env.DB_SCHEMA || 'castlebnb',
             }
         );
     },
@@ -71,7 +71,7 @@ module.exports = {
                 },
             },
             {
-                schema: 'airbnb_clone',
+                schema: process.env.DB_SCHEMA || 'castlebnb',
             }
         );
     },

@@ -1,0 +1,7 @@
+.spots-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 50px;
+    margin-bottom: 50px;
+    grid-gap: 10px;
+}

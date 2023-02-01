@@ -1,0 +1,84 @@
+.spot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 40px;
+
+    animation: containerThing 0.8s;
+}
+
+.spot-container:hover {
+    cursor: pointer;
+}
+
+.spot-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 320px !important;
+}
+
+.spot-image {
+    width: 320px !important;
+    height: 260px !important;
+    border-radius: 10px;
+
+    animation: imageFadeIn 1s;
+}
+
+
+.spot-info>.spot-name {
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 700;
+
+    animation: textSlideIn 1.0s;
+}
+
+.spot-info>.spot-description {
+    margin: 0;
+    padding: 0;
+    font-size: var(--font-size-medium);
+    color: var(--colors-text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    animation: textSlideIn 1.5s;
+}
+
+@keyframes containerThing {
+    from {
+        transform: translateY(80px);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes textSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(60px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes imageFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
