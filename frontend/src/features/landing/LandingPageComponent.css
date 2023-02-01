@@ -1,3 +1,4 @@
 .landing-page-content {
-    height: 2000px;
+    z-index: 1;
+    position: relative;
 }

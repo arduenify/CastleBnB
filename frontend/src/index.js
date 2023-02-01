@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { restoreCSRF, csrfFetch } from './app/csrf';
 import { login, restoreUser, signup } from './features/user/userSlice';
+import { getAllSpots, getSpotById } from './features/spots/spotsSlice';
 
 import './index.css';
 import './style/normalize.css';
@@ -18,6 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
     window.csrfFetch = csrfFetch;
     window.store = store;
     window.userActions = { login, restoreUser, signup };
+    window.spotActions = { getAllSpots, getSpotById };
 }
 
 const Root = () => {
