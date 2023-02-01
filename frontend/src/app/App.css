@@ -75,7 +75,7 @@ body {
     justify-content: center;
     align-self: center;
     margin: 0 auto;
-    max-width: 90%;
+    max-width: 1024px;
 }
 
 * {
@@ -83,7 +83,6 @@ body {
 }
 
 .page-container {
-    /* border: 1px solid black; */
     display: flex;
     flex-direction: column;
     margin-top: 10vh;
@@ -92,10 +91,4 @@ body {
 .popup-modal-visible {
     background-color: rgba(0, 0, 0, 0.6);
     transition: all 0.5s ease;
-}
-
-@media screen and (max-width: 1200px) {
-    body {
-        max-width: 100%;
-    }
 }

@@ -48,8 +48,8 @@ module.exports = {
                     defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
                 },
             },
-            {
-                schema: 'airbnb_clone',
+            process.env.NODE_ENV === 'production' && {
+                schema: process.env.DB_SCHEMA || 'castlebnb',
             }
         );
 
@@ -57,10 +57,14 @@ module.exports = {
             fields: ['userId', 'spotId'],
             type: 'unique',
             name: 'unique_review',
-            schema: 'airbnb_clone',
+            ...(process.env.NODE_ENV === 'production' && {
+                schema: process.env.DB_SCHEMA || 'castlebnb',
+            }),
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Reviews', { schema: 'airbnb_clone' });
+        await queryInterface.dropTable('Reviews', {
+            schema: process.env.DB_SCHEMA || 'castlebnb',
+        });
     },
 };

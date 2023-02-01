@@ -44,12 +44,14 @@ module.exports = {
                     defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
                 },
             },
-            {
-                schema: 'airbnb_clone',
+            process.env.NODE_ENV === 'production' && {
+                schema: process.env.DB_SCHEMA || 'castlebnb',
             }
         );
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Users', { schema: 'airbnb_clone' });
+        await queryInterface.dropTable('Users', {
+            schema: process.env.DB_SCHEMA || 'castlebnb',
+        });
     },
 };
