@@ -1,12 +1,17 @@
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import './SpotComponent.css';
 
 const SpotComponent = ({ spot }) => {
+    const { city, state, country, description, avgRating, previewImage } = spot;
+
     const spotLocation = () => {
         let location = '';
 
-        if (spot.city !== 'N/A') location += `${spot.city}, `;
-        if (spot?.state !== 'N/A') location += `${spot.state}, `;
-        if (spot.country) location += `${spot.country}`;
+        if (city !== 'N/A') location += `${city}, `;
+        if (state !== 'N/A') location += `${state}, `;
+        if (country) location += `${country}`;
 
         return location;
     };
@@ -16,15 +21,21 @@ const SpotComponent = ({ spot }) => {
             <div className='spot-image-container'>
                 <img
                     className='spot-image'
-                    src={`/images/${spot.previewImage}`}
+                    src={`/images/${previewImage}`}
                     alt='Spot Preview'
                 />
             </div>
 
             <div className='spot-info-container'>
                 <div className='spot-info'>
-                    <h2 className='spot-name'>{spotLocation()}</h2>
-                    <p className='spot-description'>{spot.description}</p>
+                    <div className='spot-name-rating'>
+                        <h2 className='spot-name'>{spotLocation()}</h2>
+                        <div className='spot-rating'>
+                            <FontAwesomeIcon icon={faStar} />
+                            <p className='spot-rating-text'>{avgRating}</p>
+                        </div>
+                    </div>
+                    <p className='spot-description'>{description}</p>
                 </div>
             </div>
         </div>

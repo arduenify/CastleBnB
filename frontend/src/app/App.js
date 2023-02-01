@@ -12,6 +12,7 @@ import { restoreUser } from '../features/user/userSlice';
 
 import './App.css';
 import FooterComponent from '../features/footer/FooterComponent';
+import BackdropComponent from '../common/backdrop/BackdropComponent';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -54,10 +55,13 @@ const App = () => {
 
                 <LoaderComponent />
 
-                {signupVisible && !loginVisible && (
+                {/* The backdrop for when a popup modal is visible*/}
+                {(signupVisible || loginVisible) && <BackdropComponent />}
+
+                {signupVisible && (
                     <SignupFormComponent setSignupVisible={setSignupVisible} />
                 )}
-                {loginVisible && !signupVisible && (
+                {loginVisible && (
                     <LoginFormComponent setLoginVisible={setLoginVisible} />
                 )}
 

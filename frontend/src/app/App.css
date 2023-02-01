@@ -12,11 +12,12 @@
     --colors-green: #008a05;
     --colors-text-primary: #222;
     --colors-text-secondary: var(--colors-dark-gray);
-    --colors-backdrop: rgba(0, 0, 0, 0.5);
+    --colors-backdrop: rgba(0, 0, 0, 0.8);
 
     --bg-color: var(--colors-white);
 
-    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+    --font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
+        Helvetica Neue, sans-serif !important;
 
     --font-size-xx-small: 10px;
     --font-size-x-small: 12px;
@@ -61,7 +62,15 @@ body {
     filter: none;
     transition: all 0.3s ease;
 
-    font-family: var(--font-family);
+    font-family: Circular,
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
     font-size: var(--font-size-medium);
     line-height: var(--line-height-medium);
     color: var(--colors-text-primary);

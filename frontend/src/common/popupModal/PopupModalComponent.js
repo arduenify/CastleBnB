@@ -2,6 +2,8 @@ import './PopupModalComponent.css';
 
 const PopupModalComponent = ({ header, content, setVisible }) => {
     const closeBtnClicked = (e) => {
+        e.preventDefault();
+
         setVisible(false);
     };
 

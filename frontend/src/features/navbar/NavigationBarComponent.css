@@ -6,6 +6,8 @@
     height: 9vh;
     border-top: 1px solid var(--colors-gray);
     border-bottom: 1px solid var(--colors-gray);
+    background-color: var(--bg-color);
+    z-index: 80;
 }
 
 .navbar-content {
@@ -19,12 +21,7 @@
     margin: 0 auto;
 }
 
-.navbar-left {
-    /* border: 1px solid blue; */
-}
-
 .navbar-middle {
-    /* border: 1px solid green; */
     flex-grow: 1;
     max-width: 500px;
 }

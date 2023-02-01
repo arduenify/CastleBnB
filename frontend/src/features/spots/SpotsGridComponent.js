@@ -13,17 +13,16 @@ const SpotsGridComponent = () => {
         dispatch(getAllSpots());
     }, [dispatch]);
 
+    if (!spots || !spots.length) return null;
+
     return (
         <div className='spots-container'>
-            {spots?.length &&
-                spots.map((spot) => {
-                    return (
-                        <SpotComponent
-                            key={spot.id}
-                            spot={spot}
-                        />
-                    );
-                })}
+            {spots.map((spot) => (
+                <SpotComponent
+                    key={spot.id}
+                    spot={spot}
+                />
+            ))}
         </div>
     );
 };

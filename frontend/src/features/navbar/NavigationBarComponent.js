@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
-import { Navigate } from 'react-router-dom';
 
 import SearchComponent from './SearchComponent';
 import ProfileMenuComponent from './ProfileMenuComponent';
@@ -26,10 +25,8 @@ const NavigationBarComponent = ({
         // We need a way to close the menu with no button
         //  this will do the job!
         const outsideClicked = (e) => {
-            if (profileMenuVisible) {
-                if (e.target.id !== 'profile-menu') {
-                    setProfileMenuVisible(false);
-                }
+            if (profileMenuVisible && e.target.id !== 'profile-icon') {
+                setProfileMenuVisible(false);
             }
         };
 
@@ -41,13 +38,6 @@ const NavigationBarComponent = ({
     }, [profileMenuVisible]);
 
     useEffect(() => {
-        if (signupVisible || loginVisible) {
-            document.body.classList.add('popup-modal-visible');
-        } else {
-            document.body.classList.remove('popup-modal-visible');
-        }
-
-        // Also, need to close the menu if it's open
         setProfileMenuVisible(false);
     }, [signupVisible, loginVisible]);
 
