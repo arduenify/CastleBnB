@@ -1,9 +1,9 @@
 import logo from './logo-transparent.png';
 import { useNavigate } from 'react-router-dom';
 
-import './LogoComponent.css';
+import './Logo.css';
 
-const LogoComponent = () => {
+const Logo = () => {
     const navigate = useNavigate();
 
     return (
@@ -20,4 +20,4 @@ const LogoComponent = () => {
     );
 };
 
-export default LogoComponent;
+export default Logo;

@@ -48,6 +48,28 @@ export const getSpotById = createAsyncThunk(
     }
 );
 
+/**
+ * Used to get all the reviews of a spot by spot id.
+ * @param {number} id - The id of the spot.
+ * @returns {Array} - An array of the reviews.
+ *
+ * @example
+ * const reviews = await dispatch(getSpotReviews(1));
+ */
+export const getSpotReviewsById = createAsyncThunk(
+    'spots/getSpotReviews',
+    async (id, { rejectWithValue }) => {
+        const response = await csrfFetch(`/api/spots/${id}/reviews`);
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return responseJson;
+        }
+
+        return rejectWithValue(responseJson);
+    }
+);
+
 export const spotsSlice = createSlice({
     name: 'spots',
     initialState,

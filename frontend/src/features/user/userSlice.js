@@ -9,7 +9,7 @@ const initialState = {
 };
 
 /**
- * Used by the SignupFormComponent to create a new user.
+ * Used by the SignupForm to create a new user.
  * @param {string} email
  * @param {string} username
  * @param {string} password
@@ -46,7 +46,7 @@ export const signup = createAsyncThunk(
 );
 
 /**
- * Used by the LoginFormComponent to log in a user.
+ * Used by the LoginForm to log in a user.
  *
  * @param {string} credential - The username or email of the user.
  * @param {string} password - The password of the user.

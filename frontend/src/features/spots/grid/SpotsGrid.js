@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getAllSpots } from './spotsSlice';
-import SpotComponent from './SpotComponent';
+import { getAllSpots } from '../spotsSlice';
+import SpotGridItem from './SpotGridItem';
+import './SpotsGrid.css';
 
-import './SpotsGridComponent.css';
-
-const SpotsGridComponent = () => {
+const SpotsGrid = () => {
     const spots = useSelector((state) => state.spot.spots);
     const dispatch = useDispatch();
 
@@ -18,7 +17,7 @@ const SpotsGridComponent = () => {
     return (
         <div className='spots-container'>
             {spots.map((spot) => (
-                <SpotComponent
+                <SpotGridItem
                     key={spot.id}
                     spot={spot}
                 />
@@ -27,4 +26,4 @@ const SpotsGridComponent = () => {
     );
 };
 
-export default SpotsGridComponent;
+export default SpotsGrid;

@@ -2,9 +2,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { login, logout } from '../user/userSlice';
 
-import './ProfileMenuComponent.css';
+import './ProfileMenu.css';
 
-const ProfileMenuComponent = ({ setSignupVisible, setLoginVisible }) => {
+const ProfileMenu = ({ setSignupVisible, setLoginVisible }) => {
     const dispatch = useDispatch();
 
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -77,4 +77,4 @@ const ProfileMenuComponent = ({ setSignupVisible, setLoginVisible }) => {
     );
 };
 
-export default ProfileMenuComponent;
+export default ProfileMenu;

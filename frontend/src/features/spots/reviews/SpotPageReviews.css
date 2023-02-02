@@ -1,0 +1,16 @@
+.spot-page-reviews {
+    display: flex;
+    flex-direction: column;
+}
+
+.reviews-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+#reviews-avg-rating {
+    font-weight: 500;
+    font-size: var(--font-size-x-large);
+}

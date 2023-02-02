@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 
-import SearchComponent from './SearchComponent';
-import ProfileMenuComponent from './ProfileMenuComponent';
-import LogoComponent from '../../common/logo/LogoComponent';
+import Search from './Search';
+import ProfileMenu from './ProfileMenu';
+import Logo from '../../common/logo/Logo';
 
-import './NavigationBarComponent.css';
+import './NavigationBar.css';
 
-const NavigationBarComponent = ({
+const NavigationBar = ({
     signupVisible,
     loginVisible,
     setSignupVisible,
@@ -48,11 +48,11 @@ const NavigationBarComponent = ({
         >
             <div className='navbar-content'>
                 <div className='navbar-left'>
-                    <LogoComponent />
+                    <Logo />
                 </div>
 
                 <div className='navbar-middle'>
-                    <SearchComponent />
+                    <Search />
                 </div>
 
                 <div className='navbar-right'>
@@ -73,7 +73,7 @@ const NavigationBarComponent = ({
                     </div>
 
                     {profileMenuVisible && (
-                        <ProfileMenuComponent
+                        <ProfileMenu
                             setSignupVisible={setSignupVisible}
                             setLoginVisible={setLoginVisible}
                         />
@@ -84,4 +84,4 @@ const NavigationBarComponent = ({
     );
 };
 
-export default NavigationBarComponent;
+export default NavigationBar;

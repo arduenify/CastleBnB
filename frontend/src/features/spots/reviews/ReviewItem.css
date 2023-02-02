@@ -1,0 +1,35 @@
+.review-container {
+    display: flex;
+    flex-direction: column;
+    margin: 10px auto;
+    border: 1px solid green;
+}
+
+.review-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid blue;
+}
+
+#review-user-date-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    border: 1px solid red;
+    margin-left: 10px;
+}
+
+#review-user-date-container>* {
+    margin: 0;
+}
+
+#review-user {
+    font-weight: 500;
+    font-size: var(--font-size-medium);
+}
+
+#review-date {
+    font-size: var(--font-size-small);
+    color: var(--colors-text-secondary);
+}

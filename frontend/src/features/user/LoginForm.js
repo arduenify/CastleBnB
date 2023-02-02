@@ -9,12 +9,12 @@ import {
     setValidationErrors,
 } from './userSlice';
 
-import './LoginFormComponent.css';
-import PopupModalComponent from '../../common/popupModal/PopupModalComponent';
-import FormInputComponent from '../../common/input/FormInputComponent';
-import FormErrorsComponent from './FormErrorsComponent';
+import './LoginForm.css';
+import PopupModal from '../../common/popupModal/PopupModal';
+import FormInput from '../../common/input/FormInput';
+import FormErrors from './FormErrors';
 
-const LoginFormComponent = ({ setLoginVisible }) => {
+const LoginForm = ({ setLoginVisible }) => {
     const dispatch = useDispatch();
 
     const loginErrors = useSelector((state) => state.user.errors);
@@ -67,7 +67,7 @@ const LoginFormComponent = ({ setLoginVisible }) => {
     }, [credential, password]);
 
     return (
-        <PopupModalComponent
+        <PopupModal
             header={'Login'}
             setVisible={setLoginVisible}
             content={
@@ -76,14 +76,14 @@ const LoginFormComponent = ({ setLoginVisible }) => {
                     onSubmit={loginBtnClicked}
                 >
                     <div className='form-input-container'>
-                        <FormInputComponent
+                        <FormInput
                             name='credential'
                             placeholder='Email/username'
                             value={credential}
                             onChange={(e) => setCredential(e.target.value)}
                         />
 
-                        <FormInputComponent
+                        <FormInput
                             name='password'
                             placeholder='Password'
                             value={password}
@@ -98,7 +98,7 @@ const LoginFormComponent = ({ setLoginVisible }) => {
                         Login
                     </button>
 
-                    <FormErrorsComponent
+                    <FormErrors
                         errors={loginErrors}
                         validationErrors={validationErrors}
                     />
@@ -108,4 +108,4 @@ const LoginFormComponent = ({ setLoginVisible }) => {
     );
 };
 
-export default LoginFormComponent;
+export default LoginForm;

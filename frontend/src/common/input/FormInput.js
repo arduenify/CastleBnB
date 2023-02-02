@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import './FormInputComponent.css';
+import './FormInput.css';
 
-const FormInputComponent = ({
+const FormInput = ({
     id,
     name,
     type = 'text',
@@ -95,4 +95,4 @@ const FormInputComponent = ({
     );
 };
 
-export default FormInputComponent;
+export default FormInput;

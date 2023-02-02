@@ -1,9 +1,10 @@
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 
-import './SpotComponent.css';
+import './SpotGridItem.css';
 
-const SpotComponent = ({ spot }) => {
+const SpotGridItem = ({ spot }) => {
     const { city, state, country, description, avgRating, previewImage } = spot;
 
     const spotLocation = () => {
@@ -17,7 +18,10 @@ const SpotComponent = ({ spot }) => {
     };
 
     return (
-        <div className='spot-container'>
+        <Link
+            className='spot-container'
+            to={`/spots/${spot.id}`}
+        >
             <div className='spot-image-container'>
                 <img
                     className='spot-image'
@@ -30,16 +34,19 @@ const SpotComponent = ({ spot }) => {
                 <div className='spot-info'>
                     <div className='spot-name-rating'>
                         <h2 className='spot-name'>{spotLocation()}</h2>
-                        <div className='spot-rating'>
-                            <FontAwesomeIcon icon={faStar} />
+                        <div className='spot-rating-container'>
+                            <FontAwesomeIcon
+                                className='spot-rating-icon'
+                                icon={faStar}
+                            />
                             <p className='spot-rating-text'>{avgRating}</p>
                         </div>
                     </div>
                     <p className='spot-description'>{description}</p>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 
-export default SpotComponent;
+export default SpotGridItem;

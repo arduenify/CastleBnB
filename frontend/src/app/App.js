@@ -2,98 +2,64 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
-import LoginFormComponent from '../features/user/LoginFormComponent';
-import SignupFormComponent from '../features/user/SignupFormComponent';
-import LandingPageComponent from '../features/landing/LandingPageComponent';
-import NavigationBarComponent from '../features/navbar/NavigationBarComponent';
-import LoaderComponent from '../common/loader/LoaderComponent';
+import LoginForm from '../features/user/LoginForm';
+import SignupForm from '../features/user/SignupForm';
+import LandingPage from '../features/landing/LandingPage';
+import NavigationBar from '../features/navbar/NavigationBar';
+import Loader from '../common/loader/Loader';
 
 import { restoreUser } from '../features/user/userSlice';
 
 import './App.css';
-import FooterComponent from '../features/footer/FooterComponent';
-import BackdropComponent from '../common/backdrop/BackdropComponent';
+import Footer from '../features/footer/Footer';
+import Backdrop from '../common/backdrop/Backdrop';
+import RoutesComponent from './Routes';
 
 const App = () => {
     const dispatch = useDispatch();
 
-    const currentUser = useSelector((state) => state.user.currentUser);
-
     const [isLoaded, setIsLoaded] = useState(false);
-    const [signupVisible, setSignupVisible] = useState(false);
-    const [loginVisible, setLoginVisible] = useState(false);
-    const [logoutVisible, setLogoutVisible] = useState(false);
+    const [signupModalVisible, setSignupModalVisible] = useState(false);
+    const [loginModalVisible, setLoginModalVisible] = useState(false);
 
     useEffect(() => {
         dispatch(restoreUser()).then(() => setIsLoaded(true));
     }, [dispatch]);
 
-    useEffect(() => {
-        if (currentUser) {
-            // A logged in user has no need for these!
-            setLoginVisible(false);
-            setSignupVisible(false);
-            // But they do need to be able to logout
-            setLogoutVisible(true);
-        } else {
-            setLogoutVisible(false);
-        }
-    }, [currentUser]);
-
     return (
         isLoaded && (
             <>
                 <header>
-                    <NavigationBarComponent
-                        logoutVisible={logoutVisible}
-                        loginVisible={loginVisible}
-                        setLoginVisible={setLoginVisible}
-                        signupVisible={signupVisible}
-                        setSignupVisible={setSignupVisible}
+                    <NavigationBar
+                        loginVisible={loginModalVisible}
+                        setLoginVisible={setLoginModalVisible}
+                        signupVisible={signupModalVisible}
+                        setSignupVisible={setSignupModalVisible}
                     />
                 </header>
 
-                <LoaderComponent />
+                <Loader />
 
                 {/* The backdrop for when a popup modal is visible*/}
-                {(signupVisible || loginVisible) && <BackdropComponent />}
+                {(signupModalVisible || loginModalVisible) && <Backdrop />}
 
-                {signupVisible && (
-                    <SignupFormComponent setSignupVisible={setSignupVisible} />
+                {signupModalVisible && (
+                    <SignupForm setSignupVisible={setSignupModalVisible} />
                 )}
-                {loginVisible && (
-                    <LoginFormComponent setLoginVisible={setLoginVisible} />
+                {loginModalVisible && (
+                    <LoginForm setLoginVisible={setLoginModalVisible} />
                 )}
 
                 {/*
                  * Where all of the content resides
                  */}
                 <div className='page-container'>
-                    <Routes>
-                        <Route
-                            exact
-                            path='/'
-                            element={<LandingPageComponent />}
-                        />
-                        <Route
-                            path='*'
-                            element={
-                                <h1
-                                    style={{
-                                        textAlign: 'center',
-                                        marginTop: '150px',
-                                    }}
-                                >
-                                    404: Page Not Found
-                                </h1>
-                            }
-                        />
-                    </Routes>
+                    <RoutesComponent />
                 </div>
 
                 {window.location.pathname === '/' && (
                     <footer>
-                        <FooterComponent />
+                        <Footer />
                     </footer>
                 )}
             </>

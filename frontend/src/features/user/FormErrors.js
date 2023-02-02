@@ -1,7 +1,7 @@
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const FormErrorsComponent = ({ errors, validationErrors }) => {
+const FormErrors = ({ errors, validationErrors }) => {
     return (
         <ul className='popup-modal-errors'>
             {validationErrors &&
@@ -40,4 +40,4 @@ const FormErrorsComponent = ({ errors, validationErrors }) => {
     );
 };
 
-export default FormErrorsComponent;
+export default FormErrors;

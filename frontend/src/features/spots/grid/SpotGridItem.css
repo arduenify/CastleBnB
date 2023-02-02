@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: flex-start;
     margin-bottom: 40px;
+    text-decoration: none;
 
     animation: containerThing 0.8s;
 }
@@ -58,19 +59,23 @@
     justify-content: space-between;
 }
 
-.spot-rating {
+.spot-rating-container {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    border: 1px solid blue;
     font-size: var(--font-size-small);
     color: var(--colors-text-secondary);
 }
 
-.spot-rating * {
-    margin: 0;  
-    padding: 0;
+.spot-rating-icon,
+.spot-rating-text {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative;
+    font-size: var(--font-size-medium);
+}
+
+.spot-rating-icon {
+    font-size: var(--font-size-small);
+    top: 2.5px;
 }
 
 

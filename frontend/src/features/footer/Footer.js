@@ -1,6 +1,6 @@
-import './FooterComponent.css';
+import './Footer.css';
 
-const FooterComponent = () => {
+const Footer = () => {
     return (
         <div className='footer-content'>
             <p>© CastleBnB</p>
@@ -9,4 +9,4 @@ const FooterComponent = () => {
     );
 };
 
-export default FooterComponent;
+export default Footer;

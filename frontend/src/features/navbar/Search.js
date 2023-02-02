@@ -1,6 +1,6 @@
-import './SearchComponent.css';
+import './Search.css';
 
-const SearchComponent = () => {
+const Search = () => {
     return (
         <div id='search-container'>
             <input
@@ -12,4 +12,4 @@ const SearchComponent = () => {
     );
 };
 
-export default SearchComponent;
+export default Search;

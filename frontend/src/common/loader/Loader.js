@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import './LoaderComponent.css';
+import './Loader.css';
 
-const LoaderComponent = () => {
+const Loader = () => {
     const userLoading = useSelector((state) => state.user.loading);
 
     if (userLoading)
@@ -18,4 +18,4 @@ const LoaderComponent = () => {
     return null;
 };
 
-export default LoaderComponent;
+export default Loader;

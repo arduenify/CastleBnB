@@ -8,12 +8,12 @@ import {
     clearValidationError,
 } from './userSlice';
 
-import PopupModalComponent from '../../common/popupModal/PopupModalComponent';
-import FormInputComponent from '../../common/input/FormInputComponent';
+import PopupModal from '../../common/popupModal/PopupModal';
+import FormInput from '../../common/input/FormInput';
 import useClearValidationError from './clearValidationError';
-import FormErrorsComponent from './FormErrorsComponent';
+import FormErrors from './FormErrors';
 
-const SignupFormComponent = ({ setSignupVisible }) => {
+const SignupForm = ({ setSignupVisible }) => {
     const dispatch = useDispatch();
     const errors = useSelector((state) => state.user.errors);
     const validationErrors = useSelector(
@@ -135,7 +135,7 @@ const SignupFormComponent = ({ setSignupVisible }) => {
     }, [password, confirmPassword]);
 
     return (
-        <PopupModalComponent
+        <PopupModal
             header={'Sign up'}
             setVisible={setSignupVisible}
             content={
@@ -144,42 +144,42 @@ const SignupFormComponent = ({ setSignupVisible }) => {
                     onSubmit={signupBtnClicked}
                 >
                     <div className='form-input-container'>
-                        <FormInputComponent
+                        <FormInput
                             name={'email'}
                             placeholder='Email'
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
 
-                        <FormInputComponent
+                        <FormInput
                             name={'username'}
                             placeholder='Username'
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                         />
 
-                        <FormInputComponent
+                        <FormInput
                             name={'firstName'}
                             placeholder='First name'
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                         />
 
-                        <FormInputComponent
+                        <FormInput
                             name={'lastName'}
                             placeholder='Last name'
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
                         />
 
-                        <FormInputComponent
+                        <FormInput
                             name={'password'}
                             placeholder='Password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
 
-                        <FormInputComponent
+                        <FormInput
                             name={'confirmPassword'}
                             placeholder='Confirm password'
                             value={confirmPassword}
@@ -194,7 +194,7 @@ const SignupFormComponent = ({ setSignupVisible }) => {
                         Sign up
                     </button>
 
-                    <FormErrorsComponent
+                    <FormErrors
                         errors={errors}
                         validationErrors={validationErrors}
                     />
@@ -204,4 +204,4 @@ const SignupFormComponent = ({ setSignupVisible }) => {
     );
 };
 
-export default SignupFormComponent;
+export default SignupForm;

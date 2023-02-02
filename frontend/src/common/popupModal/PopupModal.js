@@ -1,6 +1,6 @@
-import './PopupModalComponent.css';
+import './PopupModal.css';
 
-const PopupModalComponent = ({ header, content, setVisible }) => {
+const PopupModal = ({ header, content, setVisible }) => {
     const closeBtnClicked = (e) => {
         e.preventDefault();
 
@@ -26,4 +26,4 @@ const PopupModalComponent = ({ header, content, setVisible }) => {
     );
 };
 
-export default PopupModalComponent;
+export default PopupModal;
