@@ -7,13 +7,13 @@ const reviews = [
     {
         userId: 1,
         spotId: 1,
-        review: 'This was an awesome spot!',
+        review: 'Quite a succulent castle, this was!',
         stars: 5,
     },
     {
         userId: 1,
         spotId: 2,
-        review: 'This was an awesome spot, too!',
+        review: 'Indubitably, this was a very good castle. I felt as if I were part of the royal family!',
         stars: 5,
     },
     {
@@ -25,19 +25,19 @@ const reviews = [
     {
         userId: 2,
         spotId: 1,
-        review: 'This was, for sure, an awesome spot!',
+        review: 'The apprentice magicians at this castle were very eager to learn!',
         stars: 5,
     },
     {
         userId: 2,
         spotId: 2,
-        review: 'This was, for sure, a very good spot, too!',
+        review: 'Although the castle was quite nice, I was not a fan of the royal family.',
         stars: 4,
     },
     {
         userId: 2,
         spotId: 3,
-        review: "There was something about this spot that I just can't put my nose on",
+        review: "There was something about this place that I just couldn't put my nose on.",
         stars: 2,
     },
 ];
@@ -45,16 +45,12 @@ const reviews = [
 const reviewImages = [
     {
         reviewId: 1,
-        url: 'amazing_review_image.png',
+        url: 'ochre_court/reviews/1.jpg',
     },
-    // {
-    //     reviewId: 2,
-    //     url: 'super_cool_review_image.jpeg',
-    // },
-    // {
-    //     reviewId: 2,
-    //     url: 'so_cool_it_needed_two_review_images.png',
-    // },
+    {
+        reviewId: 2,
+        url: 'windsor/reviews/1.jpg',
+    },
 ];
 
 /** @type {import('sequelize-cli').Migration} */
