@@ -2,17 +2,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import './ReviewItem.css';
+import ReviewImagesContainer from './ReviewImagesContainer';
 
 const ReviewItem = ({ review }) => {
     const {
         User,
         ReviewImages,
         createdAt,
-        id,
+        // id,
         review: reviewText,
-        spotId,
+        // spotId,
         stars,
-        userId,
+        // userId,
     } = review;
 
     const reviewDate = new Date(createdAt).toLocaleDateString('en-us', {
@@ -38,16 +39,12 @@ const ReviewItem = ({ review }) => {
 
             <p id='review-body'>{reviewText}</p>
 
-            <div className='review-images-container'>
-                {review.ReviewImages.map((image) => (
-                    <img
-                        key={image.id}
-                        className='review-image'
-                        src={`/images/${image.url}`}
-                        alt={`${User.firstName}`}
-                    />
-                ))}
-            </div>
+            {ReviewImages?.length > 0 && (
+                <ReviewImagesContainer
+                    images={ReviewImages}
+                    user={User}
+                />
+            )}
         </div>
     );
 };

@@ -42,6 +42,8 @@
 
     --box-shadow-popup: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
     --box-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --box-shadow-thumbnail: 2px 2px 5px 1px rgba(0, 0, 0, 0.3);
+
     --transition-time: 0.25s;
 
     --transition-default: all var(--transition-time) ease;
