@@ -3,9 +3,11 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import ReviewImagesContainer from './ReviewImagesContainer';
 import EditReview from './EditReview';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import './ReviewItem.css';
+import { deleteReviewById } from './reviewsSlice';
+import { getSpotReviewsById } from '../spotsSlice';
 
 const ReviewItem = ({
     review,
@@ -24,6 +26,7 @@ const ReviewItem = ({
         // userId,
     } = review;
 
+    const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.user.currentUser);
 
     const reviewDate = new Date(createdAt).toLocaleDateString('en-us', {
@@ -47,7 +50,17 @@ const ReviewItem = ({
     };
 
     const deleteReviewBtnClicked = () => {
-        console.log('delete review button clicked');
+        dispatch(deleteReviewById(review.id)).then((result) => {
+            if (result.meta.requestStatus === 'fulfilled') {
+                hideGenericPopup();
+
+                dispatch(getSpotReviewsById(spotId)).then((reviews) => {
+                    setReviews(reviews.payload.Reviews);
+                });
+            } else if (result.meta.requestStatus === 'rejected') {
+                alert(result.payload.message);
+            }
+        });
     };
 
     const addReviewImageBtnClicked = () => {

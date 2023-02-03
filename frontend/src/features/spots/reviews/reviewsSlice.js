@@ -25,6 +25,23 @@ export const editReviewById = createAsyncThunk(
     }
 );
 
+export const deleteReviewById = createAsyncThunk(
+    'reviews/deleteReviewById',
+    async (reviewId, thunkAPI) => {
+        const response = await csrfFetch(`/api/reviews/${reviewId}`, {
+            method: 'DELETE',
+        });
+
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return responseJson;
+        }
+
+        return thunkAPI.rejectWithValue(responseJson);
+    }
+);
+
 export const reviewsSlice = createSlice({
     name: 'reviews',
     initialState,
