@@ -37,10 +37,19 @@
 }
 
 .form-input input {
-    margin: 0 1rem;
     margin-bottom: 10px;
     color: var(--colors-text-primary);
     border: none !important;
+}
+
+.form-input textarea {
+    margin: 0 1rem;
+    margin-bottom: 10px;
+    height: 150px;
+    color: var(--colors-text-primary);
+    border: none !important;
+    outline: 0 !important;
+    resize: none !important;
 }
 
 .form-input {

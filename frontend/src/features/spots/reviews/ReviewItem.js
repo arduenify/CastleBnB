@@ -26,7 +26,7 @@ const ReviewItem = ({ review }) => {
         <div className='review-container'>
             <div className='review-header'>
                 <div id='review-user-date-container'>
-                    <p id='review-user'>{User.firstName}</p>
+                    <p id='review-user'>{User?.firstName}</p>
                     <p id='review-date'>{reviewDate}</p>
                 </div>
 

@@ -52,45 +52,58 @@ const FormInput = ({
             /* Bug fix */
             style={{ pointerEvents: inputActive ? 'none' : 'auto' }}
         >
-            <label
-                htmlFor={name}
-                className={value ? 'has-value' : ''}
-            >
-                {placeholder}
-            </label>
+            {type !== 'textarea' && (
+                <label
+                    htmlFor={name}
+                    className={value ? 'has-value' : ''}
+                >
+                    {placeholder}
+                </label>
+            )}
 
-            <input
-                ref={inputRef}
-                id={id}
-                name={name}
-                type={type}
-                value={value}
-                onBlur={() => setInputActive(false)}
-                onChange={(e) => {
-                    const input = e.target;
-                    const label = inputRef?.current?.nextSibling;
+            {type === 'textarea' ? (
+                <textarea
+                    ref={inputRef}
+                    id={id}
+                    name={name}
+                    value={value}
+                    onBlur={() => setInputActive(false)}
+                    onChange={onChange}
+                />
+            ) : (
+                <input
+                    ref={inputRef}
+                    id={id}
+                    name={name}
+                    type={type}
+                    value={value}
+                    onBlur={() => setInputActive(false)}
+                    onChange={(e) => {
+                        const input = e.target;
+                        const label = inputRef?.current?.nextSibling;
 
-                    if (!label) {
+                        if (!label) {
+                            return onChange(e);
+                        }
+
+                        const addHasValueClass = (element) =>
+                            element.classList.add('has-value');
+
+                        const removeHasValueClass = (element) =>
+                            element.classList.remove('has-value');
+
+                        if (input.value !== '') {
+                            addHasValueClass(input);
+                            addHasValueClass(label);
+                        } else {
+                            removeHasValueClass(input);
+                            removeHasValueClass(label);
+                        }
+
                         return onChange(e);
-                    }
-
-                    const addHasValueClass = (element) =>
-                        element.classList.add('has-value');
-
-                    const removeHasValueClass = (element) =>
-                        element.classList.remove('has-value');
-
-                    if (input.value !== '') {
-                        addHasValueClass(input);
-                        addHasValueClass(label);
-                    } else {
-                        removeHasValueClass(input);
-                        removeHasValueClass(label);
-                    }
-
-                    return onChange(e);
-                }}
-            />
+                    }}
+                />
+            )}
         </div>
     );
 };

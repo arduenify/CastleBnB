@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { getSpotById } from './spotsSlice';
@@ -8,7 +8,7 @@ import { getSpotById } from './spotsSlice';
 import './SpotPage.css';
 import SpotPageReviews from './reviews/SpotPageReviews';
 
-const SpotPage = () => {
+const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
     const dispatch = useDispatch();
     const { spotId } = useParams();
     const [spot, setSpot] = useState(null);
@@ -97,6 +97,8 @@ const SpotPage = () => {
 
             <hr></hr>
             <SpotPageReviews
+                showGenericPopup={showGenericPopup}
+                hideGenericPopup={hideGenericPopup}
                 spotId={spot.id}
                 avgStarRating={spot.avgStarRating}
                 numReviews={spot.numReviews}

@@ -13,7 +13,7 @@ import FormInput from '../../common/input/FormInput';
 import useClearValidationError from './clearValidationError';
 import FormErrors from './FormErrors';
 
-const SignupForm = ({ setSignupVisible }) => {
+const SignupForm = ({ hideSignupModal }) => {
     const dispatch = useDispatch();
     const errors = useSelector((state) => state.user.errors);
     const validationErrors = useSelector(
@@ -77,7 +77,13 @@ const SignupForm = ({ setSignupVisible }) => {
             return dispatch(setValidationErrors(newErrors));
         }
 
-        dispatch(signup({ email, username, password, firstName, lastName }));
+        dispatch(
+            signup({ email, username, password, firstName, lastName })
+        ).then((res) => {
+             if (res.meta.requestStatus === 'fulfilled') {
+                 hideSignupModal();
+             }
+        });
     };
 
     // Cleans up the errors
@@ -137,7 +143,7 @@ const SignupForm = ({ setSignupVisible }) => {
     return (
         <PopupModal
             header={'Sign up'}
-            setVisible={setSignupVisible}
+            onClose={hideSignupModal}
             content={
                 <form
                     id='popup-modal-signup-form'

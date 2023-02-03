@@ -14,7 +14,7 @@ import PopupModal from '../../common/popupModal/PopupModal';
 import FormInput from '../../common/input/FormInput';
 import FormErrors from './FormErrors';
 
-const LoginForm = ({ setLoginVisible }) => {
+const LoginForm = ({ hideLoginModal }) => {
     const dispatch = useDispatch();
 
     const loginErrors = useSelector((state) => state.user.errors);
@@ -45,7 +45,11 @@ const LoginForm = ({ setLoginVisible }) => {
         if (newErrors.length) {
             dispatch(setValidationErrors(newErrors));
         } else {
-            dispatch(login({ credential, password }));
+            dispatch(login({ credential, password })).then((res) => {
+                if (res.meta.requestStatus === 'fulfilled') {
+                    hideLoginModal();
+                }
+            });
         }
     };
 
@@ -69,7 +73,7 @@ const LoginForm = ({ setLoginVisible }) => {
     return (
         <PopupModal
             header={'Login'}
-            setVisible={setLoginVisible}
+            onClose={hideLoginModal}
             content={
                 <form
                     id='popup-modal-login-form'

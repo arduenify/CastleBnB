@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import LandingPage from '../features/landing/LandingPage';
 import SpotPage from '../features/spots/SpotPage';
 
-const RoutesComponent = () => {
+const RoutesComponent = ({ showGenericPopup, hideGenericPopup }) => {
     return (
         <Routes>
             <Route
@@ -14,7 +14,12 @@ const RoutesComponent = () => {
 
             <Route
                 path='/spots/:spotId'
-                element={<SpotPage />}
+                element={
+                    <SpotPage
+                        showGenericPopup={showGenericPopup}
+                        hideGenericPopup={hideGenericPopup}
+                    />
+                }
             />
 
             <Route

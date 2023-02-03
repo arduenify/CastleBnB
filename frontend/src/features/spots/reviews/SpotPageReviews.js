@@ -1,27 +1,44 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import { getSpotReviewsById } from '../spotsSlice';
-import './SpotPageReviews.css';
 import ReviewItem from './ReviewItem';
+import AddReview from './AddReview';
 
-const SpotPageReviews = ({ spotId, avgStarRating, numReviews }) => {
+import './SpotPageReviews.css';
+
+const SpotPageReviews = ({
+    spotId,
+    avgStarRating,
+    numReviews,
+    showGenericPopup,
+    hideGenericPopup,
+}) => {
+    const [reviews, setReviews] = useState([]);
+
     const dispatch = useDispatch();
-
-    const [reviews, setReviews] = useState(null);
+    const currentUser = useSelector((state) => state.user.currentUser);
 
     useEffect(() => {
         dispatch(getSpotReviewsById(spotId)).then((reviews) => {
-            console.log('REVIEW PAYLOAD:', reviews.payload);
             setReviews(reviews.payload.Reviews);
         });
     }, [dispatch, spotId]);
 
-    useEffect(() => {
-        console.log('Reviews changed to:', reviews);
-    }, [reviews]);
+    const addReviewBtnClicked = () => {
+        const header = 'Add a review';
+        const content = (
+            <AddReview
+                spotId={spotId}
+                setReviews={setReviews}
+                hideGenericPopup={hideGenericPopup}
+            />
+        );
+
+        showGenericPopup(header, content);
+    };
 
     return (
         <div className='spot-page-reviews'>
@@ -33,63 +50,26 @@ const SpotPageReviews = ({ spotId, avgStarRating, numReviews }) => {
                 <h2 id='reviews-avg-rating'>{avgStarRating}</h2>
                 <span className='spot-page-header-divider'>·</span>
                 <p id='reviews-num-reviews'>{numReviews} reviews</p>
+
+                {currentUser && (
+                    <button
+                        id='add-review-button'
+                        onClick={addReviewBtnClicked}
+                    >
+                        Add a review
+                    </button>
+                )}
             </div>
 
             <div className='reviews-container'>
                 {reviews &&
-                    reviews.length &&
+                    reviews.length > 0 &&
                     reviews.map((review) => {
-                        const createdAt = new Date(
-                            review.createdAt
-                        ).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                        });
-
                         return (
                             <ReviewItem
                                 key={review.id}
                                 review={review}
                             />
-                        );
-
-                        return (
-                            <div
-                                key={review.id}
-                                className='review-container'
-                            >
-                                <div className='review-header'>
-                                    <FontAwesomeIcon
-                                        className='review-star-icon'
-                                        icon={faStar}
-                                    />
-                                    <p id='review-rating'>
-                                        {review.starRating}
-                                    </p>
-                                    <span className='review-header-divider'>
-                                        ·
-                                    </span>
-                                    <p id='review-date'>{createdAt}</p>
-
-                                    <p id='review-user'>
-                                        {review.User.firstName}
-                                    </p>
-
-                                    <p id='review-body'>{review.body}</p>
-
-                                    <div className='review-images-container'>
-                                        {review.ReviewImages.map((image) => (
-                                            <img
-                                                key={image.id}
-                                                className='review-image'
-                                                src={`/images/${image.url}`}
-                                                alt={`${review.User.firstName}`}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
                         );
                     })}
             </div>

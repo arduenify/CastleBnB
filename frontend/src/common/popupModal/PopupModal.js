@@ -1,19 +1,13 @@
 import './PopupModal.css';
 
-const PopupModal = ({ header, content, setVisible }) => {
-    const closeBtnClicked = (e) => {
-        e.preventDefault();
-
-        setVisible(false);
-    };
-
+const PopupModal = ({ header, content, onClose }) => {
     return (
         <div className='popup-modal'>
             <div className='popup-modal-border'>
                 <div className='popup-modal-header'>
                     <button
                         className='close-modal-btn'
-                        onClick={closeBtnClicked}
+                        onClick={onClose}
                     >
                         &times;
                     </button>

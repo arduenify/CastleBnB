@@ -1,0 +1,13 @@
+.rating-picker-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px;
+    gap: 10px;
+    width: 100px;
+}
+
+.rating-picker-star {
+    font-size: var(--font-size-x-large);
+    cursor: pointer;
+}

@@ -1,0 +1,5 @@
+#rating-header {
+    font-size: var(--font-size-large);
+    font-weight: 500;
+    margin: 10px;
+}

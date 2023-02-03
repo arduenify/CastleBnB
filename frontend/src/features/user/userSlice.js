@@ -127,11 +127,11 @@ export const userSlice = createSlice({
         clearValidationError: (state, action) => {
             const { name } = action.payload;
 
-            const index = state?.validationErrors.findIndex(
+            const index = state?.validationErrors?.findIndex(
                 (error) => error.name === name
             );
 
-            if (index !== -1) state?.validationErrors.splice(index, 1);
+            if (index !== -1) state?.validationErrors?.splice(index, 1);
         },
 
         setValidationErrors: (state, action) => {
