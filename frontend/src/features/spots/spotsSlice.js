@@ -107,18 +107,15 @@ export const addReviewToSpotById = createAsyncThunk(
             body: JSON.stringify(review),
         });
 
-        const responseJson = await response.json();
-
         if (response.ok) {
             const spotReviews = await (
                 await dispatch(getSpotReviewsById(spotId))
             ).payload.Reviews;
 
-            console.log('SPOT REVIEWS!!!!!!!!!!!!!', spotReviews);
-
             return spotReviews;
         }
 
+        const responseJson = await response.json();
         return rejectWithValue(responseJson);
     }
 );

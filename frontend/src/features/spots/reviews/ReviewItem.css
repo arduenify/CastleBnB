@@ -9,7 +9,7 @@
 .review-header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -19,12 +19,10 @@
 }
 
 .review-rating-container {
-    position: relative;
-    top: -10px;
-    margin-right: 10px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin: 0 20px;
 }
 
 #review-rating {
@@ -56,4 +54,32 @@
     font-weight: 500;
     left: 3px;
     top: -2px;
+}
+
+.review-container-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.edit-review-btn,
+.delete-review-btn,
+.add-review-image-btn {
+    background-color: var(--bg-color);
+    color: var(--colors-accent);
+    font-size: var(--font-size-medium);
+    padding: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+}
+
+.edit-review-btn:hover,
+.delete-review-btn:hover,
+.add-review-image-btn:hover {
+    background-color: var(--colors-accent);
+    color: var(--bg-color);
+    border-radius: 5px;
 }

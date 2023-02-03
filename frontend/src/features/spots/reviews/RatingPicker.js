@@ -12,8 +12,9 @@ const RatingPicker = ({ rating, setRating }) => {
         <div className='rating-picker-container'>
             {[1, 2, 3, 4, 5].map((num) => (
                 <FontAwesomeIcon
-                    className='rating-picker-star'
+                    key={num}
                     icon={faStar}
+                    className='rating-picker-star'
                     color={
                         rating >= num
                             ? 'var(--colors-accent)'

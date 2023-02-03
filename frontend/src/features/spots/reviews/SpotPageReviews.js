@@ -34,6 +34,7 @@ const SpotPageReviews = ({
                 spotId={spotId}
                 setReviews={setReviews}
                 hideGenericPopup={hideGenericPopup}
+                showGenericPopup={showGenericPopup}
             />
         );
 
@@ -69,6 +70,9 @@ const SpotPageReviews = ({
                             <ReviewItem
                                 key={review.id}
                                 review={review}
+                                setReviews={setReviews}
+                                showGenericPopup={showGenericPopup}
+                                hideGenericPopup={hideGenericPopup}
                             />
                         );
                     })}
