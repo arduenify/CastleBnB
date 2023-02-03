@@ -3,19 +3,28 @@
     flex-direction: column;
     margin: 10px auto;
     border-radius: 10px;
+    width: 46%;
 }
 
 .review-header {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
 }
 
 .review-star-icon {
-    position: relative;
-    top: -1.3px;
-    right: 2px;
+    color: var(--colors-text-secondary);
     font-size: var(--font-size-x-small);
+}
+
+.review-rating-container {
+    position: relative;
+    top: -10px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 #review-rating {
@@ -25,9 +34,6 @@
 #review-user-date-container {
     display: flex;
     flex-direction: column;
-    gap: 0px;
-    /* border: 1px solid red; */
-    margin-left: 10px;
 }
 
 #review-user-date-container>* {

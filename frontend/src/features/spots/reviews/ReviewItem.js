@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-import './ReviewItem.css';
 import ReviewImagesContainer from './ReviewImagesContainer';
+import './ReviewItem.css';
 
 const ReviewItem = ({ review }) => {
     const {
@@ -25,15 +25,17 @@ const ReviewItem = ({ review }) => {
     return (
         <div className='review-container'>
             <div className='review-header'>
-                <FontAwesomeIcon
-                    className='review-star-icon'
-                    icon={faStar}
-                />
-                <p id='review-rating'>{stars}</p>
-                <span className='review-header-divider'>·</span>
                 <div id='review-user-date-container'>
                     <p id='review-user'>{User.firstName}</p>
                     <p id='review-date'>{reviewDate}</p>
+                </div>
+
+                <div className='review-rating-container'>
+                    <FontAwesomeIcon
+                        className='review-star-icon'
+                        icon={faStar}
+                    />
+                    <p id='review-rating'>{stars}</p>
                 </div>
             </div>
 
