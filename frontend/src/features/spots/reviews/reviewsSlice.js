@@ -64,6 +64,23 @@ export const addImageToReview = createAsyncThunk(
     }
 );
 
+export const deleteImageFromReview = createAsyncThunk(
+    'reviews/deleteImageFromReview',
+    async ({ reviewId, imageId }, { rejectWithValue }) => {
+        const response = await csrfFetchDelete(
+            `/api/reviews/${reviewId}/images/${imageId}`
+        );
+
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return responseJson;
+        }
+
+        return rejectWithValue(responseJson);
+    }
+);
+
 export const reviewsSlice = createSlice({
     name: 'reviews',
     initialState,

@@ -1,7 +1,15 @@
 import ReviewImage from './ReviewImage';
 import './ReviewImagesContainer.css';
 
-const ReviewImagesContainer = ({ images, user }) => {
+const ReviewImagesContainer = ({
+    images,
+    user,
+    showGenericPopup,
+    hideGenericPopup,
+    reviewId,
+    setReviews,
+    spotId,
+}) => {
     return (
         <div className='review-images-container'>
             {images.map((image) => {
@@ -10,6 +18,11 @@ const ReviewImagesContainer = ({ images, user }) => {
                         key={image.id}
                         image={image}
                         user={user}
+                        spotId={spotId}
+                        showGenericPopup={showGenericPopup}
+                        hideGenericPopup={hideGenericPopup}
+                        reviewId={reviewId}
+                        setReviews={setReviews}
                     />
                 );
             })}

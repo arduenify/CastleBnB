@@ -10,7 +10,9 @@ const AddReviewImage = ({ reviewId, hideGenericPopup, spotId, setReviews }) => {
     const [imageUrl, setImageUrl] = useState('');
     const [errors, setErrors] = useState([]);
 
-    const submitBtnClicked = async () => {
+    const submitBtnClicked = async (e) => {
+        e.preventDefault();
+
         const response = await dispatch(
             addImageToReview({ reviewId, imageUrl })
         );

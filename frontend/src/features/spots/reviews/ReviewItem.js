@@ -22,7 +22,7 @@ const ReviewItem = ({
         User,
         ReviewImages,
         createdAt,
-        // id,
+        id,
         review: reviewText,
         spotId,
         stars,
@@ -65,12 +65,13 @@ const ReviewItem = ({
         }
     };
 
-    const addReviewImageBtnClicked = () => {
+    const addReviewImageBtnClicked = async () => {
         const header = 'Add image to review';
         const content = (
             <AddReviewImage
                 reviewId={review.id}
                 spotId={spotId}
+                setReviews={setReviews}
                 hideGenericPopup={hideGenericPopup}
             />
         );
@@ -127,8 +128,13 @@ const ReviewItem = ({
 
             {ReviewImages?.length > 0 && (
                 <ReviewImagesContainer
+                    reviewId={id}
                     images={ReviewImages}
+                    spotId={spotId}
+                    setReviews={setReviews}
                     user={User}
+                    showGenericPopup={showGenericPopup}
+                    hideGenericPopup={hideGenericPopup}
                 />
             )}
         </div>

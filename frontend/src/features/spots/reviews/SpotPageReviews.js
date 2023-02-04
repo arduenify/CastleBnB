@@ -69,6 +69,7 @@ const SpotPageReviews = ({
                         return (
                             <ReviewItem
                                 key={review.id}
+                                spotId={spotId}
                                 review={review}
                                 setReviews={setReviews}
                                 showGenericPopup={showGenericPopup}
