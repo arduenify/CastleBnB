@@ -1,4 +1,4 @@
-import ReviewForm from './ReviewForm';
+import ReviewForm from '../common/ReviewForm';
 
 const EditReview = ({ spotId, setReviews, hideGenericPopup, review }) => {
     return (

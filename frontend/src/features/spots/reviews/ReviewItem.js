@@ -1,13 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-import ReviewImagesContainer from './ReviewImagesContainer';
-import EditReview from './EditReview';
 import { useSelector, useDispatch } from 'react-redux';
 
-import './ReviewItem.css';
 import { deleteReviewById } from './reviewsSlice';
 import { getSpotReviewsById } from '../spotsSlice';
+
+import EditReview from './edit/EditReview';
+import ReviewImagesContainer from './ReviewImagesContainer';
+
+import './ReviewItem.css';
 
 const ReviewItem = ({
     review,
@@ -49,18 +51,17 @@ const ReviewItem = ({
         showGenericPopup(header, content);
     };
 
-    const deleteReviewBtnClicked = () => {
-        dispatch(deleteReviewById(review.id)).then((result) => {
-            if (result.meta.requestStatus === 'fulfilled') {
-                hideGenericPopup();
+    const deleteReviewBtnClicked = async () => {
+        const result = await dispatch(deleteReviewById(review.id));
 
-                dispatch(getSpotReviewsById(spotId)).then((reviews) => {
-                    setReviews(reviews.payload.Reviews);
-                });
-            } else if (result.meta.requestStatus === 'rejected') {
-                alert(result.payload.message);
-            }
-        });
+        if (result.meta.requestStatus === 'fulfilled') {
+            hideGenericPopup();
+
+            const reviews = await dispatch(getSpotReviewsById(spotId));
+            setReviews(reviews.payload.Reviews);
+        } else if (result.meta.requestStatus === 'rejected') {
+            alert(result.payload.message);
+        }
     };
 
     const addReviewImageBtnClicked = () => {

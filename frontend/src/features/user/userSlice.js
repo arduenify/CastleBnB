@@ -3,24 +3,10 @@ import { csrfFetch } from '../../app/csrf';
 
 const initialState = {
     currentUser: null,
-    loading: false,
     errors: [],
     validationErrors: [],
 };
 
-/**
- * Used by the SignupForm to create a new user.
- * @param {string} email
- * @param {string} username
- * @param {string} password
- * @param {string} firstName
- * @param {string} lastName
- * @returns {object} - The user object.
- *
- * @example
- * const payload = {email: 'email', username: 'username', password: 'password', firstName: 'firstName', lastName: 'lastName'}
- * const newUser = await dispatch(signup(payload));
- */
 export const signup = createAsyncThunk(
     'users/signup',
     async ({ email, username, password, firstName, lastName }, thunkAPI) => {
@@ -45,17 +31,6 @@ export const signup = createAsyncThunk(
     }
 );
 
-/**
- * Used by the LoginForm to log in a user.
- *
- * @param {string} credential - The username or email of the user.
- * @param {string} password - The password of the user.
- * @returns {object} - The user object.
- *
- * @example
- * const payload = {credential: 'username', password: 'password'}
- * const user = await dispatch(login(payload));
- */
 export const login = createAsyncThunk(
     'users/login',
     async ({ credential, password }, thunkAPI) => {
@@ -149,15 +124,12 @@ export const userSlice = createSlice({
         builder
             /** Login */
             .addCase(login.pending, (state) => {
-                state.loading = true;
                 state.errors = [];
             })
             .addCase(login.fulfilled, (state, action) => {
-                state.loading = false;
                 state.currentUser = action.payload.user;
             })
             .addCase(login.rejected, (state, action) => {
-                state.loading = false;
                 state.currentUser = null;
 
                 if (action.payload.errors) {
@@ -168,42 +140,29 @@ export const userSlice = createSlice({
             })
 
             /** Logout user */
-            .addCase(logout.pending, (state) => {
-                state.loading = true;
-            })
             .addCase(logout.fulfilled, (state) => {
-                state.loading = false;
                 state.currentUser = null;
             })
             .addCase(logout.rejected, (state) => {
-                state.loading = false;
                 state.currentUser = null;
             })
 
             /** Restore user */
-            .addCase(restoreUser.pending, (state) => {
-                state.loading = true;
-            })
             .addCase(restoreUser.fulfilled, (state, action) => {
-                state.loading = false;
                 state.currentUser = action.payload.user;
             })
             .addCase(restoreUser.rejected, (state) => {
-                state.loading = false;
                 state.currentUser = null;
             })
 
             /** Signup */
             .addCase(signup.pending, (state) => {
-                state.loading = true;
                 state.errors = [];
             })
             .addCase(signup.fulfilled, (state, action) => {
-                state.loading = false;
                 state.currentUser = action.payload.user;
             })
             .addCase(signup.rejected, (state, action) => {
-                state.loading = false;
                 state.currentUser = null;
 
                 if (action.payload.errors) {

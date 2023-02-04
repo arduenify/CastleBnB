@@ -5,7 +5,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import { getSpotReviewsById } from '../spotsSlice';
 import ReviewItem from './ReviewItem';
-import AddReview from './AddReview';
+import AddReview from './add/AddReview';
 
 import './SpotPageReviews.css';
 

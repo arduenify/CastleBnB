@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addReviewToSpotById, getSpotReviewsById } from '../spotsSlice';
-import { editReviewById } from './reviewsSlice';
+import { addReviewToSpotById, getSpotReviewsById } from '../../spotsSlice';
+import { editReviewById } from '../reviewsSlice';
 
 import RatingPicker from './RatingPicker';
-import FormInput from '../../../common/input/FormInput';
+import FormInput from '../../../../common/input/FormInput';
 
 // import './ReviewForm.css';
 
