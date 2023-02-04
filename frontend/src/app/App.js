@@ -27,13 +27,15 @@ const App = () => {
         visible: false,
         header: null,
         content: null,
+        size: null,
     });
 
-    const showGenericPopup = (header, content) => {
+    const showGenericPopup = (header, content, size) => {
         setGenericPopup({
             visible: true,
             header,
             content,
+            size,
         });
     };
 
@@ -81,6 +83,7 @@ const App = () => {
                         header={genericPopup.header}
                         content={genericPopup.content}
                         onClose={hideGenericPopup}
+                        size={genericPopup.size}
                     />
                 )}
                 {signupModalVisible && (
