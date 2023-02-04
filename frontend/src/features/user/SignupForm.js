@@ -80,9 +80,9 @@ const SignupForm = ({ hideSignupModal }) => {
         dispatch(
             signup({ email, username, password, firstName, lastName })
         ).then((res) => {
-             if (res.meta.requestStatus === 'fulfilled') {
-                 hideSignupModal();
-             }
+            if (res.meta.requestStatus === 'fulfilled') {
+                hideSignupModal();
+            }
         });
     };
 
@@ -181,6 +181,7 @@ const SignupForm = ({ hideSignupModal }) => {
                         <FormInput
                             name={'password'}
                             placeholder='Password'
+                            type='password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
@@ -188,6 +189,7 @@ const SignupForm = ({ hideSignupModal }) => {
                         <FormInput
                             name={'confirmPassword'}
                             placeholder='Confirm password'
+                            type='password'
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />

@@ -38,6 +38,8 @@
 
 .form-input input {
     margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
     color: var(--colors-text-primary);
     border: none !important;
 }
