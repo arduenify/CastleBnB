@@ -90,6 +90,7 @@ const LoginForm = ({ hideLoginModal }) => {
                         <FormInput
                             name='password'
                             placeholder='Password'
+                            type='password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />

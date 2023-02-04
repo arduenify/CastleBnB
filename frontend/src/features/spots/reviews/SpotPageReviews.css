@@ -15,6 +15,13 @@
     flex-wrap: wrap;
 }
 
+.reviews-container .review-container:last-child {
+    width: 46% !important;
+    flex-grow: 0 !important;
+    margin-left: 15px;
+}
+
+
 #add-review-button {
     background-color: var(--bg-color);
     color: var(--colors-accent);
@@ -31,8 +38,6 @@
     padding: 5px;
     border-radius: 5px;
 }
-
-
 
 #reviews-avg-rating {
     font-weight: 500;

@@ -6,7 +6,8 @@
     --colors-gray: #ddd;
     --colors-light-gray: #f7f7f7;
     --colors-white: #fff;
-    --colors-accent: #ff385c;
+    --colors-accent: rgb(255, 56, 92);
+    --colors-accent-light: rgba(255, 56, 92, 0.65);
     --colors-error: rgb(190, 54, 23);
     --colors-accent-hover: #fc1c3e;
     --colors-green: #008a05;
@@ -41,12 +42,40 @@
     --border-light: 1px solid var(--colors-gray);
 
     --box-shadow-popup: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
-    --box-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.2);
-    --box-shadow-thumbnail: 2px 2px 5px 1px rgba(0, 0, 0, 0.3);
+    --box-shadow-hover: 1px 1px 8px rgba(0, 0, 0, 1);
+    --box-shadow-thumbnail: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
 
     --transition-time: 0.25s;
 
     --transition-default: all var(--transition-time) ease;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 30px;
+    background-color: var(--colors-light-gray);
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--colors-accent-light);
+    border-radius: 30px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--colors-accent);
+}
+
+::-webkit-scrollbar-track:hover::-webkit-scrollbar-thumb:hover {
+    background-color: var(--colors-gray);
+}
+
+::-webkit-scrollbar {
+    height: 15px;
+    width: 11px;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
 }
 
 .flex-container {

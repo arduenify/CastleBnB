@@ -10,6 +10,7 @@ import EditReview from './edit/EditReview';
 import ReviewImagesContainer from './ReviewImagesContainer';
 
 import './ReviewItem.css';
+import AddReviewImage from './addImage/AddReviewImage';
 
 const ReviewItem = ({
     review,
@@ -21,7 +22,7 @@ const ReviewItem = ({
         User,
         ReviewImages,
         createdAt,
-        // id,
+        id,
         review: reviewText,
         spotId,
         stars,
@@ -38,7 +39,7 @@ const ReviewItem = ({
     });
 
     const editReviewBtnClicked = () => {
-        const header = 'Add a review';
+        const header = 'Edit review';
         const content = (
             <EditReview
                 spotId={spotId}
@@ -64,8 +65,18 @@ const ReviewItem = ({
         }
     };
 
-    const addReviewImageBtnClicked = () => {
-        console.log('add review image button clicked');
+    const addReviewImageBtnClicked = async () => {
+        const header = 'Add image to review';
+        const content = (
+            <AddReviewImage
+                reviewId={review.id}
+                spotId={spotId}
+                setReviews={setReviews}
+                hideGenericPopup={hideGenericPopup}
+            />
+        );
+
+        showGenericPopup(header, content);
     };
 
     return (
@@ -117,8 +128,13 @@ const ReviewItem = ({
 
             {ReviewImages?.length > 0 && (
                 <ReviewImagesContainer
+                    reviewId={id}
                     images={ReviewImages}
+                    spotId={spotId}
+                    setReviews={setReviews}
                     user={User}
+                    showGenericPopup={showGenericPopup}
+                    hideGenericPopup={hideGenericPopup}
                 />
             )}
         </div>

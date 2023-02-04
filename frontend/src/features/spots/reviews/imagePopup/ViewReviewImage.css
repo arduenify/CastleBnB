@@ -1,0 +1,6 @@
+.review-image-popup-image {
+    object-fit: cover;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px var(--colors-dark-gray);
+}

@@ -7,8 +7,6 @@ import { editReviewById } from '../reviewsSlice';
 import RatingPicker from './RatingPicker';
 import FormInput from '../../../../common/input/FormInput';
 
-// import './ReviewForm.css';
-
 const ReviewForm = ({
     formType,
     spotId,

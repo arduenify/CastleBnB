@@ -1,10 +1,11 @@
 .review-image {
     object-fit: cover;
     width: 200px;
-    border-radius: 10px;
-    box-shadow: var(--box-shadow-thumbnail);
+    border-radius: 30px;
     margin-bottom: 10px;
     animation: spotPageSlideIn 0.5s ease-in-out;
+    transition: box-shadow 0.3s;
+    margin: 5px;
 }
 
 .review-image:hover {

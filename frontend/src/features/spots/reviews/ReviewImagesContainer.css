@@ -5,8 +5,15 @@
     flex-wrap: nowrap;
     overflow-x: auto;
     gap: 20px;
+    padding: 10px;
     margin-left: 10px;
     margin-right: 10px;
+
+    border-radius: 30px;
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border: 1px solid var(--colors-gray);
     animation: reviewImageFadeIn 0.5s ease;
 }
 

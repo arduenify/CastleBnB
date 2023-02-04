@@ -18,13 +18,17 @@ export default loadingSlice.reducer;
 
 // Used for global loading state
 export const loadingMiddleware = (store) => (next) => (action) => {
-    const { type } = action;
+    try {
+        const { type } = action;
 
-    if (type.endsWith('/pending')) {
-        store.dispatch(setLoading(true));
-    } else if (type.endsWith('/fulfilled') || type.endsWith('/rejected')) {
-        store.dispatch(setLoading(false));
+        if (type.endsWith('/pending')) {
+            store.dispatch(setLoading(true));
+        } else if (type.endsWith('/fulfilled') || type.endsWith('/rejected')) {
+            store.dispatch(setLoading(false));
+        }
+
+        next(action);
+    } catch (err) {
+        console.log(err);
     }
-
-    next(action);
 };

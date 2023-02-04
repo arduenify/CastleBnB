@@ -1,8 +1,13 @@
 import './PopupModal.css';
 
-const PopupModal = ({ header, content, onClose }) => {
+const PopupModal = ({ header, content, onClose, size = {} }) => {
+    const { width = 600, height = 'auto' } = size;
+
     return (
-        <div className='popup-modal'>
+        <div
+            className='popup-modal'
+            style={{ width, height }}
+        >
             <div className='popup-modal-border'>
                 <div className='popup-modal-header'>
                     <button
