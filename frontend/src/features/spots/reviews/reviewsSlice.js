@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { csrfFetch } from '../../../app/csrf';
+import {
+    csrfFetch,
+    csrfFetchDelete,
+    csrfFetchPost,
+    csrfFetchPut,
+} from '../../../app/csrf';
 
 const initialState = {
     reviews: [],
@@ -9,11 +14,10 @@ const initialState = {
 export const editReviewById = createAsyncThunk(
     'reviews/editReviewById',
     async ({ review }, thunkAPI) => {
-        const response = await csrfFetch(`/api/reviews/${review.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(review),
-        });
+        const response = await csrfFetchPut(
+            `/api/reviews/${review.id}`,
+            review
+        );
 
         const responseJson = await response.json();
 
@@ -27,10 +31,8 @@ export const editReviewById = createAsyncThunk(
 
 export const deleteReviewById = createAsyncThunk(
     'reviews/deleteReviewById',
-    async (reviewId, thunkAPI) => {
-        const response = await csrfFetch(`/api/reviews/${reviewId}`, {
-            method: 'DELETE',
-        });
+    async (reviewId, { rejectWithValue }) => {
+        const response = await csrfFetchDelete(`/api/reviews/${reviewId}`);
 
         const responseJson = await response.json();
 
@@ -38,7 +40,27 @@ export const deleteReviewById = createAsyncThunk(
             return responseJson;
         }
 
-        return thunkAPI.rejectWithValue(responseJson);
+        return rejectWithValue(responseJson);
+    }
+);
+
+export const addImageToReview = createAsyncThunk(
+    'reviews/addImageToReview',
+    async ({ reviewId, imageUrl }, { rejectWithValue }) => {
+        const response = await csrfFetchPost(
+            `/api/reviews/${reviewId}/images`,
+            {
+                url: imageUrl,
+            }
+        );
+
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return responseJson;
+        }
+
+        return rejectWithValue(responseJson);
     }
 );
 
