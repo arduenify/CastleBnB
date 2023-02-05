@@ -3,8 +3,10 @@
     width: 600px;
     height: auto;
     position: fixed;
-    top: 25%;
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 100;
+    object-fit: contain;
 
     display: flex;
     flex-direction: column;
@@ -14,9 +16,6 @@
     background-color: var(--colors-white);
     filter: none !important;
     box-shadow: var(--box-shadow);
-
-    /* animation: {dur} {style} {?} {quantity} {keyframe id}*/
-    animation: 0.3s ease 0s 1 fadeIn;
 }
 
 .popup-modal-border {
@@ -51,6 +50,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    max-height: calc(100% - 70px);
 }
 
 .popup-modal form {

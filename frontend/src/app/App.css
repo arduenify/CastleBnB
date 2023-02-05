@@ -14,6 +14,7 @@
     --colors-text-primary: #222;
     --colors-text-secondary: var(--colors-dark-gray);
     --colors-backdrop: rgba(0, 0, 0, 0.8);
+    --colors-popup-text: rgba(0, 0, 0, 0.85);
 
     --bg-color: var(--colors-white);
 
@@ -94,6 +95,7 @@ body {
     margin: 0 auto !important;
     float: none !important;
     filter: none;
+    padding-bottom: 10vh;
     transition: all 0.3s ease;
 
     font-family: Circular,
@@ -109,6 +111,8 @@ body {
     line-height: var(--line-height-medium);
     color: var(--colors-text-primary);
     background-color: var(--bg-color);
+    /* This is amazing */
+    -webkit-text-stroke: .025em rgba(51, 51, 51, 0.25);
 }
 
 #root {

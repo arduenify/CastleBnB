@@ -17,46 +17,7 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
         dispatch(getSpotById(spotId)).then((spot) => setSpot(spot.payload));
     }, [dispatch, spotId]);
 
-    useEffect(() => {
-        console.log('Spot changed to:', spot);
-    }, [spot]);
-
     if (!spot) return null;
-
-    // Spot object format
-    // {
-    // "id": 1,
-    // "ownerId": 1,
-    // "address": "Ochre Point Ave",
-    // "city": "Newport",
-    // "state": "RI",
-    // "country": "USA",
-    // "lat": 41.282558,
-    // "lng": -71.175619,
-    // "name": "Ochre Court",
-    // "description": "Beautiful, châteauesque, and the second largest mansion in Newport, Ochre court is a must see for any history buff. Built in 1892 at a cost of $4.5 million dollars, the mansion was designed by architect Richard Morris Hunt. ",
-    // "price": 4906,
-    // "createdAt": "2023-02-01 08:35:42",
-    // "updatedAt": "2023-02-01 08:35:42",
-    // "numReviews": 2,
-    // "avgStarRating": 5,
-    // "SpotImages": [
-    //     {
-    //         "id": 1,
-    //         "url": "ochre_court/preview.jpg",
-    //         "preview": true
-    //     },
-    //     {
-    //         "id": 2,
-    //         "url": "ochre_court/inside.jpg",
-    //         "preview": false
-    //     }
-    // ],
-    // "Owner": {
-    //     "id": 1,
-    //     "firstName": "Adam",
-    //     "lastName": "Scoggins"
-    // }
 
     return (
         <div className='spot-page-container'>

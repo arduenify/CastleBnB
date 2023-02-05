@@ -23,7 +23,7 @@
     margin: 0;
 }
 
-d .spot-page-header-divider {
+.spot-page-header-divider {
     position: relative;
     font-size: 2rem;
     font-weight: 600;
@@ -59,7 +59,8 @@ d .spot-page-header-divider {
 }
 
 #spot-page-description {
-    font-size: var(--font-size-medium);
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
     font-weight: 400;
 }
 
