@@ -31,15 +31,18 @@ const ViewReviewImage = ({
     };
 
     return (
-        <div className='review-image-popup-content'>
-            <img
-                className='review-image-popup-image'
-                src={imageUrl}
-                alt='popup image'
-            />
+        <div className='review-image-popup-container'>
+            <div className='review-image-popup-content'>
+                <img
+                    className='review-image-popup-image'
+                    src={imageUrl}
+                    alt='popup image'
+                />
+            </div>
 
             <button
                 id='delete-review-image-btn'
+                className='review-image-popup-button'
                 onClick={deleteReviewImageBtnClicked}
             >
                 Delete review image

@@ -1,12 +1,21 @@
 import './PopupModal.css';
 
-const PopupModal = ({ header, content, onClose, size = {} }) => {
-    const { width = 600, height = 'auto' } = size;
+const PopupModal = ({ header, content, onClose, type }) => {
+    let style = {};
+
+    if (type === 'review-image-popup') {
+        style = {
+            maxWidth: '100%',
+            maxHeight: '100%',
+            width: 'auto',
+            height: 'auto',
+        };
+    }
 
     return (
         <div
             className='popup-modal'
-            style={{ width, height }}
+            style={{ ...style }}
         >
             <div className='popup-modal-border'>
                 <div className='popup-modal-header'>

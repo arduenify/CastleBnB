@@ -42,7 +42,11 @@ const SpotGridItem = ({ spot }) => {
                             <p className='spot-rating-text'>{avgRating}</p>
                         </div>
                     </div>
+
                     <p className='spot-description'>{description}</p>
+                    <div className='popup-description-container'>
+                        <p className='popup-description-text'>{description}</p>
+                    </div>
                 </div>
             </div>
         </Link>

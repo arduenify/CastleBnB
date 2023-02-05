@@ -82,6 +82,11 @@ const ReviewItem = ({
     return (
         <div className='review-container'>
             <div className='review-header'>
+                <img
+                    id='review-user-image'
+                    src={User?.profileImageUrl || '/images/default.png'}
+                    alt='user'
+                />
                 <div id='review-user-date-container'>
                     <p id='review-user'>{User?.firstName}</p>
                     <p id='review-date'>{reviewDate}</p>
