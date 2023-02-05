@@ -78,6 +78,32 @@
     top: 2.5px;
 }
 
+.spot-description {
+    overflow: hidden;
+}
+
+.popup-description-container {
+    position: absolute;
+    display: none;
+    padding: 0 8px;
+    margin: 0;
+    border-radius: 5px;
+    width: 325px;
+    box-shadow: var(--box-shadow-popup);
+    background-color: var(--colors-popup-text);
+    z-index: 80;
+}
+
+.popup-description-text {
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+    color: #fff;
+}
+
+.spot-image-container:hover+.spot-info-container .popup-description-container,
+.spot-description:hover+.popup-description-container {
+    display: block;
+}
 
 @keyframes containerThing {
     from {

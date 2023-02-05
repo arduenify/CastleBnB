@@ -27,15 +27,17 @@ const App = () => {
         visible: false,
         header: null,
         content: null,
-        size: null,
+        type: null,
+        style: null,
     });
 
-    const showGenericPopup = (header, content, size) => {
+    const showGenericPopup = (header, content, type, style) => {
         setGenericPopup({
             visible: true,
             header,
             content,
-            size,
+            type,
+            style,
         });
     };
 
@@ -44,6 +46,8 @@ const App = () => {
             visible: false,
             header: null,
             content: null,
+            type: null,
+            style: null,
         });
     };
 
@@ -58,6 +62,15 @@ const App = () => {
     useEffect(() => {
         dispatch(restoreUser()).then(() => setIsLoaded(true));
     }, [dispatch]);
+
+    // Disables the scrollbar when popup modal is visible
+    useEffect(() => {
+        if (genericPopup.visible) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+    }, [genericPopup.visible]);
 
     return (
         isLoaded && (
@@ -83,7 +96,8 @@ const App = () => {
                         header={genericPopup.header}
                         content={genericPopup.content}
                         onClose={hideGenericPopup}
-                        size={genericPopup.size}
+                        type={genericPopup.type}
+                        style={genericPopup.style}
                     />
                 )}
                 {signupModalVisible && (

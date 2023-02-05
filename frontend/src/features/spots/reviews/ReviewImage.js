@@ -1,6 +1,4 @@
-import { csrfFetch } from '../../../app/csrf';
 import ViewReviewImage from './imagePopup/ViewReviewImage';
-import { useEffect, useState } from 'react';
 
 import './ReviewImage.css';
 
@@ -26,7 +24,7 @@ const ReviewImage = ({
             />
         );
 
-        showGenericPopup(header, content, { width: `80vw` });
+        showGenericPopup(header, content, 'review-image-popup');
     };
 
     return (

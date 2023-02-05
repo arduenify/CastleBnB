@@ -9,8 +9,9 @@
 .review-header {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
     align-items: center;
+
+    border: 1px solid blue;
 }
 
 .review-star-icon {
@@ -46,6 +47,18 @@
 #review-date {
     font-size: var(--font-size-small);
     color: var(--colors-text-secondary);
+}
+
+#review-user-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#review-body {
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
 }
 
 .review-header-divider {
