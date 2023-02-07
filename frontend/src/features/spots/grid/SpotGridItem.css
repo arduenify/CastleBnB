@@ -98,6 +98,7 @@
     font-size: var(--font-size-large);
     line-height: var(--line-height-large);
     color: #fff;
+    animation: appearAfterDelay 0.7s;
 }
 
 .spot-image-container:hover+.spot-info-container .popup-description-container,
@@ -124,5 +125,15 @@
     to {
         opacity: 1;
         transform: translateX(0);
+    }
+}
+
+@keyframes appearAfterDelay {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }

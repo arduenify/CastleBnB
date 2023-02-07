@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { csrfFetchPost, csrfFetch } from '../../app/csrf';
+import { csrfFetchPost, csrfFetch, csrfFetchPut } from '../../app/csrf';
 
 const initialState = {
     spots: [],
@@ -70,6 +70,25 @@ export const getSpotReviewsById = createAsyncThunk(
     }
 );
 
+export const editSpotById = createAsyncThunk(
+    'spots/editSpotById',
+    async ({ spotId, payload: spot }, { rejectWithValue }) => {
+        const response = await csrfFetchPut(`/api/spots/${spotId}`, spot);
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            const updatedSpot = {
+                ...spot,
+                ...responseJson,
+            };
+
+            return updatedSpot;
+        }
+
+        return rejectWithValue(responseJson);
+    }
+);
+
 export const spotsSlice = createSlice({
     name: 'spots',
     initialState,
@@ -90,8 +109,16 @@ export const spotsSlice = createSlice({
 
             .addCase(addReviewToSpotById.fulfilled, (state, action) => {
                 state.currentSpotReviews = action.payload.Reviews;
+            })
+
+            .addCase(editSpotById.fulfilled, (state, action) => {
+                state.currentSpot = action.payload;
             });
     },
 });
+
+export const selectSpotOwnerId = (spot) => {
+    return spot?.Owner?.id;
+};
 
 export default spotsSlice.reducer;

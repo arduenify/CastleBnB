@@ -176,6 +176,8 @@ export const userSlice = createSlice({
 
 export default userSlice.reducer;
 
+export const selectUserId = (state) => state.user?.currentUser?.id;
+
 export const {
     clearErrors,
     clearValidationError,
