@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { getSpotById } from './spotsSlice';
+import { getSpotById, deleteSpotById } from './spotsSlice';
 import { currentUserOwnsSpot } from '../../common/helpers';
 
 import EditSpot from './EditSpot';
@@ -13,6 +13,7 @@ import './SpotPage.css';
 
 const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const currentUser = useSelector((state) => state.user.currentUser);
     const { spotId } = useParams();
     const [spot, setSpot] = useState(null);
@@ -38,7 +39,23 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
         hideGenericPopup();
     };
 
-    const editSpotBtnClicked = () => {
+    const onSpotDelete = async () => {
+        const deleteSpotResponse = await dispatch(deleteSpotById(spotId));
+
+        hideGenericPopup();
+
+        if (deleteSpotResponse.meta.requestStatus === 'rejected') {
+            if (deleteSpotResponse.payload.message) {
+                return alert(deleteSpotResponse.payload.message);
+            }
+
+            return alert('Something went wrong');
+        }
+
+        navigate('/');
+    };
+
+    const showEditSpotPopup = () => {
         const header = 'Edit Spot';
         const content = (
             <EditSpot
@@ -47,7 +64,56 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
             />
         );
 
-        showGenericPopup(header, content);
+        showGenericPopup(header, content, 'edit-spot-popup');
+    };
+
+    const editSpotBtnClicked = () => {
+        const showDeleteSpotPopup = () => {
+            const deleteSpotPopupHeader = 'Delete Spot';
+
+            const deleteSpotPopupContent = (
+                <div className='delete-spot-popup-container'>
+                    <p className='delete-spot-popup-text'>
+                        Are you sure you want to delete this spot?
+                    </p>
+                    <div className='delete-spot-popup-btns-container'>
+                        <button
+                            className='delete-spot-popup-btn'
+                            onClick={hideGenericPopup}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className='delete-spot-popup-btn'
+                            onClick={onSpotDelete}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            );
+
+            showGenericPopup(deleteSpotPopupHeader, deleteSpotPopupContent);
+        };
+
+        const showChooseEditOrDelete = (
+            <div className='edit-or-delete-container'>
+                <button
+                    className='edit-or-delete-btn'
+                    onClick={showEditSpotPopup}
+                >
+                    Edit
+                </button>
+                <button
+                    className='edit-or-delete-btn'
+                    onClick={showDeleteSpotPopup}
+                >
+                    Delete
+                </button>
+            </div>
+        );
+
+        showGenericPopup('Edit or Delete', showChooseEditOrDelete);
     };
 
     return (
@@ -75,7 +141,7 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                     <>
                         <p id='spot-page-edit-disclaimer'>
                             Hi, {currentUser?.firstName}! As the owner of this
-                            spot, you can make changes by
+                            spot, you can make changes or delete this spot by
                             <span>
                                 <button
                                     id='spot-page-edit-btn'
