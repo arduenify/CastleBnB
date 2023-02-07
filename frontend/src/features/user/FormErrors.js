@@ -6,7 +6,18 @@ const FormErrors = ({ errors, validationErrors }) => {
         <ul className='popup-modal-errors'>
             {validationErrors &&
                 validationErrors
-                    .filter((error) => error.msg)
+                    .filter((error) => {
+                        if (typeof error === 'object' && error.msg) {
+                            return true;
+                        }
+
+                        // Used for editing of spot
+                        if (typeof error === 'string') {
+                            return true;
+                        }
+
+                        return false;
+                    })
                     .map((error, idx) => (
                         <li
                             className='popup-modal-error'
@@ -16,7 +27,7 @@ const FormErrors = ({ errors, validationErrors }) => {
                                 <FontAwesomeIcon icon={faCircleExclamation} />
 
                                 <p className='popup-modal-error-text'>
-                                    {error.msg}
+                                    {error.msg || error}
                                 </p>
                             </div>
                         </li>

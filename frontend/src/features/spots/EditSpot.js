@@ -21,6 +21,18 @@ const EditSpot = ({ spot, onEdit }) => {
     const [errors, setErrors] = useState([]);
     const [validationErrors, setValidationErrors] = useState([]);
 
+    const errorMap = {
+        'Name is required': 'name',
+        'Description is required': 'description',
+        'Street address is required': 'address',
+        'City is required': 'city',
+        'State is required': 'state',
+        'Country is required': 'country',
+        'Latitude is not valid': 'lat',
+        'Longitude is not valid': 'lng',
+        'Price is required': 'price',
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -107,6 +119,10 @@ const EditSpot = ({ spot, onEdit }) => {
         onEdit(updatedSpot);
     };
 
+    const getValidationError = (name) => {
+        return validationErrors.find((error) => errorMap[error] === name);
+    };
+
     return (
         <form
             id='popup-modal-edit-spot-form'
@@ -118,6 +134,7 @@ const EditSpot = ({ spot, onEdit }) => {
                     placeholder='Name'
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    validationError={getValidationError('name')}
                 />
 
                 <FormInput
@@ -125,6 +142,7 @@ const EditSpot = ({ spot, onEdit }) => {
                     placeholder='Description'
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    validationError={getValidationError('description')}
                 />
 
                 <FormInput
@@ -132,6 +150,7 @@ const EditSpot = ({ spot, onEdit }) => {
                     placeholder='Address'
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
+                    validationError={getValidationError('address')}
                 />
 
                 <FormInput
@@ -139,6 +158,7 @@ const EditSpot = ({ spot, onEdit }) => {
                     placeholder='City'
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
+                    validationError={getValidationError('city')}
                 />
 
                 <FormInput
@@ -146,6 +166,7 @@ const EditSpot = ({ spot, onEdit }) => {
                     placeholder='State'
                     value={state}
                     onChange={(e) => setState(e.target.value)}
+                    validationError={getValidationError('state')}
                 />
 
                 <FormInput
@@ -153,6 +174,7 @@ const EditSpot = ({ spot, onEdit }) => {
                     placeholder='Zip'
                     value={zip}
                     onChange={(e) => setZip(e.target.value)}
+                    validationError={getValidationError('zip')}
                 />
 
                 <FormInput
@@ -160,6 +182,7 @@ const EditSpot = ({ spot, onEdit }) => {
                     placeholder='Latitude'
                     value={lat}
                     onChange={(e) => setLat(e.target.value)}
+                    validationError={getValidationError('lat')}
                 />
 
                 <FormInput
@@ -167,6 +190,7 @@ const EditSpot = ({ spot, onEdit }) => {
                     placeholder='Longitude'
                     value={lng}
                     onChange={(e) => setLng(e.target.value)}
+                    validationError={getValidationError('lng')}
                 />
 
                 <FormInput
@@ -174,6 +198,7 @@ const EditSpot = ({ spot, onEdit }) => {
                     placeholder='Country'
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
+                    validationError={getValidationError('country')}
                 />
 
                 <FormInput
@@ -181,6 +206,7 @@ const EditSpot = ({ spot, onEdit }) => {
                     placeholder='Price per day'
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
+                    validationError={getValidationError('price')}
                 />
             </div>
 

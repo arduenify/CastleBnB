@@ -12,6 +12,16 @@ const PopupModal = ({ header, content, onClose, type }) => {
         };
     }
 
+    if (type === 'edit-spot-popup') {
+        style = {
+            maxWidth: '90vw',
+            maxHeight: '90vh',
+            height: 'auto',
+            width: '800px',
+            overflowY: 'auto',
+        };
+    }
+
     return (
         <div
             className='popup-modal'

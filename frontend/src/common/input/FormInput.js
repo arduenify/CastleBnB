@@ -10,21 +10,10 @@ const FormInput = ({
     placeholder = 'placeholder',
     value,
     onChange,
+    validationError,
 }) => {
     const inputRef = useRef(null);
     const [inputActive, setInputActive] = useState(false);
-
-    const validationError = useSelector((state) => {
-        const validationErrors = state.user.validationErrors;
-
-        if (!validationErrors) return null;
-
-        const validationError = validationErrors.find((error) => {
-            return error.name === name;
-        });
-
-        return validationError;
-    });
 
     useEffect(() => {
         const input = inputRef?.current;

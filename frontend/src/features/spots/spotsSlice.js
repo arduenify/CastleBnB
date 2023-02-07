@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { csrfFetchPost, csrfFetch, csrfFetchPut } from '../../app/csrf';
+import {
+    csrfFetchPost,
+    csrfFetch,
+    csrfFetchPut,
+    csrfFetchDelete,
+} from '../../app/csrf';
 
 const initialState = {
     spots: [],
@@ -89,6 +94,20 @@ export const editSpotById = createAsyncThunk(
     }
 );
 
+export const deleteSpotById = createAsyncThunk(
+    'spots/deleteSpotById',
+    async (id, { rejectWithValue }) => {
+        const response = await csrfFetchDelete(`/api/spots/${id}`);
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return responseJson;
+        }
+
+        return rejectWithValue(responseJson);
+    }
+);
+
 export const spotsSlice = createSlice({
     name: 'spots',
     initialState,
@@ -113,6 +132,10 @@ export const spotsSlice = createSlice({
 
             .addCase(editSpotById.fulfilled, (state, action) => {
                 state.currentSpot = action.payload;
+            })
+
+            .addCase(deleteSpotById.fulfilled, (state, action) => {
+                state.currentSpot = null;
             });
     },
 });

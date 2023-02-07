@@ -8,11 +8,13 @@ import {
     login,
     setValidationErrors,
 } from './userSlice';
+import { getError } from '../../common/helpers';
 
-import './LoginForm.css';
 import PopupModal from '../../common/popupModal/PopupModal';
 import FormInput from '../../common/input/FormInput';
 import FormErrors from './FormErrors';
+
+import './LoginForm.css';
 
 const LoginForm = ({ hideLoginModal }) => {
     const dispatch = useDispatch();
@@ -85,6 +87,10 @@ const LoginForm = ({ hideLoginModal }) => {
                             placeholder='Email/username'
                             value={credential}
                             onChange={(e) => setCredential(e.target.value)}
+                            validationError={getError(
+                                'credential',
+                                validationErrors
+                            )}
                         />
 
                         <FormInput
@@ -93,6 +99,10 @@ const LoginForm = ({ hideLoginModal }) => {
                             type='password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            validationError={getError(
+                                'password',
+                                validationErrors
+                            )}
                         />
                     </div>
 

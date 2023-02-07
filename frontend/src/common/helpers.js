@@ -5,3 +5,7 @@ export const currentUserOwnsSpot = (currentUser, spot) => {
 
     return false;
 };
+
+export const getError = (name, errors) => {
+    return errors?.find((error) => error.name === name);
+};
