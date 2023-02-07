@@ -11,6 +11,7 @@
     --colors-error: rgb(190, 54, 23);
     --colors-accent-hover: #fc1c3e;
     --colors-green: #008a05;
+    --colors-green-hover: #006a03;
     --colors-text-primary: #222;
     --colors-text-secondary: var(--colors-dark-gray);
     --colors-backdrop: rgba(0, 0, 0, 0.8);
