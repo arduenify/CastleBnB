@@ -1,0 +1,25 @@
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-page-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-page-status {
+    font-size: var(--font-size-heading);
+    line-height: var(--line-height-heading);
+    font-weight: 700;
+}
+
+.error-page-message {
+    font-size: var(--font-size-xxx-large);
+    line-height: var(--line-height-heading);
+    font-weight: 500;
+}

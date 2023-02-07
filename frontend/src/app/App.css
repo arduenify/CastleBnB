@@ -30,12 +30,16 @@
     --font-size-xx-large: 24px;
     --font-size-xxx-large: 28px;
 
+    --font-size-heading: 36px;
+
     --line-height-xx-small: 12px;
     --line-height-x-small: 16px;
     --line-height-small: 18px;
     --line-height-medium: 20px;
     --line-height-large: 24px;
     --line-height-x-large: 28px;
+
+    --line-height-heading: 40px;
 
     --border-radius-small: 0.5rem;
     --border-radius-1: 1rem;
