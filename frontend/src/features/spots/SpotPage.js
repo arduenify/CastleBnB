@@ -1,8 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+    faStar,
+    faDeleteLeft,
+    faTrash,
+    faTrashAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import { getSpotById, deleteSpotById } from './spotsSlice';
 import { currentUserOwnsSpot } from '../../common/helpers';
 
@@ -24,13 +29,13 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
             setSpot(spot.payload);
             setIsSpotOwner(currentUserOwnsSpot(currentUser, spot.payload));
         });
-    }, [dispatch, spotId]);
+    }, [dispatch, spotId, currentUser]);
 
     useEffect(() => {
         if (spot) {
             setIsSpotOwner(currentUserOwnsSpot(currentUser, spot));
         }
-    }, [currentUser]);
+    }, [currentUser, spot]);
 
     if (!spot) return null;
 
@@ -78,17 +83,23 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                     </p>
                     <div className='delete-spot-popup-btns-container'>
                         <button
-                            className='delete-spot-popup-btn'
+                            className='delete-spot-popup-btn delete-btn'
+                            onClick={onSpotDelete}
+                        >
+                            <span>
+                                <FontAwesomeIcon
+                                    id='delete-btn-icon'
+                                    icon={faTrash}
+                                />
+                            </span>
+                            I am sure!
+                        </button>
+                        {/* <button
+                            className='delete-spot-popup-btn cancel-btn'
                             onClick={hideGenericPopup}
                         >
                             Cancel
-                        </button>
-                        <button
-                            className='delete-spot-popup-btn'
-                            onClick={onSpotDelete}
-                        >
-                            Delete
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             );
@@ -99,21 +110,27 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
         const showChooseEditOrDelete = (
             <div className='edit-or-delete-container'>
                 <button
-                    className='edit-or-delete-btn'
+                    className='edit-or-delete-btn choose-btn'
                     onClick={showEditSpotPopup}
                 >
-                    Edit
+                    Update this spot
                 </button>
                 <button
-                    className='edit-or-delete-btn'
+                    className='edit-or-delete-btn delete-btn'
                     onClick={showDeleteSpotPopup}
                 >
-                    Delete
+                    <span>
+                        <FontAwesomeIcon
+                            id='delete-btn-icon'
+                            icon={faTrash}
+                        />
+                    </span>
+                    Delete this spot
                 </button>
             </div>
         );
 
-        showGenericPopup('Edit or Delete', showChooseEditOrDelete);
+        showGenericPopup('What would you like to do?', showChooseEditOrDelete);
     };
 
     return (

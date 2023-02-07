@@ -115,6 +115,59 @@ hr {
     border-color: var(--colors-light-gray);
 }
 
+.delete-spot-popup-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.delete-spot-popup-btns-container,
+.edit-or-delete-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.delete-spot-popup-btn,
+.edit-or-delete-btn {
+    font-size: var(--font-size-large);
+    font-weight: 500;
+    display: flex;
+    width: 47% !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.choose-btn {
+    background-color: var(--colors-green) !important;
+}
+
+.choose-btn:hover {
+    transition: 0.2s;
+    background-color: var(--colors-green-hover) !important;
+}
+
+.edit-or-delete-btn.delete-btn,
+.delete-btn {
+    background-color: #a90202 !important;
+}
+
+.edit-or-delete-btn.delete-btn:hover,
+.delete-btn {
+    transition: 0.2s;
+    background-color: #7f0000 !important;
+}
+
+#delete-btn-icon {
+    margin-right: 10px;
+}
+
 @keyframes spotPageSlideIn {
     from {
         opacity: 0;
