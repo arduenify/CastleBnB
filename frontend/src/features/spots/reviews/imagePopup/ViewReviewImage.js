@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import { deleteImageFromReview } from '../reviewsSlice';
 import { getSpotReviewsById } from '../../spotsSlice';
 
+import ViewImage from '../../../../common/popupImage/ViewImage';
+
 import './ViewReviewImage.css';
 
 const ViewReviewImage = ({
@@ -10,6 +12,7 @@ const ViewReviewImage = ({
     reviewId,
     imageId,
     hideGenericPopup,
+    isReviewOwner,
     spotId,
     setReviews,
 }) => {
@@ -31,23 +34,12 @@ const ViewReviewImage = ({
     };
 
     return (
-        <div className='review-image-popup-container'>
-            <div className='review-image-popup-content'>
-                <img
-                    className='review-image-popup-image'
-                    src={imageUrl}
-                    alt='popup image'
-                />
-            </div>
-
-            <button
-                id='delete-review-image-btn'
-                className='review-image-popup-button'
-                onClick={deleteReviewImageBtnClicked}
-            >
-                Delete review image
-            </button>
-        </div>
+        <ViewImage
+            imageUrl={imageUrl}
+            onClick={deleteReviewImageBtnClicked}
+            deleteBtnText='Delete review image'
+            hasDeletePrivileges={isReviewOwner}
+        />
     );
 };
 

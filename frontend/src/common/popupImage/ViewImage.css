@@ -1,0 +1,30 @@
+.image-popup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    max-width: 100vw;
+    max-height: 100vh;
+}
+
+.image-popup-content {
+    max-width: 90vw;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.image-popup-image {
+    width: auto;
+    height: auto;
+    max-width: 90vw;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 10px;
+    margin: 15px auto;
+    box-shadow: 2px 2px 5px var(--colors-dark-gray);
+}

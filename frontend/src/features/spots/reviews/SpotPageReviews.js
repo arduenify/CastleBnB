@@ -15,6 +15,7 @@ const SpotPageReviews = ({
     numReviews,
     showGenericPopup,
     hideGenericPopup,
+    isSpotOwner,
 }) => {
     const [reviews, setReviews] = useState([]);
 
@@ -71,6 +72,7 @@ const SpotPageReviews = ({
                                 key={review.id}
                                 spotId={spotId}
                                 review={review}
+                                isSpotOwner={isSpotOwner}
                                 setReviews={setReviews}
                                 showGenericPopup={showGenericPopup}
                                 hideGenericPopup={hideGenericPopup}

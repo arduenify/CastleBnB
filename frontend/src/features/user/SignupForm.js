@@ -93,7 +93,7 @@ const SignupForm = ({ hideSignupModal }) => {
             dispatch(clearErrors());
             dispatch(clearValidationErrors());
         };
-    }, []);
+    }, [dispatch]);
 
     // Clears the validation errors on input change
     useClearValidationError('email', email);
@@ -103,7 +103,7 @@ const SignupForm = ({ hideSignupModal }) => {
 
     // Clears the password validation errors
     useEffect(() => {
-        if (!validationErrors) return;
+        if (!validationErrors || !validationErrors.length) return;
 
         const clearError = (name) => {
             dispatch(clearValidationError({ name }));
@@ -139,7 +139,7 @@ const SignupForm = ({ hideSignupModal }) => {
         clearRequiredError('password', password);
         clearRequiredError('confirmPassword', confirmPassword);
         clearMatchedPasswordError();
-    }, [password, confirmPassword]);
+    }, [password, confirmPassword, validationErrors, dispatch]);
 
     return (
         <PopupModal

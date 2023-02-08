@@ -14,6 +14,7 @@ const Logo = () => {
         >
             <img
                 id='logo-img'
+                alt='castlebnb logo'
                 src={logo}
             />
         </div>

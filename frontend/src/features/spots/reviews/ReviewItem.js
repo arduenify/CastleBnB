@@ -19,6 +19,7 @@ const ReviewItem = ({
     setReviews,
     hideGenericPopup,
     showGenericPopup,
+    isSpotOwner,
 }) => {
     const {
         User,
@@ -138,7 +139,7 @@ const ReviewItem = ({
                         color={
                             stars >= num
                                 ? 'var(--colors-gold)'
-                                : 'var(--colors-gray)'
+                                : 'var(--colors-gra m,y)'
                         }
                     />
                 ))}
@@ -153,7 +154,8 @@ const ReviewItem = ({
                     setReviewImages={setReviewImages}
                     spotId={spotId}
                     setReviews={setReviews}
-                    user={User}
+                    isSpotOwner={isSpotOwner}
+                    reviewUser={User}
                     showGenericPopup={showGenericPopup}
                     hideGenericPopup={hideGenericPopup}
                 />
