@@ -3,6 +3,7 @@ import './ReviewImagesContainer.css';
 
 const ReviewImagesContainer = ({
     images,
+    setReviewImages,
     user,
     showGenericPopup,
     hideGenericPopup,
@@ -10,6 +11,12 @@ const ReviewImagesContainer = ({
     setReviews,
     spotId,
 }) => {
+    const deleteReviewImage = (imageId) => {
+        setReviewImages((prev) => {
+            return prev.filter((image) => image.id !== imageId);
+        });
+    };
+
     return (
         <div className='review-images-container'>
             {images.map((image) => {
@@ -23,6 +30,7 @@ const ReviewImagesContainer = ({
                         hideGenericPopup={hideGenericPopup}
                         reviewId={reviewId}
                         setReviews={setReviews}
+                        deleteReviewImage={deleteReviewImage}
                     />
                 );
             })}

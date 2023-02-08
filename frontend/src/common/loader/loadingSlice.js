@@ -28,7 +28,5 @@ export const loadingMiddleware = (store) => (next) => (action) => {
         }
 
         next(action);
-    } catch (err) {
-        console.log(err);
-    }
+    } catch (err) {}
 };

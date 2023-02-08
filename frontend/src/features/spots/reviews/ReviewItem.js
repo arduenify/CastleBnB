@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
@@ -20,7 +22,7 @@ const ReviewItem = ({
 }) => {
     const {
         User,
-        ReviewImages,
+        // ReviewImages,
         createdAt,
         id,
         review: reviewText,
@@ -28,6 +30,8 @@ const ReviewItem = ({
         stars,
         // userId,
     } = review;
+
+    const [reviewImages, setReviewImages] = useState(review?.ReviewImages);
 
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -79,6 +83,10 @@ const ReviewItem = ({
         showGenericPopup(header, content);
     };
 
+    useEffect(() => {
+        setReviewImages(review?.ReviewImages);
+    }, [review]);
+
     return (
         <div className='review-container'>
             <div className='review-header'>
@@ -93,14 +101,6 @@ const ReviewItem = ({
                 </div>
 
                 <div className='review-container-right'>
-                    <div className='review-rating-container'>
-                        <FontAwesomeIcon
-                            className='review-star-icon'
-                            icon={faStar}
-                        />
-                        <p id='review-rating'>{stars}</p>
-                    </div>
-
                     {currentUser?.id === User?.id && (
                         <div className='edit-delete-container'>
                             <button
@@ -129,12 +129,28 @@ const ReviewItem = ({
                 </div>
             </div>
 
+            <div className='review-stars-container'>
+                {[1, 2, 3, 4, 5].map((num) => (
+                    <FontAwesomeIcon
+                        key={num}
+                        icon={faStar}
+                        className='review-star-icon'
+                        color={
+                            stars >= num
+                                ? 'var(--colors-gold)'
+                                : 'var(--colors-gray)'
+                        }
+                    />
+                ))}
+            </div>
+
             <p id='review-body'>{reviewText}</p>
 
-            {ReviewImages?.length > 0 && (
+            {reviewImages?.length > 0 && (
                 <ReviewImagesContainer
                     reviewId={id}
-                    images={ReviewImages}
+                    images={reviewImages}
+                    setReviewImages={setReviewImages}
                     spotId={spotId}
                     setReviews={setReviews}
                     user={User}

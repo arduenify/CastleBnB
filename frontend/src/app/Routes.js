@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import ErrorPage from '../common/errorPage/ErrorPage';
 
 import LandingPage from '../features/landing/LandingPage';
 import SpotPage from '../features/spots/SpotPage';
@@ -25,14 +26,12 @@ const RoutesComponent = ({ showGenericPopup, hideGenericPopup }) => {
             <Route
                 path='*'
                 element={
-                    <h1
-                        style={{
-                            textAlign: 'center',
-                            marginTop: '150px',
-                        }}
-                    >
-                        404: Page Not Found
-                    </h1>
+                    <ErrorPage
+                        status={'Resource not found'}
+                        message={
+                            'Sorry, the page you are looking for does not exist!'
+                        }
+                    />
                 }
             />
         </Routes>

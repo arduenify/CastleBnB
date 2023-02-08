@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import ViewReviewImage from './imagePopup/ViewReviewImage';
 
 import './ReviewImage.css';
@@ -9,7 +10,10 @@ const ReviewImage = ({
     reviewId,
     spotId,
     setReviews,
+    deleteReviewImage,
 }) => {
+    const [validImage, setValidImage] = useState(false);
+
     const reviewImageClicked = () => {
         const header = 'Review image';
 
@@ -27,16 +31,30 @@ const ReviewImage = ({
         showGenericPopup(header, content, 'review-image-popup');
     };
 
+    useEffect(async () => {
+        const res = await fetch(image.url);
+
+        if (res.ok) {
+            setValidImage(true);
+        } else {
+            deleteReviewImage(image.id);
+        }
+    }, [image, setValidImage]);
+
+    if (!validImage) {
+        return null;
+    }
+
     return (
         <img
             key={image.id}
-            onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = '/images/default.png';
-            }}
             className='review-image'
             src={image.url}
-            alt={`review image`}
+            alt={`review`}
+            onError={(e) => {
+                e.target.onerror = null;
+                e.target.display = 'none';
+            }}
             onClick={reviewImageClicked}
         />
     );

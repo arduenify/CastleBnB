@@ -26,17 +26,16 @@
 #add-review-button {
     background-color: var(--bg-color);
     color: var(--colors-accent);
-    font-weight: 600;
     font-size: var(--font-size-medium);
-    border: none;
+    padding: 10px;
+    font-weight: 500;
     cursor: pointer;
+    border: none;
 }
 
 #add-review-button:hover {
     background-color: var(--colors-accent);
     color: var(--bg-color);
-
-    padding: 5px;
     border-radius: 5px;
 }
 

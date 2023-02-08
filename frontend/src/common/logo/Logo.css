@@ -2,3 +2,7 @@
     width: 11rem;
     height: 2.5rem;
 }
+
+#logo-img-container:hover {
+    cursor: pointer;
+}

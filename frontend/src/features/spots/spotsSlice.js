@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { csrfFetchPost, csrfFetch } from '../../app/csrf';
+import {
+    csrfFetchPost,
+    csrfFetch,
+    csrfFetchPut,
+    csrfFetchDelete,
+} from '../../app/csrf';
 
 const initialState = {
     spots: [],
@@ -70,6 +75,56 @@ export const getSpotReviewsById = createAsyncThunk(
     }
 );
 
+export const editSpotById = createAsyncThunk(
+    'spots/editSpotById',
+    async ({ spotId, payload: spot }, { rejectWithValue }) => {
+        const response = await csrfFetchPut(`/api/spots/${spotId}`, spot);
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            const updatedSpot = {
+                ...spot,
+                ...responseJson,
+            };
+
+            return updatedSpot;
+        }
+
+        return rejectWithValue(responseJson);
+    }
+);
+
+export const deleteSpotById = createAsyncThunk(
+    'spots/deleteSpotById',
+    async (id, { rejectWithValue }) => {
+        const response = await csrfFetchDelete(`/api/spots/${id}`);
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return responseJson;
+        }
+
+        return rejectWithValue(responseJson);
+    }
+);
+
+export const deleteSpotImageById = createAsyncThunk(
+    'spots/deleteSpotImageById',
+    async ({ spotId, imageId }, { rejectWithValue, fulfillWithValue }) => {
+        const response = await csrfFetchDelete(
+            `/api/spots/${spotId}/images/${imageId}`
+        );
+
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return fulfillWithValue({ spotId, imageId });
+        }
+
+        return rejectWithValue(responseJson);
+    }
+);
+
 export const spotsSlice = createSlice({
     name: 'spots',
     initialState,
@@ -90,8 +145,31 @@ export const spotsSlice = createSlice({
 
             .addCase(addReviewToSpotById.fulfilled, (state, action) => {
                 state.currentSpotReviews = action.payload.Reviews;
+            })
+
+            .addCase(editSpotById.fulfilled, (state, action) => {
+                state.currentSpot = action.payload;
+            })
+
+            .addCase(deleteSpotById.fulfilled, (state, action) => {
+                state.currentSpot = null;
+            })
+
+            .addCase(deleteSpotImageById.fulfilled, (state, action) => {
+                const { spotId, imageId } = action.payload;
+
+                console.log('Deleted image', imageId, 'from spot', spotId);
+
+                state.currentSpot.SpotImages =
+                    state.currentSpot.SpotImages.filter(
+                        (image) => image.id !== imageId
+                    );
             });
     },
 });
+
+export const selectSpotOwnerId = (spot) => {
+    return spot?.Owner?.id;
+};
 
 export default spotsSlice.reducer;

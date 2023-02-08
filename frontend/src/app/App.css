@@ -6,11 +6,13 @@
     --colors-gray: #ddd;
     --colors-light-gray: #f7f7f7;
     --colors-white: #fff;
+    --colors-gold: #f9c80e;
     --colors-accent: rgb(255, 56, 92);
     --colors-accent-light: rgba(255, 56, 92, 0.65);
     --colors-error: rgb(190, 54, 23);
     --colors-accent-hover: #fc1c3e;
     --colors-green: #008a05;
+    --colors-green-hover: #006a03;
     --colors-text-primary: #222;
     --colors-text-secondary: var(--colors-dark-gray);
     --colors-backdrop: rgba(0, 0, 0, 0.8);
@@ -30,12 +32,16 @@
     --font-size-xx-large: 24px;
     --font-size-xxx-large: 28px;
 
+    --font-size-heading: 36px;
+
     --line-height-xx-small: 12px;
     --line-height-x-small: 16px;
     --line-height-small: 18px;
     --line-height-medium: 20px;
     --line-height-large: 24px;
     --line-height-x-large: 28px;
+
+    --line-height-heading: 40px;
 
     --border-radius-small: 0.5rem;
     --border-radius-1: 1rem;
@@ -44,6 +50,7 @@
 
     --box-shadow-popup: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
     --box-shadow-hover: 1px 1px 8px rgba(0, 0, 0, 1);
+    --box-shadow-hover-2: 2px 2px 8px rgba(0, 0, 0, 0.757);
     --box-shadow-thumbnail: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
 
     --transition-time: 0.25s;

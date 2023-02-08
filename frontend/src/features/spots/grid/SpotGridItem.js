@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 import './SpotGridItem.css';
 
 const SpotGridItem = ({ spot }) => {
-    const { city, state, country, description, avgRating, previewImage } = spot;
+    const { city, state, country, description, avgRating } = spot;
+    let { previewImage } = spot;
 
     const spotLocation = () => {
         let location = '';
@@ -17,6 +18,8 @@ const SpotGridItem = ({ spot }) => {
         return location;
     };
 
+    if (!previewImage) previewImage = 'default-spot-image.png';
+
     return (
         <Link
             className='spot-container'
@@ -26,11 +29,15 @@ const SpotGridItem = ({ spot }) => {
                 <img
                     className='spot-image'
                     src={`/images/${previewImage}`}
+                    onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/images/default-spot-image.png';
+                    }}
                     alt='Spot Preview'
                 />
             </div>
 
-            <div className='spot-info-container'>
+            <div className='spot-info-container full'>
                 <div className='spot-info'>
                     <div className='spot-name-rating'>
                         <h2 className='spot-name'>{spotLocation()}</h2>

@@ -8,6 +8,7 @@ import {
     clearValidationError,
 } from './userSlice';
 
+import { getError } from '../../common/helpers';
 import PopupModal from '../../common/popupModal/PopupModal';
 import FormInput from '../../common/input/FormInput';
 import useClearValidationError from './clearValidationError';
@@ -155,6 +156,10 @@ const SignupForm = ({ hideSignupModal }) => {
                             placeholder='Email'
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            validationError={getError(
+                                'email',
+                                validationErrors
+                            )}
                         />
 
                         <FormInput
@@ -162,6 +167,10 @@ const SignupForm = ({ hideSignupModal }) => {
                             placeholder='Username'
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            validationError={getError(
+                                'username',
+                                validationErrors
+                            )}
                         />
 
                         <FormInput
@@ -169,6 +178,10 @@ const SignupForm = ({ hideSignupModal }) => {
                             placeholder='First name'
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
+                            validationError={getError(
+                                'firstName',
+                                validationErrors
+                            )}
                         />
 
                         <FormInput
@@ -176,6 +189,10 @@ const SignupForm = ({ hideSignupModal }) => {
                             placeholder='Last name'
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
+                            validationError={getError(
+                                'lastName',
+                                validationErrors
+                            )}
                         />
 
                         <FormInput
@@ -184,6 +201,10 @@ const SignupForm = ({ hideSignupModal }) => {
                             type='password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            validationError={getError(
+                                'password',
+                                validationErrors
+                            )}
                         />
 
                         <FormInput
@@ -192,6 +213,10 @@ const SignupForm = ({ hideSignupModal }) => {
                             type='password'
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
+                            validationError={getError(
+                                'confirmPassword',
+                                validationErrors
+                            )}
                         />
                     </div>
 
