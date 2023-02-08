@@ -60,7 +60,7 @@ const LoginForm = ({ hideLoginModal }) => {
             dispatch(clearErrors());
             dispatch(clearValidationErrors());
         };
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         if (credential) {
@@ -70,7 +70,7 @@ const LoginForm = ({ hideLoginModal }) => {
         if (password) {
             dispatch(clearValidationError({ name: 'password' }));
         }
-    }, [credential, password]);
+    }, [credential, password, dispatch]);
 
     return (
         <PopupModal

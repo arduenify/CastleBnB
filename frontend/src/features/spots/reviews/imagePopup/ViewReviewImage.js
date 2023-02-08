@@ -36,7 +36,7 @@ const ViewReviewImage = ({
                 <img
                     className='review-image-popup-image'
                     src={imageUrl}
-                    alt='popup image'
+                    alt='review'
                 />
             </div>
 

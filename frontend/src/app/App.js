@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import LoginForm from '../features/user/LoginForm';
 import SignupForm from '../features/user/SignupForm';
-import LandingPage from '../features/landing/LandingPage';
 import NavigationBar from '../features/navbar/NavigationBar';
 import Loader from '../common/loader/Loader';
 

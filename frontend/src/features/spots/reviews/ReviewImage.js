@@ -31,15 +31,19 @@ const ReviewImage = ({
         showGenericPopup(header, content, 'review-image-popup');
     };
 
-    useEffect(async () => {
-        const res = await fetch(image.url);
+    useEffect(() => {
+        const fetchImage = async () => {
+            const res = await fetch(image.url);
 
-        if (res.ok) {
-            setValidImage(true);
-        } else {
-            deleteReviewImage(image.id);
-        }
-    }, [image, setValidImage]);
+            if (res.ok) {
+                setValidImage(true);
+            } else {
+                deleteReviewImage(image.id);
+            }
+        };
+
+        fetchImage();
+    }, [image, setValidImage, deleteReviewImage]);
 
     if (!validImage) {
         return null;
