@@ -57,7 +57,6 @@ const ReviewForm = ({
     return (
         <form
             id='add-review-form'
-            // onSubmit={submitReviewBtnClicked}
             onSubmit={onFormSubmit}
         >
             <div className='form-input-container'>
