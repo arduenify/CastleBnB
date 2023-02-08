@@ -13,19 +13,14 @@
 }
 
 .review-star-icon {
-    color: var(--colors-text-secondary);
-    font-size: var(--font-size-x-small);
+    font-size: var(--font-size-large);
 }
 
-.review-rating-container {
+.review-stars-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin: 0 20px;
-}
-
-#review-rating {
-    font-size: var(--font-size-large);
+    margin-top: 15px;
 }
 
 #review-user-date-container {
@@ -70,7 +65,7 @@
 .review-container-right {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     flex-grow: 1;
 }

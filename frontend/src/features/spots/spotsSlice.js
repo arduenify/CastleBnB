@@ -108,6 +108,23 @@ export const deleteSpotById = createAsyncThunk(
     }
 );
 
+export const deleteSpotImageById = createAsyncThunk(
+    'spots/deleteSpotImageById',
+    async ({ spotId, imageId }, { rejectWithValue, fulfillWithValue }) => {
+        const response = await csrfFetchDelete(
+            `/api/spots/${spotId}/images/${imageId}`
+        );
+
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return fulfillWithValue({ spotId, imageId });
+        }
+
+        return rejectWithValue(responseJson);
+    }
+);
+
 export const spotsSlice = createSlice({
     name: 'spots',
     initialState,
@@ -136,6 +153,17 @@ export const spotsSlice = createSlice({
 
             .addCase(deleteSpotById.fulfilled, (state, action) => {
                 state.currentSpot = null;
+            })
+
+            .addCase(deleteSpotImageById.fulfilled, (state, action) => {
+                const { spotId, imageId } = action.payload;
+
+                console.log('Deleted image', imageId, 'from spot', spotId);
+
+                state.currentSpot.SpotImages =
+                    state.currentSpot.SpotImages.filter(
+                        (image) => image.id !== imageId
+                    );
             });
     },
 });

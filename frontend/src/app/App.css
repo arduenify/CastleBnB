@@ -6,6 +6,7 @@
     --colors-gray: #ddd;
     --colors-light-gray: #f7f7f7;
     --colors-white: #fff;
+    --colors-gold: #f9c80e;
     --colors-accent: rgb(255, 56, 92);
     --colors-accent-light: rgba(255, 56, 92, 0.65);
     --colors-error: rgb(190, 54, 23);
@@ -49,6 +50,7 @@
 
     --box-shadow-popup: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
     --box-shadow-hover: 1px 1px 8px rgba(0, 0, 0, 1);
+    --box-shadow-hover-2: 2px 2px 8px rgba(0, 0, 0, 0.757);
     --box-shadow-thumbnail: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
 
     --transition-time: 0.25s;
