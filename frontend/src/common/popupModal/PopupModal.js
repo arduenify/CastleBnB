@@ -3,7 +3,7 @@ import './PopupModal.css';
 const PopupModal = ({ header, content, onClose, type }) => {
     let style = {};
 
-    if (type === 'review-image-popup') {
+    if (type === 'review-image-popup' || type === 'spot-image-popup') {
         style = {
             maxWidth: '100%',
             maxHeight: '100%',

@@ -8,6 +8,7 @@ const ReviewImage = ({
     showGenericPopup,
     hideGenericPopup,
     reviewId,
+    isReviewOwner,
     spotId,
     setReviews,
     deleteReviewImage,
@@ -25,6 +26,7 @@ const ReviewImage = ({
                 spotId={spotId}
                 setReviews={setReviews}
                 hideGenericPopup={hideGenericPopup}
+                isReviewOwner={isReviewOwner}
             />
         );
 

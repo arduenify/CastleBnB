@@ -10,6 +10,7 @@ import EditSpot from './EditSpot';
 import SpotPageReviews from './reviews/SpotPageReviews';
 
 import './SpotPage.css';
+import ViewSpotImage from './ViewSpotImage';
 
 const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
     const dispatch = useDispatch();
@@ -36,71 +37,6 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
     }, [currentUser, spot]);
 
     if (!spot) return null;
-
-    const spotImageClicked = (imageId) => {
-        const showDeleteImagePopup = () => {
-            const deleteSpotImage = async () => {
-                const deleteSpotImageResponse = await dispatch(
-                    deleteSpotImageById({ spotId, imageId })
-                );
-
-                hideGenericPopup();
-
-                if (deleteSpotImageResponse.meta.requestStatus === 'rejected') {
-                    if (deleteSpotImageResponse.payload.message) {
-                        return alert(deleteSpotImageResponse.payload.message);
-                    }
-
-                    return alert('Something went wrong');
-                }
-            };
-
-            const deleteImagePopupHeader = 'Delete Image';
-
-            const deleteImagePopupContent = (
-                <div className='delete-image-popup-container'>
-                    <p className='delete-image-popup-text'>
-                        Are you sure you want to delete this image?
-                    </p>
-                    <button
-                        className='delete-spot-popup-btn delete-btn'
-                        onClick={deleteSpotImage}
-                    >
-                        <span>
-                            <FontAwesomeIcon
-                                id='delete-btn-icon'
-                                icon={faTrash}
-                            />
-                        </span>
-                        Yes, I am sure!
-                    </button>
-                </div>
-            );
-
-            showGenericPopup(deleteImagePopupHeader, deleteImagePopupContent);
-        };
-
-        const content = (
-            <div className='spot-image-popup-container'>
-                <div className='spot-image-popup-btns-container'>
-                    <button
-                        className='spot-image-popup-btn delete-btn'
-                        onClick={showDeleteImagePopup}
-                    >
-                        <span>
-                            <FontAwesomeIcon
-                                id='delete-btn-icon'
-                                icon={faTrash}
-                            />
-                        </span>
-                        Delete this image
-                    </button>
-                </div>
-            </div>
-        );
-
-        showGenericPopup('Manage Spot Image', content, 'spot-image-popup');
-    };
 
     const onSpotEdit = (updatedSpot) => {
         setSpot(updatedSpot);
@@ -133,6 +69,22 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
         );
 
         showGenericPopup(header, content, 'edit-spot-popup');
+    };
+
+    const spotImageClicked = (spotImageId, spotImageUrl) => {
+        const header = 'Spot image';
+
+        const content = (
+            <ViewSpotImage
+                imageId={spotImageId}
+                spotId={spotId}
+                hideGenericPopup={hideGenericPopup}
+                imageUrl={spotImageUrl}
+                isSpotOwner={isSpotOwner}
+            />
+        );
+
+        showGenericPopup(header, content, 'spot-image-popup');
     };
 
     const editSpotBtnClicked = () => {
@@ -261,7 +213,9 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                                 src={imageUrl}
                                 alt={image.description}
                                 className='spot-page-image'
-                                onClick={() => spotImageClicked(image.id)}
+                                onClick={() =>
+                                    spotImageClicked(image.id, imageUrl)
+                                }
                             />
                         );
                     })}
@@ -279,6 +233,7 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
             <SpotPageReviews
                 showGenericPopup={showGenericPopup}
                 hideGenericPopup={hideGenericPopup}
+                isSpotOwner={isSpotOwner}
                 spotId={spot.id}
                 avgStarRating={spot.avgStarRating}
                 numReviews={spot.numReviews}
