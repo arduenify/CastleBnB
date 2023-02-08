@@ -8,6 +8,7 @@ const ReviewImage = ({
     showGenericPopup,
     hideGenericPopup,
     reviewId,
+    isReviewOwner,
     spotId,
     setReviews,
     deleteReviewImage,
@@ -25,21 +26,26 @@ const ReviewImage = ({
                 spotId={spotId}
                 setReviews={setReviews}
                 hideGenericPopup={hideGenericPopup}
+                isReviewOwner={isReviewOwner}
             />
         );
 
         showGenericPopup(header, content, 'review-image-popup');
     };
 
-    useEffect(async () => {
-        const res = await fetch(image.url);
+    useEffect(() => {
+        const fetchImage = async () => {
+            const res = await fetch(image.url);
 
-        if (res.ok) {
-            setValidImage(true);
-        } else {
-            deleteReviewImage(image.id);
-        }
-    }, [image, setValidImage]);
+            if (res.ok) {
+                setValidImage(true);
+            } else {
+                deleteReviewImage(image.id);
+            }
+        };
+
+        fetchImage();
+    }, [image, setValidImage, deleteReviewImage]);
 
     if (!validImage) {
         return null;

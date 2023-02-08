@@ -11,7 +11,7 @@ const useClearValidationError = (name, value) => {
         if (value) {
             dispatch(clearValidationError({ name }));
         }
-    }, [value]);
+    }, [value, dispatch, name]);
 };
 
 export default useClearValidationError;

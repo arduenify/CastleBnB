@@ -1,4 +1,5 @@
 .popup-modal {
+    overflow-y: auto !important;
     margin: 0 auto;
     width: 600px;
     height: auto;
