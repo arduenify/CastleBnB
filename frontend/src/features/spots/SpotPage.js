@@ -3,14 +3,15 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { getSpotById, deleteSpotById, deleteSpotImageById } from './spotsSlice';
+import { getSpotById, deleteSpotById } from './spotsSlice';
 import { currentUserOwnsSpot } from '../../common/helpers';
 
 import EditSpot from './EditSpot';
 import SpotPageReviews from './reviews/SpotPageReviews';
+import AddSpotImage from './addImage/AddSpotImage';
+import ViewSpotImage from './ViewSpotImage';
 
 import './SpotPage.css';
-import ViewSpotImage from './ViewSpotImage';
 
 const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
     const dispatch = useDispatch();
@@ -19,9 +20,9 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
     const { spotId } = useParams();
     const [spot, setSpot] = useState(null);
     const [isSpotOwner, setIsSpotOwner] = useState(false);
-    const spotImages = useSelector(
-        (state) => state.spot.currentSpot?.SpotImages
-    );
+    const [spotImages, setSpotImages] = useState([]);
+    const [avgStarRating, setAvgStarRating] = useState(0);
+    const [numReviews, setNumReviews] = useState(0);
 
     useEffect(() => {
         dispatch(getSpotById(spotId)).then((spot) => {
@@ -35,6 +36,17 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
             setIsSpotOwner(currentUserOwnsSpot(currentUser, spot));
         }
     }, [currentUser, spot]);
+
+    useEffect(() => {
+        if (spot?.SpotImages) {
+            setSpotImages(spot.SpotImages);
+        } else {
+            setSpotImages([]);
+        }
+
+        setAvgStarRating(spot?.avgStarRating);
+        setNumReviews(spot?.numReviews);
+    }, [spot]);
 
     if (!spot) return null;
 
@@ -81,10 +93,25 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                 hideGenericPopup={hideGenericPopup}
                 imageUrl={spotImageUrl}
                 isSpotOwner={isSpotOwner}
+                setSpotImages={setSpotImages}
             />
         );
 
         showGenericPopup(header, content, 'spot-image-popup');
+    };
+
+    const addSpotImageBtnClicked = () => {
+        const header = 'Add spot image';
+
+        const content = (
+            <AddSpotImage
+                spotId={spotId}
+                hideGenericPopup={hideGenericPopup}
+                setSpotImages={setSpotImages}
+            />
+        );
+
+        showGenericPopup(header, content);
     };
 
     const editSpotBtnClicked = () => {
@@ -145,7 +172,7 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                 <div className='spot-manager-container-row'>
                     <button
                         className='edit-or-delete-btn choose-btn'
-                        // onClick={addSpotImage}
+                        onClick={addSpotImageBtnClicked}
                     >
                         Add an image
                     </button>
@@ -175,9 +202,9 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                         className='spot-page-star-icon'
                         icon={faStar}
                     />
-                    <p id='spot-avg-rating'>{spot.avgStarRating}</p>
+                    <p id='spot-avg-rating'>{avgStarRating}</p>
                     <span className='spot-page-header-divider'>·</span>
-                    <p id='spot-num-reviews'>{spot.numReviews} reviews</p>
+                    <p id='spot-num-reviews'>{numReviews} reviews</p>
                     <span className='spot-page-header-divider'>·</span>
                     <p id='spot-location'>
                         {spot.city}, {spot.state}, {spot.country}
@@ -202,23 +229,30 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                 )}
 
                 <div className='spot-page-images-container'>
-                    {spotImages.map((image) => {
-                        const imageUrl = image.url.includes('http')
-                            ? image.url
-                            : `/images/${image.url}`;
+                    {spotImages &&
+                        spotImages.map((image) => {
+                            console.log('IMAGE IS:', image);
+                            const imageUrl = image.url.includes('http')
+                                ? image.url
+                                : `/images/${image.url}`;
 
-                        return (
-                            <img
-                                key={image.id}
-                                src={imageUrl}
-                                alt={image.description}
-                                className='spot-page-image'
-                                onClick={() =>
-                                    spotImageClicked(image.id, imageUrl)
-                                }
-                            />
-                        );
-                    })}
+                            return (
+                                <img
+                                    key={image.id}
+                                    src={imageUrl}
+                                    alt={image.description}
+                                    className='spot-page-image'
+                                    onClick={(e) => {
+                                        spotImageClicked(image.id, imageUrl);
+                                    }}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src =
+                                            '/images/default-spot-image.png';
+                                    }}
+                                />
+                            );
+                        })}
                 </div>
 
                 <div className='spot-page-description-container'>
@@ -235,8 +269,10 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                 hideGenericPopup={hideGenericPopup}
                 isSpotOwner={isSpotOwner}
                 spotId={spot.id}
-                avgStarRating={spot.avgStarRating}
-                numReviews={spot.numReviews}
+                avgStarRating={avgStarRating}
+                setAvgStarRating={setAvgStarRating}
+                numReviews={numReviews}
+                setNumReviews={setNumReviews}
             />
         </div>
     );
