@@ -12,7 +12,9 @@ const db = require('../db/models');
 // Check the database connection before starting the app
 db.sequelize
     .authenticate()
-    .then(() => {})
+    .then(() => {
+        app.listen(port);
+    })
     .catch((err) => {
         console.error(err);
     });
