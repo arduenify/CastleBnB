@@ -12,7 +12,9 @@ import './SpotPageReviews.css';
 const SpotPageReviews = ({
     spotId,
     avgStarRating,
+    setAvgStarRating,
     numReviews,
+    setNumReviews,
     showGenericPopup,
     hideGenericPopup,
     isSpotOwner,
@@ -27,6 +29,23 @@ const SpotPageReviews = ({
             setReviews(reviews.payload.Reviews);
         });
     }, [dispatch, spotId]);
+
+    useEffect(() => {
+        if (reviews.length) {
+            const totalStars = reviews.reduce(
+                (acc, review) => acc + review.stars,
+                0
+            );
+
+            const avgStars = totalStars / reviews.length;
+
+            setAvgStarRating(avgStars.toFixed(2));
+            setNumReviews(reviews.length);
+        } else {
+            setAvgStarRating(0);
+            setNumReviews(0);
+        }
+    }, [reviews]);
 
     const addReviewBtnClicked = () => {
         const header = 'Add a review';
