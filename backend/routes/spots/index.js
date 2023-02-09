@@ -406,18 +406,20 @@ router.post(
                 });
             }
 
+            const { url, preview } = req.body;
+
             // This is because of the unique index on SpotImage(spotId, preview)
             // Since there can only be one preview image, this will resolve the issue
             //      by updating the current preview image to not be a preview image
-            const previewImage = await SpotImage.findOne({
-                where: { spotId, preview: true },
-            });
+            if (preview === true) {
+                const previewImage = await SpotImage.findOne({
+                    where: { spotId, preview: true },
+                });
 
-            if (previewImage) {
-                await previewImage.update({ preview: false });
+                if (previewImage) {
+                    await previewImage.update({ preview: false });
+                }
             }
-
-            const { url, preview } = req.body;
 
             const spotImage = await spot.createSpotImage({
                 url,

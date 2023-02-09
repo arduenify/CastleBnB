@@ -11,6 +11,7 @@ const ViewSpotImage = ({
     hideGenericPopup,
     spotId,
     isSpotOwner,
+    setSpotImages,
 }) => {
     const dispatch = useDispatch();
 
@@ -27,6 +28,10 @@ const ViewSpotImage = ({
             }
 
             return alert('Something went wrong');
+        } else if (deleteSpotImageResponse.meta.requestStatus === 'fulfilled') {
+            setSpotImages((spotImages) =>
+                spotImages.filter((spotImage) => spotImage.id !== imageId)
+            );
         }
     };
 

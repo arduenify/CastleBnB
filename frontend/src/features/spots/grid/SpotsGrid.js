@@ -13,8 +13,7 @@ const SpotsGrid = () => {
         dispatch(getAllSpots());
     }, [dispatch]);
 
-    if (!spots || !spots.length)
-        return <ErrorPage message={'No spots found'} />;
+    if (!spots.length) return <ErrorPage message={'No spots found'} />;
 
     return (
         <div className='spots-container'>

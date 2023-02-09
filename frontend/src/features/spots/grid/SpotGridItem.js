@@ -20,6 +20,10 @@ const SpotGridItem = ({ spot }) => {
 
     if (!previewImage) previewImage = 'default-spot-image.png';
 
+    const previewImageUrl = previewImage.includes('http')
+        ? previewImage
+        : `/images/${previewImage}`;
+
     return (
         <Link
             className='spot-container'
@@ -28,7 +32,7 @@ const SpotGridItem = ({ spot }) => {
             <div className='spot-image-container'>
                 <img
                     className='spot-image'
-                    src={`/images/${previewImage}`}
+                    src={previewImageUrl}
                     onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = '/images/default-spot-image.png';
@@ -45,8 +49,17 @@ const SpotGridItem = ({ spot }) => {
                             <FontAwesomeIcon
                                 className='spot-rating-icon'
                                 icon={faStar}
+                                style={
+                                    avgRating
+                                        ? { color: '#f5c518' }
+                                        : {
+                                              color: '#d3d3d3',
+                                          }
+                                }
                             />
-                            <p className='spot-rating-text'>{avgRating}</p>
+                            <p className='spot-rating-text'>
+                                {avgRating || 'N/A'}
+                            </p>
                         </div>
                     </div>
 

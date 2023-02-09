@@ -125,6 +125,27 @@ export const deleteSpotImageById = createAsyncThunk(
     }
 );
 
+export const addImageToSpot = createAsyncThunk(
+    'spots/addImageToSpot',
+    async (
+        { spotId, imageUrl, isPreviewImage },
+        { rejectWithValue, fulfillWithValue }
+    ) => {
+        const response = await csrfFetchPost(`/api/spots/${spotId}/images`, {
+            url: imageUrl,
+            preview: isPreviewImage,
+        });
+
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return fulfillWithValue({ spotId, ...responseJson });
+        }
+
+        return rejectWithValue(responseJson);
+    }
+);
+
 export const spotsSlice = createSlice({
     name: 'spots',
     initialState,
@@ -155,16 +176,22 @@ export const spotsSlice = createSlice({
                 state.currentSpot = null;
             })
 
-            .addCase(deleteSpotImageById.fulfilled, (state, action) => {
-                const { spotId, imageId } = action.payload;
+            .addCase(addImageToSpot.fulfilled, (state, action) => {
+                const spot = state.spots.find(
+                    (s) => s.id == action.payload.spotId
+                );
 
-                console.log('Deleted image', imageId, 'from spot', spotId);
-
-                state.currentSpot.SpotImages =
-                    state.currentSpot.SpotImages.filter(
-                        (image) => image.id !== imageId
-                    );
+                spot.SpotImages.push(action.payload);
             });
+
+        // .addCase(deleteSpotImageById.fulfilled, (state, action) => {
+        //     const { spotId, imageId } = action.payload;
+
+        //     state.currentSpot.SpotImages =
+        //         state.currentSpot.SpotImages.filter(
+        //             (image) => image.id !== imageId
+        //         );
+        // });
     },
 });
 

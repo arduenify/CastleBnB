@@ -139,7 +139,7 @@ const ReviewItem = ({
                         color={
                             stars >= num
                                 ? 'var(--colors-gold)'
-                                : 'var(--colors-gra m,y)'
+                                : 'var(--colors-gray)'
                         }
                     />
                 ))}

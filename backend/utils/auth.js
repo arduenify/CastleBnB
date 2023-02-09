@@ -56,10 +56,6 @@ const restoreUser = (req, res, next) => {
 
 // If there is no current user, return an error
 const requireAuthentication = function (req, _res, next) {
-    if (process.env.NODE_ENV !== 'production') {
-        console.log('User:', req?.user?.id, `(${req?.user?.username})`);
-    }
-
     if (req.user) return next();
 
     const error = new AuthenticationError('Authentication required');
