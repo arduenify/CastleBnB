@@ -231,7 +231,6 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                 <div className='spot-page-images-container'>
                     {spotImages &&
                         spotImages.map((image) => {
-                            console.log('IMAGE IS:', image);
                             const imageUrl = image.url.includes('http')
                                 ? image.url
                                 : `/images/${image.url}`;

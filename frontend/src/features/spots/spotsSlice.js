@@ -138,8 +138,6 @@ export const addImageToSpot = createAsyncThunk(
 
         const responseJson = await response.json();
 
-        console.log('Add Spot ResponseJSON', responseJson);
-
         if (response.ok) {
             return fulfillWithValue({ spotId, ...responseJson });
         }
@@ -182,7 +180,7 @@ export const spotsSlice = createSlice({
                 const spot = state.spots.find(
                     (s) => s.id == action.payload.spotId
                 );
-                
+
                 spot.SpotImages.push(action.payload);
             });
 
