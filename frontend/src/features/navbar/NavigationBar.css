@@ -15,7 +15,7 @@
     justify-content: space-between;
     gap: 50px;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     width: 90%;
     height: 100%;
     margin: 0 auto;
@@ -23,12 +23,13 @@
 
 .navbar-middle {
     flex-grow: 1;
-    max-width: 500px;
+    max-width: 400px;
 }
 
 .navbar-right {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
 }
 
 .navbar-right-icons {
@@ -54,4 +55,20 @@
 #profile-icon {
     width: 25px;
     height: auto;
+}
+
+#host-castle-btn {
+    position: relative;
+    right: 25px;
+    border: none;
+    background-color: var(--colors-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+}
+
+#host-castle-btn:hover {
+    text-shadow: 0.25px 0.25px 1px rgba(0, 0, 0, 0.5);
+    transition: var(--transition-time);
 }

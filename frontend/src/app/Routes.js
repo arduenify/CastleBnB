@@ -1,8 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
-import ErrorPage from '../common/components/ErrorPage/ErrorPage';
 
-import LandingPage from '../features/landing/LandingPage';
+import CreateSpotPage from '../features/spots/spot/createSpot/CreateSpotPage';
 import SpotPage from '../features/spots/SpotPage';
+import ErrorPage from '../common/components/ErrorPage/ErrorPage';
+import LandingPage from '../features/landing/LandingPage';
 
 const RoutesComponent = ({ showGenericPopup, hideGenericPopup }) => {
     return (
@@ -21,6 +22,11 @@ const RoutesComponent = ({ showGenericPopup, hideGenericPopup }) => {
                         hideGenericPopup={hideGenericPopup}
                     />
                 }
+            />
+
+            <Route
+                path='/create-spot'
+                element={<CreateSpotPage />}
             />
 
             <Route

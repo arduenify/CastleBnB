@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import FormInput from '../../../common/components/FormInput/FormInput';
-import FormErrors from '../../user/forms/errors/FormErrors';
-import { editSpotById } from '../spotsSlice';
+import FormInput from '../../../../common/components/FormInput/FormInput';
+import FormErrors from '../../../user/forms/errors/FormErrors';
+import { editSpotById } from '../../spotsSlice';
+
+import validationErrorMap from '../validationErrorMap';
 
 const EditSpot = ({ spot, onEdit }) => {
     const dispatch = useDispatch();
@@ -20,18 +22,6 @@ const EditSpot = ({ spot, onEdit }) => {
     const [price, setPrice] = useState(spot.price);
     const [errors, setErrors] = useState([]);
     const [validationErrors, setValidationErrors] = useState([]);
-
-    const errorMap = {
-        'Name is required': 'name',
-        'Description is required': 'description',
-        'Street address is required': 'address',
-        'City is required': 'city',
-        'State is required': 'state',
-        'Country is required': 'country',
-        'Latitude is not valid': 'lat',
-        'Longitude is not valid': 'lng',
-        'Price is required': 'price',
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -120,7 +110,7 @@ const EditSpot = ({ spot, onEdit }) => {
     };
 
     const getValidationError = (name) => {
-        return validationErrors.find((error) => errorMap[error] === name);
+        return validationErrors.find((error) => validationErrorMap[error] === name);
     };
 
     return (

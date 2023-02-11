@@ -99,33 +99,7 @@ const ReviewItem = ({
                     <p id='review-date'>{reviewDate}</p>
                 </div>
 
-                <div className='review-container-right'>
-                    {currentUser?.id === User?.id && (
-                        <div className='edit-delete-container'>
-                            <button
-                                type='button'
-                                className='edit-review-btn'
-                                onClick={editReviewBtnClicked}
-                            >
-                                Edit
-                            </button>
-                            <button
-                                type='button'
-                                className='delete-review-btn'
-                                onClick={deleteReviewBtnClicked}
-                            >
-                                Delete
-                            </button>
-                            <button
-                                type='button'
-                                className='add-review-image-btn'
-                                onClick={addReviewImageBtnClicked}
-                            >
-                                Add image
-                            </button>
-                        </div>
-                    )}
-                </div>
+                <div className='review-container-right'></div>
             </div>
 
             <div className='review-stars-container'>
@@ -157,6 +131,32 @@ const ReviewItem = ({
                     showGenericPopup={showGenericPopup}
                     hideGenericPopup={hideGenericPopup}
                 />
+            )}
+
+            {currentUser?.id === User?.id && (
+                <div className='edit-delete-container'>
+                    <button
+                        type='button'
+                        className='edit-review-btn'
+                        onClick={editReviewBtnClicked}
+                    >
+                        Edit
+                    </button>
+                    <button
+                        type='button'
+                        className='delete-review-btn'
+                        onClick={deleteReviewBtnClicked}
+                    >
+                        Delete
+                    </button>
+                    <button
+                        type='button'
+                        className='add-review-image-btn'
+                        onClick={addReviewImageBtnClicked}
+                    >
+                        Add image
+                    </button>
+                </div>
             )}
         </div>
     );

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -8,7 +8,7 @@ import { currentUserOwnsSpot } from '../../common/helpers';
 import { getSpotById, deleteSpotById } from './spotsSlice';
 
 import AddSpotImage from './addImage/AddSpotImage';
-import EditSpot from './editSpot/EditSpot';
+import EditSpot from './spot/editSpot/EditSpot';
 import ViewSpotImage from './viewImage/ViewSpotImage';
 import SpotPageReviews from './reviews/SpotPageReviews';
 
@@ -210,6 +210,8 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                     <p id='spot-location'>
                         {spot.city}, {spot.state}, {spot.country}
                     </p>
+                    <span className='spot-page-header-divider'>·</span>
+                    <p id='spot-price'>{`$${spot.price}`}</p>
                 </div>
 
                 {isSpotOwner && (
@@ -265,6 +267,7 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
 
             <hr></hr>
             <SpotPageReviews
+                id='spot-page-reviews'
                 showGenericPopup={showGenericPopup}
                 hideGenericPopup={hideGenericPopup}
                 isSpotOwner={isSpotOwner}
