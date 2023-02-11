@@ -6,8 +6,8 @@
     overflow-x: auto;
     gap: 20px;
     padding: 10px;
-    margin-left: 10px;
     margin-right: 10px;
+    margin-bottom: 15px;
 
     border-radius: 30px;
     border-bottom: none;
@@ -15,6 +15,9 @@
     border-bottom-right-radius: 0;
     border: 1px solid var(--colors-gray);
     animation: reviewImageFadeIn 0.5s ease;
+    min-height: 180px;
+    height: 180px;
+    overflow-y: hidden;
 }
 
 @keyframes slideLeft {

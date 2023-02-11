@@ -75,6 +75,20 @@ export const getSpotReviewsById = createAsyncThunk(
     }
 );
 
+export const createSpot = createAsyncThunk(
+    'spots/createSpot',
+    async (spot, { rejectWithValue }) => {
+        const response = await csrfFetchPost('/api/spots', spot);
+        const responseJson = await response.json();
+
+        if (response.ok) {
+            return responseJson;
+        }
+
+        return rejectWithValue(responseJson);
+    }
+);
+
 export const editSpotById = createAsyncThunk(
     'spots/editSpotById',
     async ({ spotId, payload: spot }, { rejectWithValue }) => {
@@ -168,6 +182,10 @@ export const spotsSlice = createSlice({
                 state.currentSpotReviews = action.payload.Reviews;
             })
 
+            .addCase(createSpot.fulfilled, (state, action) => {
+                state.spots.push(action.payload);
+            })
+
             .addCase(editSpotById.fulfilled, (state, action) => {
                 state.currentSpot = action.payload;
             })
@@ -178,7 +196,7 @@ export const spotsSlice = createSlice({
 
             .addCase(addImageToSpot.fulfilled, (state, action) => {
                 const spot = state.spots.find(
-                    (s) => s.id == action.payload.spotId
+                    (s) => parseInt(s.id) === parseInt(action.payload.spotId)
                 );
 
                 spot.SpotImages.push(action.payload);

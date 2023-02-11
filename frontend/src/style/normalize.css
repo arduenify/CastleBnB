@@ -9,7 +9,7 @@
  */
 
 html {
-    line-height: 1.15;
+    /* line-height: 1.15; */
     /* 1 */
     -webkit-text-size-adjust: 100%;
     /* 2 */
@@ -174,7 +174,7 @@ input,
 optgroup,
 select,
 textarea {
-    font-family: inherit;
+    font-family: Circular, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
     /* 1 */
     font-size: 100%;
     /* 1 */

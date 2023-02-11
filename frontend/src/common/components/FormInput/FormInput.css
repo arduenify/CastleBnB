@@ -27,7 +27,7 @@
     top: 8px;
 
     transform: translate(0, 0);
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-medium);
     color: var(--colors-text-secondary);
 
     transition:

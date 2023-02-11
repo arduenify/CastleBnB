@@ -1,0 +1,76 @@
+#create-spot-form {
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid var(--colors-dark-gray);
+    border-radius: 1rem;
+}
+
+.create-spot-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.create-spot-form-input.error>input {
+    border-bottom: 1px solid var(--colors-error) !important;
+}
+
+.create-spot-form-input.error>label {
+    color: var(--colors-error) !important;
+}
+
+.create-spot-form-input {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: normal;
+    font-family: inherit;
+}
+
+.create-spot-form-input-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0;
+}
+
+.create-spot-form-input-row>* {
+    width: 50%;
+}
+
+.create-spot-form-input-row>*:first-child {
+    border-right: 1px solid var(--colors-dark-gray);
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.create-spot-form-input-row>*:last-child {
+    border-bottom: 1px solid var(--colors-dark-gray);
+}
+
+.create-spot-page-header>p {
+    font-size: var(--font-size-medium);
+    line-height: var(--line-height-medium);
+    text-align: center;
+    font-style: italic;
+    margin: 0 auto;
+}
+
+
+#create-spot-form-submit-button {
+    width: 100%;
+    margin: 30px auto;
+    padding: 12px;
+    border: 1px solid transparent;
+    border-radius: 1rem;
+    background-color: var(--colors-accent);
+    color: var(--bg-color);
+    cursor: pointer;
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+    transition: all 0.3s ease;
+}
+
+#create-spot-form-submit-button:hover {
+    background-color: var(--colors-accent-hover);
+    border: 1px solid var(--colors-accent);
+}

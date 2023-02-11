@@ -1,0 +1,12 @@
+.create-spot-page-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.create-spot-page-container h1 {
+    font-size: var(--font-size-heading);
+    line-height: var(--line-height-heading);
+    text-align: center;
+    margin-bottom: 15px;
+}
