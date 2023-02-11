@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 
-import Search from './Search';
+// import Search from './Search';
 import ProfileMenu from './ProfileMenu';
-import Logo from '../../common/logo/Logo';
+import Logo from '../../common/components/Logo/Logo';
+
+import HostCastle from './HostCastle';
+import { useSelector } from 'react-redux';
 
 import './NavigationBar.css';
 
@@ -16,6 +19,8 @@ const NavigationBar = ({
     style,
 }) => {
     const [profileMenuVisible, setProfileMenuVisible] = useState(false);
+
+    const currentUser = useSelector((state) => state.user.currentUser);
 
     const profileIconClicked = (e) => {
         setProfileMenuVisible(!profileMenuVisible);
@@ -51,11 +56,11 @@ const NavigationBar = ({
                     <Logo />
                 </div>
 
-                <div className='navbar-middle'>
-                    <Search />
-                </div>
+                <div className='navbar-middle'>{/* <Search /> */}</div>
 
                 <div className='navbar-right'>
+                    {currentUser && <HostCastle />}
+
                     <div
                         className='navbar-right-icons'
                         onClick={profileIconClicked}

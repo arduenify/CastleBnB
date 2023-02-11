@@ -1,15 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import loadingSlice, { loadingMiddleware } from '../common/loader/loadingSlice';
-
 import logger from 'redux-logger';
 
+import loadingReducer, {
+    loadingMiddleware,
+} from '../common/components/Loader/loadingSlice';
 import userReducer from '../features/user/userSlice';
 import spotReducer from '../features/spots/spotsSlice';
 
 const reducer = {
     user: userReducer,
     spot: spotReducer,
-    loading: loadingSlice,
+    loading: loadingReducer,
 };
 
 export const store = configureStore({

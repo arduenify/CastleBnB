@@ -14,6 +14,7 @@
 .reviews-container {
     display: flex;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 .reviews-container .review-container:last-child {

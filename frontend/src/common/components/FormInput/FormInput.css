@@ -1,0 +1,73 @@
+.form-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    font-size: var(--font-size-medium);
+    line-height: var(--line-height-medium);
+    color: var(--colors-text-primary);
+
+    pointer-events: all;
+}
+
+
+.form-input:nth-child(n+1) {
+    padding-top: 1rem;
+    border-bottom: 1px solid var(--colors-dark-gray);
+}
+
+.form-input:last-child {
+    border-bottom: none;
+}
+
+.form-input label {
+    pointer-events: none;
+    position: relative;
+    margin: 0 1rem;
+    top: 8px;
+
+    transform: translate(0, 0);
+    font-size: var(--font-size-medium);
+    color: var(--colors-text-secondary);
+
+    transition:
+        transform 0.25s ease,
+        font-size 0.1s ease-out,
+        color 0.1s ease-in;
+}
+
+.form-input input {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: var(--colors-text-primary);
+    border: none !important;
+}
+
+.form-input textarea {
+    margin: 0 1rem;
+    margin-bottom: 10px;
+    height: 150px;
+    color: var(--colors-text-primary);
+    border: none !important;
+    outline: 0 !important;
+    resize: none !important;
+}
+
+.form-input {
+    outline: none;
+}
+
+/* When the input is focused */
+.form-input:focus-within label,
+/* When input contains a value */
+.form-input label.has-value {
+    transform: translate(-0.5rem, -0.5rem);
+    font-size: var(--font-size-small);
+    color: var(--colors-accent);
+    top: 0px;
+}
+
+.form-input:hover {
+    cursor: text;
+}

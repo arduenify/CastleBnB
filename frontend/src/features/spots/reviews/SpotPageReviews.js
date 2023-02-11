@@ -4,8 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import { getSpotReviewsById } from '../spotsSlice';
-import ReviewItem from './ReviewItem';
-import AddReview from './add/AddReview';
+import ReviewItem from './review/ReviewItem';
+import AddReview from './review/addReview/AddReview';
+import EditReview from './review/editReview/EditReview';
 
 import './SpotPageReviews.css';
 
@@ -45,20 +46,39 @@ const SpotPageReviews = ({
             setAvgStarRating(0);
             setNumReviews(0);
         }
-    }, [reviews]);
+    }, [reviews, setAvgStarRating, setNumReviews]);
 
     const addReviewBtnClicked = () => {
-        const header = 'Add a review';
-        const content = (
-            <AddReview
-                spotId={spotId}
-                setReviews={setReviews}
-                hideGenericPopup={hideGenericPopup}
-                showGenericPopup={showGenericPopup}
-            />
-        );
+        // check if user already has a review for this spot
+        const userReview = reviews.find((review) => {
+            return review.userId === currentUser.id;
+        });
 
-        showGenericPopup(header, content);
+        if (userReview) {
+            const header = 'Edit review';
+            const content = (
+                <EditReview
+                    spotId={spotId}
+                    review={userReview}
+                    setReviews={setReviews}
+                    hideGenericPopup={hideGenericPopup}
+                />
+            );
+
+            showGenericPopup(header, content);
+        } else {
+            const header = 'Add a review';
+            const content = (
+                <AddReview
+                    spotId={spotId}
+                    setReviews={setReviews}
+                    hideGenericPopup={hideGenericPopup}
+                    showGenericPopup={showGenericPopup}
+                />
+            );
+
+            showGenericPopup(header, content);
+        }
     };
 
     return (

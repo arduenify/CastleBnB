@@ -1,4 +1,4 @@
-import SpotsGrid from '../spots/grid/SpotsGrid';
+import SpotsGrid from '../spots/spotsGrid/SpotsGrid';
 import './LandingPage.css';
 
 export const LandingPage = () => {

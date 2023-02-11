@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { addImageToSpot } from '../spotsSlice';
-import FormInput from '../../../common/input/FormInput';
+import FormInput from '../../../common/components/FormInput/FormInput';
 
 import './AddSpotImage.css';
 
