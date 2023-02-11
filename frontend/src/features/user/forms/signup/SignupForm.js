@@ -1,18 +1,20 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 
-import { setValidationErrors, signup } from './userSlice';
 import {
     clearErrors,
     clearValidationErrors,
     clearValidationError,
-} from './userSlice';
+    setValidationErrors,
+    signup,
+} from '../../userSlice';
 
-import { getError } from '../../common/helpers';
-import PopupModal from '../../common/popupModal/PopupModal';
-import FormInput from '../../common/input/FormInput';
-import useClearValidationError from './clearValidationError';
-import FormErrors from './FormErrors';
+import { getError } from '../../../../common/helpers';
+import useClearValidationError from '../errors/clearValidationError';
+
+import PopupModal from '../../../../common/components/PopupModal/PopupModal';
+import FormInput from '../../../../common/components/FormInput/FormInput';
+import FormErrors from '../errors/FormErrors';
 
 const SignupForm = ({ hideSignupModal }) => {
     const dispatch = useDispatch();

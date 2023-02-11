@@ -1,18 +1,16 @@
 import { useState, useEffect } from 'react';
-
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { deleteReviewById } from '../reviewsSlice';
+import { getSpotReviewsById } from '../../spotsSlice';
 
-import { deleteReviewById } from './reviewsSlice';
-import { getSpotReviewsById } from '../spotsSlice';
-
-import EditReview from './edit/EditReview';
+import AddReviewImage from './addImage/AddReviewImage';
+import EditReview from './editReview/EditReview';
 import ReviewImagesContainer from './ReviewImagesContainer';
 
 import './ReviewItem.css';
-import AddReviewImage from './addImage/AddReviewImage';
 
 const ReviewItem = ({
     review,

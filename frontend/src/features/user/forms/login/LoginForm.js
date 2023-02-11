@@ -7,12 +7,12 @@ import {
     clearErrors,
     login,
     setValidationErrors,
-} from './userSlice';
-import { getError } from '../../common/helpers';
+} from '../../userSlice';
+import { getError } from '../../../../common/helpers';
 
-import PopupModal from '../../common/popupModal/PopupModal';
-import FormInput from '../../common/input/FormInput';
-import FormErrors from './FormErrors';
+import PopupModal from '../../../../common/components/PopupModal/PopupModal';
+import FormInput from '../../../../common/components/FormInput/FormInput';
+import FormErrors from '../errors/FormErrors';
 
 import './LoginForm.css';
 

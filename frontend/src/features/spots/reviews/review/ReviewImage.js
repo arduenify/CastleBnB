@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ViewReviewImage from './imagePopup/ViewReviewImage';
+import ViewReviewImage from './ViewReviewImage';
 
 import './ReviewImage.css';
 
@@ -14,13 +14,14 @@ const ReviewImage = ({
     deleteReviewImage,
 }) => {
     const [validImage, setValidImage] = useState(false);
+    const [imageUrl, setImageUrl] = useState(image.url);
 
     const reviewImageClicked = () => {
         const header = 'Review image';
 
         const content = (
             <ViewReviewImage
-                imageUrl={image.url}
+                imageUrl={imageUrl}
                 reviewId={reviewId}
                 imageId={image.id}
                 spotId={spotId}
@@ -38,10 +39,17 @@ const ReviewImage = ({
             const res = await fetch(image.url);
 
             if (res.ok) {
-                setValidImage(true);
+                return setValidImage(true);
             } else {
-                deleteReviewImage(image.id);
+                const res = await fetch(`/images/${image.url}`);
+
+                if (res.ok) {
+                    setImageUrl(`/images/${image.url}`);
+                    return setValidImage(true);
+                }
             }
+
+            deleteReviewImage(image.id);
         };
 
         fetchImage();
@@ -55,11 +63,10 @@ const ReviewImage = ({
         <img
             key={image.id}
             className='review-image'
-            src={image.url}
+            src={imageUrl}
             alt={`review`}
             onError={(e) => {
                 e.target.onerror = null;
-                e.target.display = 'none';
             }}
             onClick={reviewImageClicked}
         />

@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import ErrorPage from '../common/errorPage/ErrorPage';
+import ErrorPage from '../common/components/ErrorPage/ErrorPage';
 
 import LandingPage from '../features/landing/LandingPage';
 import SpotPage from '../features/spots/SpotPage';

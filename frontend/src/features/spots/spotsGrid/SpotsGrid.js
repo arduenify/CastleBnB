@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { getAllSpots } from '../spotsSlice';
 import SpotGridItem from './SpotGridItem';
 import './SpotsGrid.css';
-import ErrorPage from '../../../common/errorPage/ErrorPage';
+import ErrorPage from '../../../common/components/ErrorPage/ErrorPage';
 
 const SpotsGrid = () => {
     const spots = useSelector((state) => state.spot.spots);

@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app/App';
-import { store } from './app/store';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import { restoreCSRF, csrfFetch } from './app/csrf';
+import { store } from './app/store';
+import { restoreCSRF, csrfFetch } from './services/csrf';
 import { login, restoreUser, signup } from './features/user/userSlice';
 import { getAllSpots, getSpotById } from './features/spots/spotsSlice';
+
+import App from './app/App';
 
 import './index.css';
 import './style/normalize.css';

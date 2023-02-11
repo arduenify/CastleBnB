@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { csrfFetch } from '../../app/csrf';
+import { csrfFetch } from '../../services/csrf';
 
 const initialState = {
     currentUser: null,

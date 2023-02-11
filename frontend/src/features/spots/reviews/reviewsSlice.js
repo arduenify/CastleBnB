@@ -3,7 +3,7 @@ import {
     csrfFetchDelete,
     csrfFetchPost,
     csrfFetchPut,
-} from '../../../app/csrf';
+} from '../../../services/csrf';
 
 const initialState = {
     reviews: [],
