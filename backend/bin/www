@@ -4,8 +4,6 @@
 // Import environment variables
 require('dotenv').config();
 
-const { port } = require('.');
-
 const app = require('../app');
 const db = require('../db/models');
 
@@ -13,7 +11,7 @@ const db = require('../db/models');
 db.sequelize
     .authenticate()
     .then(() => {
-        app.listen(port);
+        app.listen(process.env.PORT || 8000);
     })
     .catch((err) => {
         console.error(err);
