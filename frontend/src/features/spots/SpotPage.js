@@ -1,15 +1,16 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { getSpotById, deleteSpotById } from './spotsSlice';
-import { currentUserOwnsSpot } from '../../common/helpers';
 
-import EditSpot from './EditSpot';
-import SpotPageReviews from './reviews/SpotPageReviews';
+import { currentUserOwnsSpot } from '../../common/helpers';
+import { getSpotById, deleteSpotById } from './spotsSlice';
+
 import AddSpotImage from './addImage/AddSpotImage';
-import ViewSpotImage from './ViewSpotImage';
+import EditSpot from './editSpot/EditSpot';
+import ViewSpotImage from './viewImage/ViewSpotImage';
+import SpotPageReviews from './reviews/SpotPageReviews';
 
 import './SpotPage.css';
 

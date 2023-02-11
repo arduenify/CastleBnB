@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import FormInput from '../../common/input/FormInput';
-import FormErrors from '../user/FormErrors';
-import { editSpotById } from './spotsSlice';
+import FormInput from '../../../common/components/FormInput/FormInput';
+import FormErrors from '../../user/forms/errors/FormErrors';
+import { editSpotById } from '../spotsSlice';
 
 const EditSpot = ({ spot, onEdit }) => {
     const dispatch = useDispatch();

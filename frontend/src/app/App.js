@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import LoginForm from '../features/user/LoginForm';
-import SignupForm from '../features/user/SignupForm';
-import NavigationBar from '../features/navbar/NavigationBar';
-import Loader from '../common/loader/Loader';
+import { useEffect, useState } from 'react';
 
 import { restoreUser } from '../features/user/userSlice';
+import LoginForm from '../features/user/forms/login/LoginForm';
+import SignupForm from '../features/user/forms/signup/SignupForm';
+import NavigationBar from '../features/navbar/NavigationBar';
+import Footer from '../features/footer/Footer';
+
+import Loader from '../common/components/Loader/Loader';
+import Backdrop from '../common/components/Backdrop/Backdrop';
+import PopupModal from '../common/components/PopupModal/PopupModal';
+import RoutesComponent from './Routes';
 
 import './App.css';
-import Footer from '../features/footer/Footer';
-import Backdrop from '../common/backdrop/Backdrop';
-import RoutesComponent from './Routes';
-import PopupModal from '../common/popupModal/PopupModal';
-
 const App = () => {
     const dispatch = useDispatch();
 

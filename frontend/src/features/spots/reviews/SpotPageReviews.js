@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import { getSpotReviewsById } from '../spotsSlice';
-import ReviewItem from './ReviewItem';
-import AddReview from './add/AddReview';
+import ReviewItem from './review/ReviewItem';
+import AddReview from './review/addReview/AddReview';
 
 import './SpotPageReviews.css';
 
@@ -45,7 +45,7 @@ const SpotPageReviews = ({
             setAvgStarRating(0);
             setNumReviews(0);
         }
-    }, [reviews]);
+    }, [reviews, setAvgStarRating, setNumReviews]);
 
     const addReviewBtnClicked = () => {
         const header = 'Add a review';

@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
+
 import './Loader.css';
 
 const Loader = () => {
-    // const userLoading = useSelector((state) => state.user.loading);
     const loading = useSelector((state) => state.loading.loading);
 
     if (loading)

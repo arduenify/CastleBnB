@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { addImageToReview } from '../reviewsSlice';
-import { getSpotReviewsById } from '../../spotsSlice';
-import FormInput from '../../../../common/input/FormInput';
+import { addImageToReview } from '../../reviewsSlice';
+import { getSpotReviewsById } from '../../../spotsSlice';
+import FormInput from '../../../../../common/components/FormInput/FormInput';
 
 const AddReviewImage = ({ reviewId, hideGenericPopup, spotId, setReviews }) => {
     const dispatch = useDispatch();

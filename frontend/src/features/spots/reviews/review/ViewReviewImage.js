@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { deleteImageFromReview } from '../reviewsSlice';
 import { getSpotReviewsById } from '../../spotsSlice';
 
-import ViewImage from '../../../../common/popupImage/ViewImage';
+import ViewImage from '../../../../common/components/PopupImage/ViewImage';
 
 import './ViewReviewImage.css';
 

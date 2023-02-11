@@ -4,7 +4,7 @@ import {
     csrfFetch,
     csrfFetchPut,
     csrfFetchDelete,
-} from '../../app/csrf';
+} from '../../services/csrf';
 
 const initialState = {
     spots: [],

@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
-import { deleteSpotImageById } from './spotsSlice';
+import { deleteSpotImageById } from '../spotsSlice';
 
-import ViewImage from '../../common/popupImage/ViewImage';
+import ViewImage from '../../../common/components/PopupImage/ViewImage';
 
 import './ViewSpotImage.css';
 
