@@ -47,13 +47,15 @@
     justify-content: center;
     align-items: center;
     margin-top: 25px;
-    gap: 10px;
+    border-radius: 1rem;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 
 .spot-page-image {
     object-fit: scale-down;
-    width: 50%;
+    width: 45%;
     border-radius: 10px;
     animation: spotPageSlideIn 0.6s ease-in-out;
 }
@@ -68,6 +70,11 @@
     position: relative;
     left: -8px;
     margin-right: -10px;
+}
+
+#spot-price {
+    font-size: var(--font-size-medium);
+    font-weight: 500;
 }
 
 #spot-page-owner-header {
@@ -142,7 +149,7 @@ hr {
 
 .delete-spot-popup-btn,
 .edit-or-delete-btn {
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-medium);
     font-weight: 500;
     display: flex;
     width: 47% !important;

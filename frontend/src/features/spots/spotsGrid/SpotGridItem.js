@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import './SpotGridItem.css';
 
 const SpotGridItem = ({ spot }) => {
-    const { city, state, country, description, avgRating } = spot;
+    const { city, state, country, description, avgRating, price } = spot;
     let { previewImage } = spot;
 
     const spotLocation = () => {
@@ -64,6 +64,9 @@ const SpotGridItem = ({ spot }) => {
                     </div>
 
                     <p className='spot-description'>{description}</p>
+                    <p className='spot-price'>
+                        {price ? `$${price}/night` : 'N/A'}
+                    </p>
                     <div className='popup-description-container'>
                         <p className='popup-description-text'>{description}</p>
                     </div>

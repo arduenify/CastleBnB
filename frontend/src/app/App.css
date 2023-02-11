@@ -20,21 +20,18 @@
 
     --bg-color: var(--colors-white);
 
-    --font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
-        Helvetica Neue, sans-serif !important;
+    --font-size-xx-small: 12px;
+    --font-size-x-small: 14px;
+    --font-size-small: 16px;
+    --font-size-medium: 18px;
+    --font-size-large: 20px;
+    --font-size-x-large: 22px;
+    --font-size-xx-large: 26px;
+    --font-size-xxx-large: 32px;
 
-    --font-size-xx-small: 10px;
-    --font-size-x-small: 12px;
-    --font-size-small: 14px;
-    --font-size-medium: 16px;
-    --font-size-large: 18px;
-    --font-size-x-large: 20px;
-    --font-size-xx-large: 24px;
-    --font-size-xxx-large: 28px;
+    --font-size-heading: 38px;
 
-    --font-size-heading: 36px;
-
-    --line-height-xx-small: 12px;
+    --line-height-xx-small: 14px;
     --line-height-x-small: 16px;
     --line-height-small: 18px;
     --line-height-medium: 20px;
@@ -105,19 +102,11 @@ body {
     padding-bottom: 10vh;
     transition: all 0.3s ease;
 
-    font-family: Circular,
-        -apple-system,
-        BlinkMacSystemFont,
-        'Segoe UI',
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif;
-
     font-size: var(--font-size-medium);
     line-height: var(--line-height-medium);
     color: var(--colors-text-primary);
     background-color: var(--bg-color);
+
     /* This is amazing */
     -webkit-text-stroke: .025em rgba(51, 51, 51, 0.25);
 }

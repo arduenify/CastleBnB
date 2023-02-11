@@ -6,7 +6,7 @@
     margin-bottom: 40px;
     text-decoration: none;
 
-    animation: containerThing 0.8s;
+    animation: containerThing 0.5s;
 }
 
 .spot-container:hover {
@@ -16,7 +16,6 @@
 .spot-info-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
     justify-content: flex-end;
     width: 320px !important;
 }
@@ -26,9 +25,18 @@
     height: 260px !important;
     border-radius: 10px;
 
-    animation: slideInToLeft 0.5s;
+    animation: slideInToLeft 0.3s;
 }
 
+.spot-price {
+    margin: 0;
+    padding: 0;
+    margin-top: 5px;
+    font-size: var(--font-size-medium);
+    font-weight: 600;
+    color: var(--colors-text-primary);
+    animation: slideInToLeft 1s;
+}
 
 .spot-info .spot-name {
     margin: 0;
@@ -36,7 +44,7 @@
     font-size: 15px;
     font-weight: 550;
     color: var(--colors-text-primary);
-    animation: slideInToLeft 1.0s;
+    animation: slideInToLeft 0.75s;
 }
 
 .spot-info .spot-description {
@@ -49,7 +57,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 
-    animation: slideInToLeft 1.5s;
+    animation: slideInToLeft 0.8s;
 }
 
 .spot-name-rating {
@@ -70,12 +78,17 @@
     margin: 0 !important;
     padding: 0 !important;
     position: relative;
-    font-size: var(--font-size-medium);
+    font-size: var(--font-size-small);
+    animation: slideInToLeft 0.5s;
 }
 
 .spot-rating-icon {
-    font-size: var(--font-size-small);
-    top: 2.5px;
+    font-size: var(--font-size-x-small);
+    top: 1px;
+}
+
+.spot-rating-text {
+    color: var(--colors-text-primary);
 }
 
 .spot-description {
@@ -98,7 +111,7 @@
     font-size: var(--font-size-large);
     line-height: var(--line-height-large);
     color: #fff;
-    animation: appearAfterDelay 0.7s;
+    animation: appearAfterDelay 0.3s;
 }
 
 .spot-image-container:hover+.spot-info-container .popup-description-container,
