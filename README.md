@@ -31,7 +31,7 @@ A full-stack web application that allows users to find and review spots (castles
 
 ## Live Site
 
-Feel free to checkout a live version of [CastleBnB here!](https://airbnb-clone-i8gb.onrender.com])
+Feel free to checkout a live version of [CastleBnB here!](https://airbnb-clone-i8gb.onrender.com "CastleBnB")
 
 ## Screenshots
 
@@ -117,14 +117,3 @@ todo
 - [API Documentation](./backend/README.md)
 
 - [Redux Store Tree](./frontend/REDUX_STORE_TREE.md)
-
-
-Feb 11 05:12:17 PM  [eslint]
-Feb 11 05:12:17 PM  src/features/spots/SpotPage.js
-Feb 11 05:12:17 PM    Line 2:10:  'Link' is defined but never used  no-unused-vars
-Feb 11 05:12:17 PM  
-Feb 11 05:12:17 PM  src/features/spots/addImage/AddSpotImage.js
-Feb 11 05:12:17 PM    Line 44:8:  React Hook useEffect has a missing dependency: 'errors.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
-
-Style create spot errors
-Empty fields with spaces (trim)
