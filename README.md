@@ -100,7 +100,84 @@ I wanted to make sure that the average user would find this website easy to use.
 
 ## Code Snippets
 
-todo
+### Loading middleware
+I wanted a way to have a loading indicator for all network requests that was scalable. The following snippet resolves this.
+```javascript
+import { createSlice } from '@reduxjs/toolkit';
+
+// Manages the loading state for all network calls in the application
+const loadingSlice = createSlice({
+    name: 'loading',
+    initialState: {
+        loading: false,
+    },
+    reducers: {
+        // The setLoading reducer updates the loading state
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
+    },
+});
+
+// The setLoading action used with dispatch
+export const { setLoading } = loadingSlice.actions;
+
+// The reducer
+export default loadingSlice.reducer;
+
+// This middleware is used to update the loading state based on the type of action that is dispatched
+export const loadingMiddleware = (store) => (next) => (action) => {
+    try {
+        const { type } = action;
+
+        // If the action type ends with '/pending', set the loading state to true
+        if (type.endsWith('/pending')) {
+            store.dispatch(setLoading(true));
+        } 
+        // If the action type ends with '/fulfilled' or '/rejected', set the loading state to false
+        else if (type.endsWith('/fulfilled') || type.endsWith('/rejected')) {
+            store.dispatch(setLoading(false));
+        }
+
+        // Call the next action in the middleware chain
+        next(action);
+    } catch (err) {}
+};
+```
+
+This makes displaying the loader as simple as rendering it conditionally based on the current loading state!
+
+### Asynchronous Thunks (Add an Image to a Spot)
+This showcases how all of my async thunks are structured. They all follow this same pattern, which makes creating new thunks super easy. 
+
+```javascript
+export const addImageToSpot = createAsyncThunk(
+    'spots/addImageToSpot',
+    async (
+        // Information needed to add the image
+        { spotId, imageUrl, isPreviewImage },
+        // Functions that handle the fulfillment of the response
+        { rejectWithValue, fulfillWithValue }
+    ) => {
+        // Make a safe post request that adds an image to an existing spot
+        const response = await csrfFetchPost(`/api/spots/${spotId}/images`, {
+            url: imageUrl,
+            preview: isPreviewImage,
+        });
+
+        // All responses from the API use JSON
+        const responseJson = await response.json();
+
+        // If the request is successful, then we can fulfill the thunk with the response
+        if (response.ok) {
+            return fulfillWithValue({ spotId, ...responseJson });
+        }
+
+        // Something went wrong, so we need to reject the thunk
+        return rejectWithValue(responseJson);
+    }
+);
+```
 
 ## Table of Contents
 
