@@ -4,34 +4,34 @@ A full-stack web application that allows users to find and review spots (castles
 
 ## Features
 
-- Authentication and authorization, including signup and login functionality
-- View spots on the landing page.
-- Create and manage castles (spots), including images.
-- Create and manage castle reviews.
+-   Authentication and authorization, including signup and login functionality
+-   View spots on the landing page.
+-   Create and manage castles (spots), including images.
+-   Create and manage castle reviews.
 
 ## Tech Stack
 
-- Backend:
-  - Node.js
-  - Express
-  - PostgreSQL (for production)
-  - Sequelize (for development)
-- Front-end:
-  - React
-  - Redux
-  - Redux Toolkit
+-   Backend:
+    -   Node.js
+    -   Express
+    -   PostgreSQL (for production)
+    -   Sequelize (for development)
+-   Front-end:
+    -   React
+    -   Redux
+    -   Redux Toolkit
 
 ## Future Goals
 
-- Further polish the styling and clean up code.
-- Add additional features, such as: bookings, spot searching, and custom profile pages.
-- Normalize state management
-- Seperate the spot images from the spots with a model to view and manage all images at once.
-- Improve accessability of the website
+-   Further polish the styling and clean up code.
+-   Add additional features, such as: bookings, spot searching, and custom profile pages.
+-   Normalize state management
+-   Seperate the spot images from the spots with a model to view and manage all images at once.
+-   Improve accessability of the website
 
 ## Live Site
 
-Feel free to checkout a live version of [CastleBnB here!](https://airbnb-clone-i8gb.onrender.com "CastleBnB")
+Feel free to checkout a live version of [CastleBnB here!](https://airbnb-clone-i8gb.onrender.com 'CastleBnB')
 
 ## Screenshots
 
@@ -40,13 +40,13 @@ todo
 ## Run CastleBnB Locally
 
 1. Clone the repository
-`git clone https://github.com/AdamScoggins/CastleBnB.git`
+   `git clone https://github.com/AdamScoggins/CastleBnB.git`
 
 2. Change the working directory
-`cd CastleBnB`
+   `cd CastleBnB`
 
 3. Install dependencies
-`npm run install`
+   `npm run install`
 
 4. Create a .env file in the `backend` directory with the following contents:
 
@@ -57,10 +57,10 @@ todo
     ```
 
 5. Start the backend server
-`npm run dev:backend`
+   `npm run dev:backend`
 
 6. Start the frontend server
-`npm run dev:frontend`
+   `npm run dev:frontend`
 
 Once you complete these steps, the backend should be running at `http://localhost:8000` and the frontend at `http://localhost:3000`. Visit the frontend in your browser of choice!
 
@@ -101,7 +101,9 @@ I wanted to make sure that the average user would find this website easy to use.
 ## Code Snippets
 
 ### Loading middleware
+
 I wanted a way to have a loading indicator for all network requests that was scalable. The following snippet resolves this.
+
 ```javascript
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -133,7 +135,7 @@ export const loadingMiddleware = (store) => (next) => (action) => {
         // If the action type ends with '/pending', set the loading state to true
         if (type.endsWith('/pending')) {
             store.dispatch(setLoading(true));
-        } 
+        }
         // If the action type ends with '/fulfilled' or '/rejected', set the loading state to false
         else if (type.endsWith('/fulfilled') || type.endsWith('/rejected')) {
             store.dispatch(setLoading(false));
@@ -148,7 +150,8 @@ export const loadingMiddleware = (store) => (next) => (action) => {
 This makes displaying the loader as simple as rendering it conditionally based on the current loading state!
 
 ### Asynchronous Thunks (Add an Image to a Spot)
-This showcases how all of my async thunks are structured. They all follow this same pattern, which makes creating new thunks super easy. 
+
+This showcases how all of my async thunks are structured. They all follow this same pattern, which makes creating new thunks super easy.
 
 ```javascript
 export const addImageToSpot = createAsyncThunk(
@@ -181,16 +184,16 @@ export const addImageToSpot = createAsyncThunk(
 
 ## Table of Contents
 
-- [Features](FEATURES.md)
+-   [Features](FEATURES.md)
 
-- [React Components List](./frontend/REACT_COMPONENTS.md)
+-   [React Components List](./frontend/REACT_COMPONENTS.md)
 
-- [Database Schema SQL](./backend/schema.sql)
+-   [Database Schema SQL](./backend/schema.sql)
 
-- [Database Schema Diagram](./backend/schema.png)
+-   [Database Schema Diagram](./backend/schema.png)
 
-- [Frontend Routes](./frontend/REACT_ROUTES.md)
+-   [Frontend Routes](./frontend/REACT_ROUTES.md)
 
-- [API Documentation](./backend/README.md)
+-   [API Documentation](./backend/README.md)
 
-- [Redux Store Tree](./frontend/REDUX_STORE_TREE.md)
+-   [Redux Store Tree](./frontend/REDUX_STORE_TREE.md)
