@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { addImageToSpot } from '../spotsSlice';
@@ -12,6 +12,8 @@ const AddSpotImage = ({ spotId, hideGenericPopup, setSpotImages }) => {
     const [imageUrl, setImageUrl] = useState('');
     const [isPreviewImage, setIsPreviewImage] = useState(false);
     const [errors, setErrors] = useState([]);
+
+    const errorsExist = useCallback(() => errors.length > 0, [errors]);
 
     const submitBtnClicked = async (e) => {
         e.preventDefault();
@@ -38,10 +40,10 @@ const AddSpotImage = ({ spotId, hideGenericPopup, setSpotImages }) => {
     };
 
     useEffect(() => {
-        if (errors.length > 0) {
+        if (errorsExist()) {
             setErrors([]);
         }
-    }, [imageUrl]);
+    }, [imageUrl, errorsExist]);
 
     return (
         <form

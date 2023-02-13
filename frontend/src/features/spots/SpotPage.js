@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -15,10 +15,12 @@ import SpotPageReviews from './reviews/SpotPageReviews';
 import './SpotPage.css';
 
 const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
+    const { spotId } = useParams();
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentUser = useSelector((state) => state.user.currentUser);
-    const { spotId } = useParams();
+
     const [spot, setSpot] = useState(null);
     const [isSpotOwner, setIsSpotOwner] = useState(false);
     const [spotImages, setSpotImages] = useState([]);
