@@ -217,4 +217,28 @@ export const selectSpotOwnerId = (spot) => {
     return spot?.Owner?.id;
 };
 
+export const searchSpots = (spots, search) => {
+    if (!search) return spots;
+
+    return spots.filter((spot) => {
+        const spotName = spot.name.toLowerCase();
+        // const spotDescription = spot.description.toLowerCase();
+        const spotAddress = spot.address.toLowerCase();
+        const spotCity = spot.city.toLowerCase();
+        const spotState = spot.state.toLowerCase();
+        const spotCountry = spot.country.toLowerCase();
+
+        const searchLower = search.toLowerCase();
+
+        return (
+            spotName.includes(searchLower) ||
+            // spotDescription.includes(searchLower) ||
+            spotAddress.includes(searchLower) ||
+            spotCity.includes(searchLower) ||
+            spotState.includes(searchLower) ||
+            spotCountry.includes(searchLower)
+        );
+    });
+};
+
 export default spotsSlice.reducer;

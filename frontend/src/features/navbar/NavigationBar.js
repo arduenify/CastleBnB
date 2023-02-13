@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 
 // import Search from './Search';
 import ProfileMenu from './ProfileMenu';
 import Logo from '../../common/components/Logo/Logo';
-
+import Search from './Search';
 import HostCastle from './HostCastle';
-import { useSelector } from 'react-redux';
 
 import './NavigationBar.css';
 
@@ -56,7 +56,9 @@ const NavigationBar = ({
                     <Logo />
                 </div>
 
-                <div className='navbar-middle'>{/* <Search /> */}</div>
+                <div className='navbar-middle'>
+                    <Search />
+                </div>
 
                 <div className='navbar-right'>
                     {currentUser && <HostCastle />}
