@@ -40,27 +40,27 @@ const CreateSpotForm = () => {
             });
         };
 
-        if (name) {
+        if (name.trim()) {
             clearValidationError('Name is required');
         }
 
-        if (description) {
+        if (description.trim()) {
             clearValidationError('Description is required');
         }
 
-        if (address) {
+        if (address.trim()) {
             clearValidationError('Street address is required');
         }
 
-        if (city) {
+        if (city.trim()) {
             clearValidationError('City is required');
         }
 
-        if (state) {
+        if (state.trim()) {
             clearValidationError('State is required');
         }
 
-        if (country) {
+        if (country.trim()) {
             clearValidationError('Country is required');
         }
 
@@ -96,19 +96,19 @@ const CreateSpotForm = () => {
 
         let newErrors = [];
 
-        if (!address) {
+        if (!address.trim()) {
             newErrors.push('Street address is required');
         }
 
-        if (!city) {
+        if (!city.trim()) {
             newErrors.push('City is required');
         }
 
-        if (!state) {
+        if (!state.trim()) {
             newErrors.push('State is required');
         }
 
-        if (!country) {
+        if (!country.trim()) {
             newErrors.push('Country is required');
         }
 
@@ -122,11 +122,11 @@ const CreateSpotForm = () => {
             newErrors.push('Longitude is not valid');
         }
 
-        if (!name) {
+        if (!name.trim()) {
             newErrors.push('Name is required');
         }
 
-        if (!description) {
+        if (!description.trim()) {
             newErrors.push('Description is required');
         }
 

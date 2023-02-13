@@ -29,6 +29,7 @@ const ProfileMenu = ({ setSignupVisible, setLoginVisible }) => {
 
     const demoUserBtnClicked = (e) => {
         e.preventDefault();
+
         dispatch(login({ credential: 'adamscoggins', password: 'iloveaa' }));
     };
 
