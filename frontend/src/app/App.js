@@ -114,11 +114,9 @@ const App = () => {
                     />
                 </div>
 
-                {window.location.pathname === '/' && (
-                    <footer>
-                        <Footer />
-                    </footer>
-                )}
+                <footer>
+                    <Footer />
+                </footer>
             </>
         )
     );
