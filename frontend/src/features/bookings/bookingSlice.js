@@ -12,6 +12,7 @@ export const getAllBookings = createAsyncThunk(
         const responseJson = await response.json();
 
         if (response.ok) {
+            // normalize bookings into a dictionary
             const bookingObjs = {};
             for (const booking of responseJson.Bookings) {
                 bookingObjs[booking.id] = booking;

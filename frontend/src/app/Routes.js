@@ -32,7 +32,12 @@ const RoutesComponent = ({ showGenericPopup, hideGenericPopup }) => {
 
             <Route
                 path='/bookings'
-                element={<BookingsPage />}
+                element={
+                    <BookingsPage
+                        showGenericPopup={showGenericPopup}
+                        hideGenericPopup={hideGenericPopup}
+                    />
+                }
             />
 
             <Route
