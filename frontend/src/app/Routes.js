@@ -4,6 +4,7 @@ import CreateSpotPage from '../features/spots/spot/createSpot/CreateSpotPage';
 import SpotPage from '../features/spots/SpotPage';
 import ErrorPage from '../common/components/ErrorPage/ErrorPage';
 import LandingPage from '../features/landing/LandingPage';
+import BookingsPage from '../features/bookings/BookingsPage';
 
 const RoutesComponent = ({ showGenericPopup, hideGenericPopup }) => {
     return (
@@ -27,6 +28,11 @@ const RoutesComponent = ({ showGenericPopup, hideGenericPopup }) => {
             <Route
                 path='/create-spot'
                 element={<CreateSpotPage />}
+            />
+
+            <Route
+                path='/bookings'
+                element={<BookingsPage />}
             />
 
             <Route
