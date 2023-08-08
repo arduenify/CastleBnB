@@ -27,15 +27,20 @@ export const getAllBookings = createAsyncThunk(
 
 export const createBooking = createAsyncThunk(
     'bookings/createBooking',
-    async (booking, { rejectWithValue }) => {
-        const response = await csrfFetchPost('/api/bookings', booking);
+    async ({ spotId, startDate, endDate }) => {
+        const response = await csrfFetchPost('/api/bookings', {
+            spotId,
+            startDate,
+            endDate,
+        });
 
+        const data = await response.json();
+        console.log('Response data:', data);
         if (response.ok) {
-            return;
+            return data;
+        } else {
+            throw new Error(data.message || 'Unknown Error');
         }
-
-        const responseJson = await response.json();
-        return rejectWithValue(responseJson);
     }
 );
 

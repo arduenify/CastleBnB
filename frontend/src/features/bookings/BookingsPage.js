@@ -118,7 +118,7 @@ const BookingsPage = ({ showGenericPopup, hideGenericPopup }) => {
                             onClick={handleModifyBookingClicked}
                             className='subtext'
                         >
-                            Make changes to your reservation here.
+                            Make changes to your reservation by clicking.
                         </p>
                     </div>
                 );

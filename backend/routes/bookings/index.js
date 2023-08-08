@@ -9,7 +9,7 @@ const {
     spotQueryFilterValidationMiddleware,
 } = require('../../utils/validation');
 const { toReadableDateUTC, formatDate } = require('../../utils/format_date');
-const { Booking } = require('../../db/models');
+const { Booking, Spot } = require('../../db/models');
 
 const router = express.Router();
 router.use(restoreUser);
@@ -151,5 +151,76 @@ router.delete('/:bookingId', requireAuthentication, async (req, res, next) => {
         next(err);
     }
 });
+
+/**
+ * Create a new booking
+ * Require authentication
+ * Method: POST
+ * Route: /bookings
+ * Request body: { spotId, startDate, endDate }
+ */
+router.post(
+    '/',
+    requireAuthentication,
+    [
+        check('spotId')
+            .exists({ checkFalsy: true })
+            .withMessage('Spot ID is required'),
+        check('startDate')
+            .exists({ checkFalsy: true })
+            .withMessage('Start date is required'),
+        check('endDate')
+            .exists({ checkFalsy: true })
+            .withMessage('End date is required'),
+        handleValidationErrors,
+    ],
+    async (req, res, next) => {
+        const { spotId, startDate, endDate } = req.body;
+        const { user } = req;
+
+        try {
+            const spot = await Spot.findByPk(spotId);
+            if (!spot) {
+                throw new ResourceNotFoundError({
+                    message: "Spot couldn't be found",
+                });
+            }
+
+            const bookingConflicts = await spot.checkBookingConflicts(
+                startDate,
+                endDate
+            );
+
+            console.log('found booking conflicts\n\n\n\n');
+
+            if (bookingConflicts) {
+                throw new ForbiddenError({
+                    message:
+                        'Sorry, this spot is already booked for the specified dates',
+                    errors: bookingConflicts.errors,
+                });
+            }
+
+            const booking = await Booking.create({
+                spotId,
+                userId: user.id,
+                startDate,
+                endDate,
+            });
+
+            res.json({
+                id: booking.id,
+                spotId: booking.spotId,
+                userId: booking.userId,
+                startDate: toReadableDateUTC(booking.startDate),
+                endDate: toReadableDateUTC(booking.endDate),
+                createdAt: formatDate(booking.createdAt),
+                updatedAt: formatDate(booking.updatedAt),
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 module.exports = router;
