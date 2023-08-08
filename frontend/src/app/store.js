@@ -6,11 +6,13 @@ import loadingReducer, {
 } from '../common/components/Loader/loadingSlice';
 import userReducer from '../features/user/userSlice';
 import spotReducer from '../features/spots/spotsSlice';
+import bookingReducer from '../features/bookings/bookingSlice';
 
 const reducer = {
     user: userReducer,
     spot: spotReducer,
     loading: loadingReducer,
+    booking: bookingReducer,
 };
 
 export const store = configureStore({

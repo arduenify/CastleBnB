@@ -11,6 +11,7 @@ import AddSpotImage from './addImage/AddSpotImage';
 import EditSpot from './spot/editSpot/EditSpot';
 import ViewSpotImage from './viewImage/ViewSpotImage';
 import SpotPageReviews from './reviews/SpotPageReviews';
+import BookingForm from '../bookings/BookingForm';
 
 import './SpotPage.css';
 
@@ -264,6 +265,13 @@ const SpotPage = ({ showGenericPopup, hideGenericPopup }) => {
                         Hosted by {spot.Owner.firstName}
                     </h2>
                     <p id='spot-page-description'>{spot.description}</p>
+                    {
+                        <BookingForm
+                            showGenericPopup={showGenericPopup}
+                            hideGenericPopup={hideGenericPopup}
+                            spot={spot}
+                        />
+                    }
                 </div>
             </div>
 
